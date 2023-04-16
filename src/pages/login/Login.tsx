@@ -10,7 +10,7 @@ function Login() {
           <label className="text-field-label" htmlFor="email">
             Email
           </label>
-          <input name="password" className="text-field" type="email" />
+          <input name="email" className="text-field" type="email" />
 
           <label className="password-label text-field-label" htmlFor="password">
             Password
