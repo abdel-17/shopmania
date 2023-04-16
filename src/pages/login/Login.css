@@ -1,0 +1,28 @@
+main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 16px;
+  padding: 32px;
+  border-radius: 16px;
+  background-color: var(--container);
+}
+
+.password-label {
+  margin-top: 16px;
+}
+
+.login {
+  margin-top: 32px;
+}
+
+.register {
+  margin-top: 16px;
+  text-align: center;
+}

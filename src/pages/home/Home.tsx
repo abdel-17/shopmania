@@ -1,4 +1,4 @@
-import Root from "../../common/Root";
+import Root from "../Root";
 import "./Home.css";
 
 function Home() {

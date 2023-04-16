@@ -15,6 +15,7 @@ body {
   border-radius: 20px;
   color: white;
   background-color: var(--accent);
+  border: none;
   font-size: 12pt;
   transition: background-color 0.25s;
 }
@@ -56,4 +57,25 @@ body {
 
 .no-underline {
   text-decoration: none;
+}
+
+.text-field-label {
+  margin-left: 16px;
+  margin-bottom: 4px;
+  font-size: 11pt;
+}
+
+.text-field {
+  height: 56px;
+  padding: 0px 16px;
+  font-size: 12pt;
+  background: none;
+  border: 1px solid black;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.25s;
+}
+
+.text-field:focus {
+  border-color: var(--accent);
 }
