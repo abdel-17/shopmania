@@ -21,9 +21,11 @@ function Login() {
             Login
           </button>
 
-          <Link to="/register" className="register text-button">
-            Create an account
-          </Link>
+          <div className="centered">
+            <Link to="/register" className="register text-button">
+              Create an account
+            </Link>
+          </div>
         </form>
       </div>
     </Root>
