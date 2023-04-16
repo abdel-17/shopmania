@@ -1,0 +1,62 @@
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--container);
+  height: 64px;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+nav > a {
+  border-radius: 20px;
+  padding: 8px 16px;
+  margin-right: 8px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.deselected {
+  color: black;
+  transition: background-color 0.25s;
+}
+
+/* Fill on hover */
+.deselected:hover {
+  color: white;
+  fill: white;
+  background-color: var(--primary);
+}
+
+/* Fill with a darker color on press */
+.deselected:active {
+  color: white;
+  fill: wite;
+  background-color: var(--primary-dark);
+}
+
+.selected {
+  color: white;
+  fill: white;
+  background-color: var(--primary);
+}
+
+main {
+  /* Subtract the height of the header, footer, and footer border. */
+  min-height: calc(100vh - 64px - 80px - 2px);
+  width: 100%;
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  border-top: 2px solid;
+  font-weight: bold;
+  font-size: 16pt;
+}
+
+.logo {
+  margin-left: 8px;
+}
