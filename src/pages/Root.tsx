@@ -15,25 +15,14 @@ function Root(props: RootProps) {
     <>
       <header>
         <nav>
-          <NavLink to="/" isSelected={pathname === "/"}>
-            Home
-          </NavLink>
-
-          <NavLink to="/products" isSelected={pathname === "/products"}>
-            Products
-          </NavLink>
-
-          <NavLink to="/about" isSelected={pathname === "/about"}>
-            About
-          </NavLink>
-
-          <NavLink to="/contact" isSelected={pathname === "/contact"}>
-            Contact Us
-          </NavLink>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/products">Products</NavLink>
+          <NavLink to="/about">About</NavLink>
+          <NavLink to="/contact">Contact Us</NavLink>
         </nav>
 
         {action === "login" && <LoginButton />}
-        
+
         {action === "cart" && <CartButton />}
       </header>
 
@@ -49,12 +38,13 @@ function Root(props: RootProps) {
 
 interface NavLinkProps {
   to: string;
-  isSelected: boolean;
   children: string;
 }
 
 function NavLink(props: NavLinkProps) {
-  const className = props.isSelected ? "selected destination" : "destination";
+  const { pathname } = useLocation();
+  const isSelected = props.to === pathname;
+  const className = isSelected ? "selected destination" : "destination";
   return (
     <Link to={props.to} className="no-underline">
       <div className={className}>{props.children}</div>
