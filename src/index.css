@@ -1,12 +1,59 @@
 :root {
-  --primary: #a52a2a;
-  --primary-dark: #8c2323;
-  --secondary: #396bcf;
-  --secondary-dark: #2b59b4;
+  --accent: #a52a2a;
+  --accent-dark: #8c2323;
   --container: #eed9c4;
 }
 
 body {
   margin: 0;
   font-family: Roboto;
+}
+
+.filled-button {
+  height: 40px;
+  padding: 0px 24px;
+  border-radius: 20px;
+  color: white;
+  background-color: var(--accent);
+  font-size: 12pt;
+  transition: background-color 0.25s;
+}
+
+.filled-button:active {
+  background-color: var(--accent-dark);
+}
+
+.icon-button {
+  width: 24px;
+  height: 24px;
+  padding: 8px;
+  border-radius: 20px;
+  background: none;
+  border: none;
+  transition: background-color 0.25s;
+}
+
+.icon-button:hover {
+  fill: white;
+  background-color: var(--accent);
+}
+
+.icon-button:active {
+  fill: white;
+  background-color: var(--accent-dark);
+}
+
+.text-button {
+  color: black;
+  background: none;
+  border: none;
+  font-size: 12pt;
+}
+
+.text-button:active {
+  color: var(--accent-dark);
+}
+
+.no-underline {
+  text-decoration: none;
 }

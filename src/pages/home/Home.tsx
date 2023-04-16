@@ -1,14 +1,11 @@
-import CartButton from "../../common/CartButton";
-import LoginButton from "../../common/LoginButton";
 import Root from "../../common/Root";
 import "./Home.css";
 
 function Home() {
   const isLoggedIn = localStorage.getItem("email") !== null;
-  const actionButton = isLoggedIn ? <CartButton /> : <LoginButton />;
-
+  const action = isLoggedIn ? "cart" : "login"
   return (
-    <Root selectedDestination="home" actionButton={actionButton}>
+    <Root action={action}>
       <div className="container">
         <h1>Welcome to Shopmania!</h1>
       </div>

@@ -8,37 +8,39 @@ header {
   padding-right: 16px;
 }
 
-nav > a {
-  border-radius: 20px;
-  padding: 8px 16px;
-  margin-right: 8px;
-  font-weight: bold;
-  text-decoration: none;
+nav {
+  display: flex;
 }
 
-.deselected {
+.destination {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0px 24px;
+  border-radius: 20px;
+  margin-right: 8px;
   color: black;
   transition: background-color 0.25s;
 }
 
 /* Fill on hover */
-.deselected:hover {
+.destination:hover {
   color: white;
   fill: white;
-  background-color: var(--primary);
+  background-color: var(--accent);
 }
 
 /* Fill with a darker color on press */
-.deselected:active {
+.destination:active {
   color: white;
   fill: white;
-  background-color: var(--primary-dark);
+  background-color: var(--accent-dark);
 }
 
 .selected {
   color: white;
   fill: white;
-  background-color: var(--primary);
+  background-color: var(--accent);
 }
 
 main {
@@ -58,5 +60,5 @@ footer {
 }
 
 .logo {
-  margin-left: 8px;
+  margin-right: 8px;
 }
