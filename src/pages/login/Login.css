@@ -1,10 +1,4 @@
-main {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card {
+.login-form {
   display: flex;
   flex-direction: column;
   width: 300px;

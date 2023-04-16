@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import Root from "../Root";
-import "./Login.css"
+import "./Login.css";
 
 function Login() {
   return (
     <Root>
-      <div>
-        <form className="card">
+      <div className="full-size centered">
+        <form className="login-form">
           <label className="text-field-label" htmlFor="email">
             Email
           </label>

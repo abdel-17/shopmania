@@ -3,7 +3,7 @@ header {
   align-items: center;
   justify-content: space-between;
   background-color: var(--container);
-  height: 64px;
+  height: var(--header-height);
   padding-left: 16px;
   padding-right: 16px;
 }
@@ -43,17 +43,11 @@ nav {
   background-color: var(--accent);
 }
 
-main {
-  /* Subtract the height of the header, footer, and footer border. */
-  min-height: calc(100vh - 64px - 80px - 2px);
-  width: 100%;
-}
-
 footer {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 80px;
+  height: calc(var(--footer-height) - 2px);
   border-top: 2px solid;
   font-weight: bold;
   font-size: 16pt;

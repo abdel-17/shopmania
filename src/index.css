@@ -2,6 +2,8 @@
   --accent: #a52a2a;
   --accent-dark: #8c2323;
   --container: #eed9c4;
+  --header-height: 64px;
+  --footer-height: 80px;
 }
 
 body {
@@ -9,6 +11,7 @@ body {
   font-family: Roboto;
 }
 
+/* Styled components */
 .filled-button {
   height: 40px;
   padding: 0px 24px;
@@ -55,10 +58,6 @@ body {
   color: var(--accent-dark);
 }
 
-.no-underline {
-  text-decoration: none;
-}
-
 .text-field-label {
   margin-left: 16px;
   margin-bottom: 4px;
@@ -78,4 +77,20 @@ body {
 
 .text-field:focus {
   border-color: var(--accent);
+}
+
+/* Semantic css classes */
+.no-underline {
+  text-decoration: none;
+}
+
+.full-size {
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  width: 100%;
+}
+
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
