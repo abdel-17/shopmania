@@ -1,9 +1,9 @@
 import Root from "../Root";
+import { isSignedIn } from "../login/auth";
 import "./Home.css";
 
 function Home() {
-  const isLoggedIn = localStorage.getItem("email") !== null;
-  const action = isLoggedIn ? "cart" : "login"
+  const action = isSignedIn() ?  "cart" : "login"
   return (
     <Root action={action}>
       <div className="fullscreen">
