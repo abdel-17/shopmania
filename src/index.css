@@ -54,6 +54,10 @@ body {
   font-size: 12pt;
 }
 
+.text-button:hover {
+  color: var(--accent);
+}
+
 .text-button:active {
   color: var(--accent-dark);
 }
