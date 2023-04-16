@@ -19,15 +19,15 @@ function Root(props: RootProps) {
             Home
           </NavLink>
 
-          <NavLink to="/" isSelected={pathname === "/products"}>
+          <NavLink to="/products" isSelected={pathname === "/products"}>
             Products
           </NavLink>
 
-          <NavLink to="/" isSelected={pathname === "/about"}>
+          <NavLink to="/about" isSelected={pathname === "/about"}>
             About
           </NavLink>
 
-          <NavLink to="/" isSelected={pathname === "/contact"}>
+          <NavLink to="/contact" isSelected={pathname === "/contact"}>
             Contact Us
           </NavLink>
         </nav>
