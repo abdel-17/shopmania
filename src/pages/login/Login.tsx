@@ -1,6 +1,6 @@
 import Root from "../Root";
 import "./Login.css";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { signIn, signUp } from "./auth";
 
 function Login() {
@@ -8,11 +8,11 @@ function Login() {
 
   const toggle = () => setIsLoggingIn((value) => !value);
 
-  const onSubmit = (event: React.MouseEvent) => {
+  const onSubmit = (event: FormEvent) => {
     // Prevent the page from refreshing.
     event.preventDefault();
 
-    const submission = new FormData();
+    const submission = new FormData(event.target as HTMLFormElement);
     const email = submission.get("email") as string;
     const password = submission.get("password") as string;
 
@@ -26,7 +26,7 @@ function Login() {
   return (
     <Root>
       <div className="fullscreen centered">
-        <form className="login-form">
+        <form onSubmit={onSubmit} className="login-form">
           <label htmlFor="email " className="text-field-label">
             Email
           </label>
@@ -37,11 +37,7 @@ function Login() {
           </label>
           <input name="password" type="password" className="text-field" />
 
-          <button
-            type="submit"
-            onClick={onSubmit}
-            className="form-submit-button filled-button"
-          >
+          <button type="submit" className="form-submit-button filled-button">
             {isLoggingIn ? "Login" : "Create Account"}
           </button>
 

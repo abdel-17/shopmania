@@ -10,15 +10,15 @@ function signIn(email: string, password: string) {
   localStorage.setItem("email", email);
 }
 
-function getPasswords() {
-  const passwords = localStorage.getItem("passwords") || "{}";
-  return JSON.parse(passwords);
-}
-
 function signUp(email: string, password: string) {
   const passwords = getPasswords();
   passwords[email] = password;
   localStorage.setItem("passwords", JSON.stringify(passwords));
+}
+
+function getPasswords() {
+  const passwords = localStorage.getItem("passwords") || "{}";
+  return JSON.parse(passwords);
 }
 
 function signOut() {
