@@ -3,9 +3,7 @@ function signIn(email: string, password: string) {
   // for the given email.
   const passwords = getPasswords();
   if (password !== passwords[email]) {
-    // If not, alert the user.
-    alert("Invalid email or password");
-    return;
+    throw new Error("Invalid email or password");
   }
   localStorage.setItem("email", email);
 }
@@ -14,6 +12,7 @@ function signUp(email: string, password: string) {
   const passwords = getPasswords();
   passwords[email] = password;
   localStorage.setItem("passwords", JSON.stringify(passwords));
+  localStorage.setItem("email", email);
 }
 
 function getPasswords() {

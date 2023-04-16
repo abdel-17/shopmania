@@ -1,10 +1,17 @@
 import Root from "../Root";
 import "./Login.css";
 import { FormEvent, useState } from "react";
-import { signIn, signUp } from "./auth";
+import { isSignedIn, signIn, signUp } from "./auth";
+import { Navigate, useNavigate } from "react-router";
 
 function Login() {
+  // If we're already logged in, navigate to the home page.
+  if (isSignedIn()) {
+    return <Navigate to="/" replace />
+  }
+
   const [isLoggingIn, setIsLoggingIn] = useState(true);
+  const navigate = useNavigate();
 
   const toggle = () => setIsLoggingIn((value) => !value);
 
@@ -16,10 +23,17 @@ function Login() {
     const email = submission.get("email") as string;
     const password = submission.get("password") as string;
 
-    if (isLoggingIn) {
-      signIn(email, password);
-    } else {
-      signUp(email, password);
+    try {
+      if (isLoggingIn) {
+        signIn(email, password);
+      } else {
+        signUp(email, password);
+      }
+      // Navigate back to the previous destination.
+      navigate(-1);
+    } catch (error) {
+      // Alert the user if login fails.
+      alert(error);
     }
   };
 
