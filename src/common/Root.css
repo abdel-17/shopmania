@@ -31,7 +31,7 @@ nav > a {
 /* Fill with a darker color on press */
 .deselected:active {
   color: white;
-  fill: wite;
+  fill: white;
   background-color: var(--primary-dark);
 }
 
