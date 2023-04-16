@@ -8,14 +8,19 @@
   background-color: var(--container);
 }
 
-.password-label {
+.form-password-label {
   margin-top: 16px;
 }
 
-.login {
+.form-submit-button {
   margin-top: 32px;
 }
 
-.register {
+.form-helper-text {
   margin-top: 16px;
+}
+
+.form-hyperlink-text {
+  margin-left: 8px;
+  text-decoration: underline;
 }

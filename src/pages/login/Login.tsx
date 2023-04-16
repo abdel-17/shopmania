@@ -1,30 +1,37 @@
-import { Link } from "react-router-dom";
 import Root from "../Root";
 import "./Login.css";
+import { useState } from "react";
 
 function Login() {
+  const [isLoggingIn, setIsLoggingIn] = useState(true);
+  const toggle = () => setIsLoggingIn((value) => !value);
   return (
     <Root>
       <div className="fullscreen centered">
         <form className="login-form">
-          <label className="text-field-label" htmlFor="email">
+          <label htmlFor="email " className="text-field-label">
             Email
           </label>
-          <input name="email" className="text-field" type="email" />
+          <input name="email" type="email" className="text-field" />
 
-          <label className="password-label text-field-label" htmlFor="password">
+          <label htmlFor="password" className="form-password-label text-field-label">
             Password
           </label>
-          <input name="password" className="text-field" type="password" />
+          <input name="password" type="password" className="text-field" />
 
-          <button className="login filled-button" type="submit">
-            Login
+          <button type="submit" className="form-submit-button filled-button">
+            {isLoggingIn ? "Login" : "Create Account"}
           </button>
 
-          <div className="centered">
-            <Link to="/register" className="register text-button">
-              Create an account
-            </Link>
+          <div className="form-helper-text">
+            {isLoggingIn ? "Don't have an account?" : "Already have an account?"}
+            <button
+              type="button"
+              onClick={toggle}
+              className="form-hyperlink-text text-button"
+            >
+              {isLoggingIn ? "Sign up" : "Sign In"}
+            </button>
           </div>
         </form>
       </div>
