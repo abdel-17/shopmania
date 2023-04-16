@@ -84,7 +84,7 @@ body {
   text-decoration: none;
 }
 
-.full-size {
+.fullscreen {
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
   width: 100%;
 }

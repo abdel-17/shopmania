@@ -6,8 +6,10 @@ function Home() {
   const action = isLoggedIn ? "cart" : "login"
   return (
     <Root action={action}>
-      <div className="container">
-        <h1>Welcome to Shopmania!</h1>
+      <div className="fullscreen">
+        <div className="container">
+          <h1>Welcome to Shopmania!</h1>
+        </div>
       </div>
     </Root>
   );

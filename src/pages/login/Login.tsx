@@ -5,7 +5,7 @@ import "./Login.css";
 function Login() {
   return (
     <Root>
-      <div className="full-size centered">
+      <div className="fullscreen centered">
         <form className="login-form">
           <label className="text-field-label" htmlFor="email">
             Email
