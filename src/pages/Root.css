@@ -26,21 +26,19 @@ nav {
 /* Fill on hover */
 .destination:hover {
   color: white;
-  fill: white;
   background-color: var(--accent);
 }
 
 /* Fill with a darker color on press */
 .destination:active {
   color: white;
-  fill: white;
   background-color: var(--accent-dark);
 }
 
 .selected {
   color: white;
-  fill: white;
   background-color: var(--accent);
+  font-weight: bold;
 }
 
 footer {
