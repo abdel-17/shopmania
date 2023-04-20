@@ -27,8 +27,8 @@ function Login() {
       } else if (selectedTab === "register") {
         signUp(email, password);
       }
-      // Navigate back to the previous destination.
-      navigate(-1);
+      // Navigate to the home destination.
+      navigate("/", { replace: true });
     } catch (error) {
       // Alert the user if login fails.
       alert(error);
