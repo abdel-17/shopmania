@@ -10,7 +10,6 @@ interface RootProps {
 
 function Root(props: RootProps) {
   const { action, children } = props;
-  const { pathname } = useLocation();
   return (
     <>
       <header>

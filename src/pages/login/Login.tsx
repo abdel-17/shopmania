@@ -1,6 +1,6 @@
 import Root from "../Root";
 import "./Login.css";
-import { FormEvent, ReactNode, useState } from "react";
+import { FormEvent, useState } from "react";
 import { isSignedIn, signIn, signUp } from "./auth";
 import { Navigate, useNavigate } from "react-router";
 
@@ -9,6 +9,8 @@ function Login() {
   if (isSignedIn()) {
     return <Navigate to="/" replace />;
   }
+
+  type FormTab = "login" | "register";
 
   const [selectedTab, setSelectedTab] = useState<FormTab>("login");
   const navigate = useNavigate();
@@ -34,8 +36,6 @@ function Login() {
       alert(error);
     }
   };
-
-  type FormTab = "login" | "register";
 
   interface TabButtonProps {
     tab: FormTab
