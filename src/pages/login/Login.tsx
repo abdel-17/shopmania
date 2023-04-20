@@ -1,19 +1,17 @@
 import Root from "../Root";
 import "./Login.css";
-import { FormEvent, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 import { isSignedIn, signIn, signUp } from "./auth";
 import { Navigate, useNavigate } from "react-router";
 
 function Login() {
   // If we're already logged in, navigate to the home page.
   if (isSignedIn()) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
-  const [isLoggingIn, setIsLoggingIn] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<FormTab>("login");
   const navigate = useNavigate();
-
-  const toggle = () => setIsLoggingIn((value) => !value);
 
   const onSubmit = (event: FormEvent) => {
     // Prevent the page from refreshing.
@@ -24,9 +22,9 @@ function Login() {
     const password = submission.get("password") as string;
 
     try {
-      if (isLoggingIn) {
+      if (selectedTab === "login") {
         signIn(email, password);
-      } else {
+      } else if (selectedTab === "register") {
         signUp(email, password);
       }
       // Navigate back to the previous destination.
@@ -37,36 +35,64 @@ function Login() {
     }
   };
 
+  type FormTab = "login" | "register";
+
+  interface TabButtonProps {
+    tab: FormTab
+  }
+
+  function TabButton(props: TabButtonProps) {
+    const { tab } = props;
+
+    const isSelected = tab === selectedTab;
+    const className = `form-tab ${tab}-tab ${isSelected ? "active-tab" : ""}`;
+
+    const onClick = () => setSelectedTab(tab);
+
+    return (
+      <button onClick={onClick} className={className}>
+        {tab}
+      </button>
+    );
+  }
+
   return (
     <Root>
       <div className="fullscreen centered">
-        <form onSubmit={onSubmit} className="login-form">
-          <label htmlFor="email " className="text-field-label">
-            Email
-          </label>
-          <input name="email" type="email" className="text-field" />
-
-          <label htmlFor="password" className="form-password-label text-field-label">
-            Password
-          </label>
-          <input name="password" type="password" className="text-field" />
-
-          <button type="submit" className="form-submit-button filled-button">
-            {isLoggingIn ? "Login" : "Create Account"}
-          </button>
-
-          <div className="form-helper-text">
-            {isLoggingIn ? "Don't have an account?" : "Already have an account?"}
-
-            <button
-              type="button"
-              onClick={toggle}
-              className="form-hyperlink-text text-button"
-            >
-              {isLoggingIn ? "Sign up" : "Sign In"}
-            </button>
+        <div className="form-container">
+          <div>
+            <TabButton tab="login" />
+            <TabButton tab="register" />
           </div>
-        </form>
+
+          <form method="post" onSubmit={onSubmit} className="login-form">
+            <label htmlFor="email" className="text-field-label">
+              Email
+            </label>
+            <input
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="text-field"
+            />
+
+            <label htmlFor="password" className="form-password-label text-field-label">
+              Password
+            </label>
+            <input
+              name="password"
+              type="password"
+              autoComplete={selectedTab === "login" ? "current-password" : "new-password"}
+              required
+              className="text-field"
+            />
+
+            <button type="submit" className="form-submit-button filled-button">
+              {selectedTab === "login" ? "Login" : "Create Account"}
+            </button>
+          </form>
+        </div>
       </div>
     </Root>
   );

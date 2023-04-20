@@ -1,11 +1,37 @@
+.form-container {
+  margin: 16px;
+  border-radius: 16px;
+  background-color: var(--container);
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
   width: 300px;
-  margin: 16px;
   padding: 32px;
-  border-radius: 16px;
-  background-color: var(--container);
+}
+
+.form-tab {
+  width: 50%;
+  height: 40px;
+  font-size: 12pt;
+  background: none;
+  border: none;
+  text-transform: capitalize;
+  transition-duration: 0.25s;
+}
+
+.active-tab {
+  color: white;
+  background-color: var(--accent);
+}
+
+.login-tab {
+  border-top-left-radius: 16px;
+}
+
+.register-tab {
+  border-top-right-radius: 16px;
 }
 
 .form-password-label {
