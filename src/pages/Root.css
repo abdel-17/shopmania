@@ -38,7 +38,6 @@ nav {
 .selected {
   color: white;
   background-color: var(--accent);
-  font-weight: bold;
 }
 
 footer {
