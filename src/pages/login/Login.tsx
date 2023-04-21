@@ -1,44 +1,55 @@
 import Root from "../Root";
 import "./Login.css";
 import { FormEvent, useState } from "react";
-import { isSignedIn, signIn, signUp } from "./auth";
 import { Navigate, useNavigate } from "react-router";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { FirebaseError } from "firebase/app";
+import { auth, useAuth } from "../../firebase/auth";
+
+type FormTab = "login" | "register";
 
 function Login() {
-  // If we're already logged in, navigate to the home page.
-  if (isSignedIn()) {
+  const [selectedTab, setSelectedTab] = useState<FormTab>("login");
+  const [loading, setLoading] = useState(false);
+  const user = useAuth();
+
+  if (user !== null) {
+    // Replace this commponent with the home page on login.
     return <Navigate to="/" replace />;
   }
 
-  type FormTab = "login" | "register";
-
-  const [selectedTab, setSelectedTab] = useState<FormTab>("login");
-  const navigate = useNavigate();
-
-  const onSubmit = (event: FormEvent) => {
+  const onSubmit = async (event: FormEvent) => {
     // Prevent the page from refreshing.
     event.preventDefault();
 
+    // Extract the form submission.
     const submission = new FormData(event.target as HTMLFormElement);
     const email = submission.get("email") as string;
     const password = submission.get("password") as string;
 
     try {
+      setLoading(true);
       if (selectedTab === "login") {
-        signIn(email, password);
+        await signInWithEmailAndPassword(auth, email, password);
       } else if (selectedTab === "register") {
-        signUp(email, password);
+        await createUserWithEmailAndPassword(auth, email, password);
       }
-      // Navigate to the home destination.
-      navigate("/", { replace: true });
     } catch (error) {
-      // Alert the user if login fails.
-      alert(error);
+      console.error(error);
+      if (error instanceof FirebaseError) {
+        // Alert the user if login/registration fails.
+        alert(error.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
   interface TabButtonProps {
-    tab: FormTab
+    tab: FormTab;
   }
 
   function TabButton(props: TabButtonProps) {
@@ -88,7 +99,11 @@ function Login() {
               className="text-field"
             />
 
-            <button type="submit" className="form-submit-button filled-button">
+            <button
+              type="submit"
+              disabled={loading}
+              className="form-submit-button filled-button"
+            >
               {selectedTab === "login" ? "Login" : "Create Account"}
             </button>
           </form>

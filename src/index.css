@@ -20,11 +20,15 @@ body {
   background-color: var(--accent);
   border: none;
   font-size: 12pt;
-  transition: background-color 0.25s;
+  transition-duration: 0.25s;
 }
 
 .filled-button:active {
   background-color: var(--accent-dark);
+}
+
+.filled-button:disabled {
+  opacity: 25%;
 }
 
 .icon-button {
