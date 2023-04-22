@@ -1,0 +1,21 @@
+.contact-message {
+  margin-top: 0;
+  margin-bottom: 32px;
+  font-size: 13pt;
+}
+
+.contact-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: ce;
+  width: 150px;
+  margin: 16px;
+}
+
+.contact-method {
+  margin-top: 4px;
+  margin-bottom: 16px;
+  font-size: 15pt;
+  font-weight: bold;
+}
