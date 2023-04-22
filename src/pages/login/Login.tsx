@@ -1,7 +1,7 @@
 import Root from "../Root";
 import "./Login.css";
 import { FormEvent, useState } from "react";
-import { Navigate, useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -56,7 +56,7 @@ function Login() {
     const { tab } = props;
 
     const isSelected = tab === selectedTab;
-    const className = `form-tab ${tab}-tab ${isSelected ? "active-tab" : ""}`;
+    const className = `form-tab ${tab}-tab ${isSelected ? "active-tab" : "inactive-tab"}`;
 
     const onClick = () => setSelectedTab(tab);
 

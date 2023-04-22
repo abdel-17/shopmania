@@ -21,6 +21,10 @@
   transition-duration: 0.25s;
 }
 
+.inactive-tab:hover {
+  background-color: rgba(0, 0, 0, 8%);
+}
+
 .active-tab {
   color: white;
   background-color: var(--accent);
