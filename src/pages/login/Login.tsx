@@ -68,7 +68,7 @@ function Login() {
   }
 
   return (
-    <Root>
+    <Root hideActionButton>
       <div className="fullscreen centered">
         <div className="form-container">
           <div>

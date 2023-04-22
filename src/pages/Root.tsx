@@ -5,13 +5,12 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../firebase/auth";
 
 interface RootProps {
-  action?: "login" | "cart";
+  hideActionButton?: boolean;
   children: ReactNode;
 }
 
 function Root(props: RootProps) {
   const user = useAuth();
-  const action = props.action || (user !== null ? "cart" : "login");
   return (
     <>
       <header>
@@ -22,9 +21,7 @@ function Root(props: RootProps) {
           <NavLink to="/contact">Contact Us</NavLink>
         </nav>
 
-        {action === "login" && <LoginButton />}
-
-        {action === "cart" && <CartButton />}
+        {!props.hideActionButton && (user === null ? <LoginButton /> : <CartButton />)}
       </header>
 
       <main>{props.children}</main>
