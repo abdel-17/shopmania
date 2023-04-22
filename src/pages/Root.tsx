@@ -2,6 +2,7 @@ import "./Root.css";
 import logo from "../assets/logo.svg";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../firebase/auth";
 
 interface RootProps {
   action?: "login" | "cart";
@@ -9,7 +10,8 @@ interface RootProps {
 }
 
 function Root(props: RootProps) {
-  const { action, children } = props;
+  const user = useAuth();
+  const action = props.action || (user !== null ? "cart" : "login");
   return (
     <>
       <header>
@@ -25,7 +27,7 @@ function Root(props: RootProps) {
         {action === "cart" && <CartButton />}
       </header>
 
-      <main>{children}</main>
+      <main>{props.children}</main>
 
       <footer>
         <img src={logo} alt="logo" className="logo" />

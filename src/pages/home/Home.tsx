@@ -1,11 +1,9 @@
 import Root from "../Root";
 import "./Home.css";
-import { useAuth } from "../../firebase/auth";
 
 function Home() {
-  const user = useAuth();
   return (
-    <Root action={user !== null ? "cart" : "login"}>
+    <Root>
       <div className="fullscreen">
         <div className="container">
           <h1>Welcome to Shopmania!</h1>
