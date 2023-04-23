@@ -40,6 +40,12 @@ nav {
   background-color: var(--accent);
 }
 
+.action-button {
+  margin-left: 8px;
+  background: none;
+  border: none;
+}
+
 footer {
   display: flex;
   align-items: center;

@@ -51,22 +51,6 @@ body {
   background-color: var(--accent-dark);
 }
 
-.text-button {
-  color: black;
-  background: none;
-  border: none;
-  padding: 0px;
-  font-size: 12pt;
-}
-
-.text-button:hover {
-  color: var(--accent);
-}
-
-.text-button:active {
-  color: var(--accent-dark);
-}
-
 .text-field-label {
   margin-left: 16px;
   margin-bottom: 4px;

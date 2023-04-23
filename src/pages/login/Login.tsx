@@ -1,4 +1,3 @@
-import Root from "../Root";
 import "./Login.css";
 import { FormEvent, useState } from "react";
 import { Navigate } from "react-router";
@@ -68,48 +67,46 @@ function Login() {
   }
 
   return (
-    <Root hideActionButton>
-      <div className="fullscreen centered">
-        <div className="form-container">
-          <div>
-            <TabButton tab="login" />
-            <TabButton tab="register" />
-          </div>
-
-          <form method="post" onSubmit={onSubmit} className="login-form">
-            <label htmlFor="email" className="text-field-label">
-              Email
-            </label>
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              className="text-field"
-            />
-
-            <label htmlFor="password" className="form-password-label text-field-label">
-              Password
-            </label>
-            <input
-              name="password"
-              type="password"
-              autoComplete={selectedTab === "login" ? "current-password" : "new-password"}
-              required
-              className="text-field"
-            />
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="form-submit-button filled-button"
-            >
-              {selectedTab === "login" ? "Login" : "Create Account"}
-            </button>
-          </form>
+    <div className="fullscreen centered">
+      <div className="form-container">
+        <div>
+          <TabButton tab="login" />
+          <TabButton tab="register" />
         </div>
+
+        <form method="post" onSubmit={onSubmit} className="login-form">
+          <label htmlFor="email" className="text-field-label">
+            Email
+          </label>
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            className="text-field"
+          />
+
+          <label htmlFor="password" className="form-password-label text-field-label">
+            Password
+          </label>
+          <input
+            name="password"
+            type="password"
+            autoComplete={selectedTab === "login" ? "current-password" : "new-password"}
+            required
+            className="text-field"
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="form-submit-button filled-button"
+          >
+            {selectedTab === "login" ? "Login" : "Create Account"}
+          </button>
+        </form>
       </div>
-    </Root>
+    </div>
   );
 }
 
