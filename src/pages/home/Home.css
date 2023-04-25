@@ -1,9 +1,9 @@
-h1 {
+.welcome-message {
   margin-left: 16px;
   margin-bottom: 48px;
 }
 
-h2 {
+.category-name {
   margin-left: 16px;
   text-transform: capitalize;
 }

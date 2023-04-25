@@ -11,11 +11,11 @@ function Home() {
   ] as const;
   return (
     <div className="fullscreen">
-      <h1>Welcome to Shopmania!</h1>
+      <h1 className="welcome-message">Welcome to Shopmania!</h1>
 
       {categories.map((category) => (
         <>
-          <h2>{category}</h2>
+          <h2 className="category-name">{category}</h2>
           <CategoryProducts category={category} key={category} />
         </>
       ))}
