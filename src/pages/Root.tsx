@@ -1,7 +1,7 @@
 import "./Root.css";
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { auth, useAuth } from "../../firebase/auth";
+import { auth, useAuth } from "../firebase/auth";
 import { FirebaseError } from "firebase/app";
 
 interface RootProps {
@@ -102,8 +102,8 @@ function LogoutButton() {
 }
 
 function CartButton() {
-  const { pathname } = useLocation()
-  const isSelected = pathname === "/cart"
+  const { pathname } = useLocation();
+  const isSelected = pathname === "/cart";
   return (
     <Link to="/cart">
       <svg

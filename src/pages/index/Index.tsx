@@ -1,9 +1,8 @@
 import { Fragment } from "react";
-import { ProductCaegory, useProducts } from "../../api";
-import ProductCard from "../../components/ProductCard/ProductCard";
-import "./Home.css";
+import { Product, ProductCaegory, useProducts } from "../../api";
+import "./Index.css";
 
-function Home() {
+function Index() {
   const categories = [
     "electronics",
     "jewelery",
@@ -42,4 +41,21 @@ function CategoryProducts(props: CategoryProductsProps) {
   );
 }
 
-export default Home;
+interface ProductCardProps {
+  product: Product;
+}
+
+function ProductCard(props: ProductCardProps) {
+  const { product } = props;
+  return (
+    <div className="product-card">
+      <img src={product.image} alt={product.title} className="product-image" />
+      <div>
+        <div className="product-name">{product.title}</div>
+        <div className="product-price">{product.price}$</div>
+      </div>
+    </div>
+  );
+}
+
+export default Index;
