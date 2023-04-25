@@ -13,29 +13,16 @@ interface Product {
   };
 }
 
-interface ProductOptions {
-  category?: ProductCaegory;
-  limit?: number;
-  sort?: "desc" | "asc";
-}
-
-type ProductCaegory = "electronics" | "jewelery" | "men's clothing" | "women's clothing";
+type ProductCategory = "electronics" | "jewelery" | "men's clothing" | "women's clothing";
 
 const baseUrl = "https://fakestoreapi.com";
 
-function useProducts(options: ProductOptions = {}) {
-  return useQuery<Product[]>(["products", options], async () => {
-    const { category, limit, sort } = options;
-    const url = new URL(category ? `/products/category/${category}` : "/products", baseUrl);
-    
-    if (limit) {
-      url.searchParams.set("limit", limit.toString());
-    }
-
-    if (sort) {
-      url.searchParams.set("sort", sort);
-    }
-
+function useProducts(category?: ProductCategory) {
+  return useQuery<Product[]>(["products", category], async () => {
+    const url = new URL(
+      category ? `/products/category/${category}` : "/products",
+      baseUrl
+    );
     const response = await fetch(url);
     return await response.json();
   });
@@ -50,4 +37,4 @@ function useProduct(id: number) {
 }
 
 export { useProducts, useProduct };
-export type { Product, ProductCaegory };
+export type { Product, ProductCategory as ProductCaegory };

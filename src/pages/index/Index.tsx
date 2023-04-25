@@ -28,8 +28,7 @@ interface CategoryProductsProps {
 }
 
 function CategoryProducts(props: CategoryProductsProps) {
-  const { category } = props;
-  const { data: products } = useProducts({ category });
+  const { data: products } = useProducts(props.category);
   return (
     <div className="products-container">
       {products?.map((product) => (

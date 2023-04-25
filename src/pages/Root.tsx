@@ -21,8 +21,7 @@ function Root(props: RootProps) {
     <>
       <header>
         <nav>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/products">Products</NavLink>
+          <NavLink to="/">Products</NavLink>
           <NavLink to="/about">About</NavLink>
           <NavLink to="/contact">Contact Us</NavLink>
         </nav>
