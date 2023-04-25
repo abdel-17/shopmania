@@ -55,10 +55,19 @@ nav {
 
 footer {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: calc(var(--footer-height) - 2px);
   border-top: 2px solid;
-  font-weight: bold;
+}
+
+.logo-name {
   font-size: 15pt;
+  font-weight: bold;
+}
+
+.logo-description {
+  font-size: 13pt;
+  margin-top: 8px;
 }
