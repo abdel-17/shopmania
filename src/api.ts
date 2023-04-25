@@ -27,8 +27,7 @@ function useProducts(options: ProductOptions = {}) {
   return useQuery<Product[]>(["products", options], async () => {
     const { category, limit, sort } = options;
     const url = new URL(category ? `/products/category/${category}` : "/products", baseUrl);
-    console.log(url)
-
+    
     if (limit) {
       url.searchParams.set("limit", limit.toString());
     }
