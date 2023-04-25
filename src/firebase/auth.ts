@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const auth = getAuth(app);
 
 function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

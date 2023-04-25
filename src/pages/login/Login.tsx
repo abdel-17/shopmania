@@ -15,7 +15,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const user = useAuth();
 
-  if (user !== null) {
+  if (user !== null && user !== undefined) {
     // Replace this commponent with the home page on login.
     return <Navigate to="/" replace />;
   }

@@ -16,7 +16,8 @@ function Root(props: RootProps) {
 
   // Hide the login and cart buttons in the login screen.
   const showActionButtons = pathname !== "/login";
-  const isLoggedIn = user !== null;
+  const isLoggedIn = user !== null && user !== undefined;
+  const isLoggedOut = user === null;
 
   return (
     <>
@@ -30,7 +31,8 @@ function Root(props: RootProps) {
 
         {showActionButtons && (
           <div className="action-buttons">
-            {isLoggedIn ? <LogoutButton /> : <LoginButton />}
+            {isLoggedIn && <LogoutButton />}
+            {isLoggedOut && <LoginButton />}
             {isLoggedIn && <CartButton />}
           </div>
         )}
