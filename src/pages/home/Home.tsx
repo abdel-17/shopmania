@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { ProductCaegory, useProducts } from "../../api";
 import ProductCard from "../../components/ProductCard/ProductCard";
 import "./Home.css";
@@ -14,10 +15,10 @@ function Home() {
       <h1 className="welcome-message">Welcome to Shopmania!</h1>
 
       {categories.map((category) => (
-        <>
+        <Fragment key={category}>
           <h2 className="category-name">{category}</h2>
-          <CategoryProducts category={category} key={category} />
-        </>
+          <CategoryProducts category={category} />
+        </Fragment>
       ))}
     </div>
   );
@@ -33,7 +34,7 @@ function CategoryProducts(props: CategoryProductsProps) {
   return (
     <div className="products-container">
       {products?.map((product) => (
-        <div className="category-product">
+        <div className="category-product" key={product.id}>
           <ProductCard product={product} key={product.id} />
         </div>
       ))}
