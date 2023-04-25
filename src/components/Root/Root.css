@@ -2,7 +2,6 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--container);
   height: var(--header-height);
   padding-left: 16px;
   padding-right: 16px;
@@ -19,31 +18,39 @@ nav {
   padding: 0px 16px;
   border-radius: 20px;
   margin-right: 8px;
-  color: black;
+  color: var(--offwhite);
   transition: background-color 0.25s;
 }
 
 /* Fill on hover */
 .destination:hover {
-  color: white;
   background-color: var(--accent);
 }
 
 /* Fill with a darker color on press */
 .destination:active {
-  color: white;
   background-color: var(--accent-dark);
 }
 
 .selected {
-  color: white;
   background-color: var(--accent);
 }
 
 .action-button {
-  margin-left: 8px;
-  background: none;
-  border: none;
+  width: 24px;
+  height: 24px;
+  padding: 8px;
+  border-radius: 20px;
+  fill: var(--offwhite);
+  transition-duration: 0.25s;
+}
+
+.action-button:hover {
+  background-color: var(--accent);
+}
+
+.action-button:active {
+  background-color: var(--accent-dark);
 }
 
 footer {
@@ -53,9 +60,5 @@ footer {
   height: calc(var(--footer-height) - 2px);
   border-top: 2px solid;
   font-weight: bold;
-  font-size: 16pt;
-}
-
-.logo {
-  margin-right: 8px;
+  font-size: 15pt;
 }

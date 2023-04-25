@@ -1,7 +1,7 @@
 .form-container {
   margin: 16px;
   border-radius: 16px;
-  background-color: var(--container);
+  background-color: var(--card);
 }
 
 .login-form {
@@ -15,6 +15,7 @@
   width: 50%;
   height: 40px;
   font-size: 12pt;
+  color: var(--offwhite);
   background: none;
   border: none;
   text-transform: capitalize;
@@ -22,11 +23,10 @@
 }
 
 .inactive-tab:hover {
-  background-color: rgba(0, 0, 0, 8%);
+  background-color: rgba(0, 0, 0, 16%);
 }
 
 .active-tab {
-  color: white;
   background-color: var(--accent);
 }
 
@@ -38,19 +38,48 @@
   border-top-right-radius: 16px;
 }
 
+.text-field-label {
+  margin-left: 16px;
+  margin-bottom: 4px;
+  font-size: 11pt;
+}
+
+.text-field {
+  height: 56px;
+  padding: 0px 16px;
+  font-size: 12pt;
+  color: var(--offwhite);
+  background: none;
+  border: 1px solid gray;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.25s;
+}
+
+.text-field:focus {
+  border-color: var(--accent);
+}
+
 .form-password-label {
   margin-top: 16px;
 }
 
 .form-submit-button {
+  height: 40px;
   margin-top: 32px;
+  padding: 0px 24px;
+  border-radius: 20px;
+  color: var(--offwhite);
+  background-color: var(--accent);
+  border: none;
+  font-size: 12pt;
+  transition-duration: 0.25s;
 }
 
-.form-helper-text {
-  margin-top: 16px;
+.form-submit-button:active {
+  background-color: var(--accent-dark);
 }
 
-.form-hyperlink-text {
-  margin-left: 8px;
-  text-decoration: underline;
+.form-submit-button:disabled {
+  opacity: 25%;
 }

@@ -1,7 +1,9 @@
 :root {
   --accent: #813845;
   --accent-dark: #6a2e38;
-  --container: #eed9c4;
+  --offwhite: #e8eaed;
+  --background-color: #181818;
+  --card: #282828;
   --header-height: 64px;
   --footer-height: 80px;
 }
@@ -9,72 +11,21 @@
 body {
   margin: 0;
   font-family: Roboto;
-}
-
-/* Styled components */
-.filled-button {
-  height: 40px;
-  padding: 0px 24px;
-  border-radius: 20px;
-  color: white;
-  background-color: var(--accent);
-  border: none;
-  font-size: 12pt;
-  transition-duration: 0.25s;
-}
-
-.filled-button:active {
-  background-color: var(--accent-dark);
-}
-
-.filled-button:disabled {
-  opacity: 25%;
-}
-
-.icon-button {
-  width: 24px;
-  height: 24px;
-  padding: 8px;
-  border-radius: 20px;
-  background: none;
-  border: none;
-  transition: background-color 0.25s;
-}
-
-.icon-button:hover {
-  fill: white;
-  background-color: var(--accent);
-}
-
-.icon-button:active {
-  fill: white;
-  background-color: var(--accent-dark);
-}
-
-.text-field-label {
-  margin-left: 16px;
-  margin-bottom: 4px;
-  font-size: 11pt;
-}
-
-.text-field {
-  height: 56px;
-  padding: 0px 16px;
-  font-size: 12pt;
-  background: none;
-  border: 1px solid black;
-  border-radius: 8px;
-  outline: none;
-  transition: border-color 0.25s;
-}
-
-.text-field:focus {
-  border-color: var(--accent);
+  color: var(--offwhite);
+  background-color: var(--background-color);
 }
 
 /* Semantic css classes */
 .no-underline {
   text-decoration: none;
+}
+
+.no-background {
+  background: none;
+}
+
+.borderless {
+  border: none;
 }
 
 .fullscreen {
