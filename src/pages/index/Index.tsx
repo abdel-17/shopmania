@@ -1,7 +1,7 @@
 import { Fragment } from "react";
-import { Product, ProductCaegory, useProducts } from "../../api";
+import { Product, ProductCategory as ProductCategory, useProducts } from "../../api";
 import "./Index.css";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 function Index() {
@@ -26,7 +26,7 @@ function Index() {
 }
 
 interface CategoryProductsProps {
-  category: ProductCaegory;
+  category: ProductCategory;
 }
 
 function CategoryProducts(props: CategoryProductsProps) {

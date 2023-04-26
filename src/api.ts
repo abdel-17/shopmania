@@ -37,4 +37,4 @@ function useProduct(id: number) {
 }
 
 export { useProducts, useProduct };
-export type { Product, ProductCategory as ProductCaegory };
+export type { Product, ProductCategory };
