@@ -9,11 +9,9 @@ interface RootProps {
 }
 
 function Root(props: RootProps) {
-  const { pathname } = useLocation();
   const user = useAuth();
 
   // Hide the login and cart buttons in the login screen.
-  const showActionButtons = pathname !== "/login";
   const isLoggedIn = user !== null && user !== undefined;
   const isLoggedOut = user === null;
 
@@ -26,13 +24,11 @@ function Root(props: RootProps) {
           <NavLink to="/contact">Contact Us</NavLink>
         </nav>
 
-        {showActionButtons && (
-          <div className="action-buttons">
-            {isLoggedIn && <LogoutButton />}
-            {isLoggedOut && <LoginButton />}
-            {isLoggedIn && <CartButton />}
-          </div>
-        )}
+        <div className="action-buttons">
+          {isLoggedIn && <LogoutButton />}
+          {isLoggedOut && <LoginButton />}
+          {isLoggedIn && <CartButton />}
+        </div>
       </header>
 
       <main>{props.children}</main>
@@ -62,12 +58,14 @@ function NavLink(props: NavLinkProps) {
 }
 
 function LoginButton() {
+  const { pathname } = useLocation();
+  const isSelected = pathname === "/login";
   return (
     <Link to="/login">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 96 960 960"
-        className="action-button"
+        className={isSelected ? "selected action-button" : "action-button"}
       >
         <path d="M489 936v-60h291V276H489v-60h291q24 0 42 18t18 42v600q0 24-18 42t-42 18H489Zm-78-185-43-43 102-102H120v-60h348L366 444l43-43 176 176-174 174Z" />
       </svg>
