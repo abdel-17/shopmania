@@ -39,7 +39,7 @@ function CategoryProducts(props: CategoryProductsProps) {
               <ProductCard product={product} key={product.id} />
             </div>
           ))
-        : [1, 2, 3, 4, 5].map((i) => (
+        : [1, 2, 3].map((i) => (
             <div className="category-product" key={i}>
               <ProductCardPlaceholder key={i} />
             </div>
