@@ -10,8 +10,7 @@ interface RootProps {
 
 function Root(props: RootProps) {
   const user = useAuth();
-
-  // Hide the login and cart buttons in the login screen.
+  
   const isLoggedIn = user !== null && user !== undefined;
   const isLoggedOut = user === null;
 
