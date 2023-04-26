@@ -42,6 +42,7 @@ nav {
   padding: 8px;
   border-radius: 20px;
   fill: var(--offwhite);
+  animation: fade 0.5s;
   transition-duration: 0.25s;
 }
 
@@ -51,6 +52,15 @@ nav {
 
 .action-button:active {
   background-color: var(--accent-dark);
+}
+
+@keyframes fade {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
 }
 
 footer {
