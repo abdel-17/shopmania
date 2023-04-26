@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { Product, ProductCaegory, useProducts } from "../../api";
 import "./Index.css";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function Index() {
   const categories = [
@@ -31,11 +33,17 @@ function CategoryProducts(props: CategoryProductsProps) {
   const { data: products } = useProducts(props.category);
   return (
     <div className="products-container">
-      {products?.map((product) => (
-        <div className="category-product" key={product.id}>
-          <ProductCard product={product} key={product.id} />
-        </div>
-      ))}
+      {products
+        ? products.map((product) => (
+            <div className="category-product" key={product.id}>
+              <ProductCard product={product} key={product.id} />
+            </div>
+          ))
+        : [1, 2, 3, 4, 5].map((i) => (
+            <div className="category-product" key={i}>
+              <ProductCardPlaceholder key={i} />
+            </div>
+          ))}
     </div>
   );
 }
@@ -55,6 +63,15 @@ function ProductCard(props: ProductCardProps) {
         <div className="product-name">{product.title}</div>
         <div className="product-price">{product.price}$</div>
       </div>
+    </div>
+  );
+}
+
+function ProductCardPlaceholder() {
+  return (
+    <div className="product-card">
+      <Skeleton width="100%" height={175} />
+      <Skeleton count={2} />
     </div>
   );
 }
