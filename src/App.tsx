@@ -3,6 +3,7 @@ import Index from "./pages/index/Index";
 import Login from "./pages/login/Login";
 import Contact from "./pages/contact/Contact";
 import Root from "./pages/Root";
+import Cart from "./pages/cart/Cart";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </Root>
     </BrowserRouter>
