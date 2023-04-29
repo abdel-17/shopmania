@@ -24,8 +24,8 @@ function Root(props: RootProps) {
         </nav>
 
         <div className="action-buttons">
-          {isLoggedIn && <LogoutButton />}
           {isLoggedOut && <LoginButton />}
+          {isLoggedIn && <LogoutButton />}
           {isLoggedIn && <CartButton />}
         </div>
       </header>
