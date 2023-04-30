@@ -1,8 +1,3 @@
-import "./Contact.css";
-import agent from "../../assets/agent.svg";
-import email from "../../assets/email.svg";
-import location from "../../assets/location.svg";
-
 function Contact() {
   return (
     <div className="fullscreen centered vertical">
@@ -22,7 +17,6 @@ function Contact() {
 function Location() {
   return (
     <div className="contact-container">
-      <img src={location} alt="address" />
       <div className="contact-method">Address</div>
       Mostafa Kamel
       <br />
@@ -34,7 +28,6 @@ function Location() {
 function Phone() {
   return (
     <div className="contact-container">
-      <img src={agent} alt="phone" />
       <div className="contact-method">Phone</div>
       19111
     </div>
@@ -44,7 +37,6 @@ function Phone() {
 function Email() {
   return (
     <div className="contact-container">
-      <img src={email} alt="email" />
       <div className="contact-method">Email</div>
       shopmania@gmail.com
     </div>

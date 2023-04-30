@@ -32,12 +32,9 @@ function Layout(props: { children: ReactNode }) {
         </Toolbar>
       </AppBar>
 
-      <main>{props.children}</main>
+      <Toolbar />
 
-      <footer>
-        <div className="logo-name">Shopmania</div>
-        <div className="logo-description">Your #1 destination for online shopping</div>
-      </footer>
+      <main>{props.children}</main>
     </>
   );
 }
@@ -53,7 +50,7 @@ function NavLink(props: { to: string; children: string }) {
       variant="text"
       sx={{
         marginRight: 1,
-        color: isSelected ? "primary" : "white",
+        color: isSelected ? "primary.light" : "white",
       }}
     >
       {children}

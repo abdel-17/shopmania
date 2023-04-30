@@ -4,11 +4,11 @@ export const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#ec407a",
+      main: "#a34857",
     },
     secondary: {
-      main: "#ab47bc",
-    },
+      main: "#48a394"
+    }
   },
   components: {
     MuiToolbar: {

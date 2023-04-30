@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import Index from "./pages/index/Index";
-import Login from "./pages/login/Login";
-import Contact from "./pages/contact/Contact";
+import Login from "./pages/Login";
+import Contact from "./pages/Contact";
 import Cart from "./pages/cart/Cart";
 import About from "./pages/about/About";
 
