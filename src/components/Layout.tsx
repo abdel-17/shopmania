@@ -13,10 +13,8 @@ import {
 function Layout(props: { children: ReactNode }) {
   const user = useFirebaseAuth();
 
-  // const isLoggedIn = user !== null && user !== undefined;
-  // const isLoggedOut = user === null;
-  const isLoggedIn = false;
-  const isLoggedOut = true;
+  const isLoggedIn = user !== null && user !== undefined;
+  const isLoggedOut = user === null;
 
   return (
     <>
