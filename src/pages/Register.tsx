@@ -15,6 +15,7 @@ import FullscreenBox from "../components/FullscreenBox";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
+import { FirebaseError } from "firebase/app";
 
 function Register() {
   const user = useFirebaseAuth();
@@ -40,7 +41,9 @@ function Register() {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error(error);
-      alert("Incorrect email or password");
+      if (error instanceof FirebaseError) {
+        alert(error.message);
+      }
     }
     setLoading(false);
   };

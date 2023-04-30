@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import {
+  AuthErrorCodes,
   browserLocalPersistence,
   browserSessionPersistence,
   signInWithEmailAndPassword,
@@ -22,6 +23,7 @@ import FullscreenBox from "../components/FullscreenBox";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
+import { FirebaseError } from "firebase/app";
 
 function Login() {
   const user = useFirebaseAuth();
@@ -51,7 +53,9 @@ function Login() {
       );
     } catch (error) {
       console.error(error);
-      alert("Incorrect email or password");
+      if (error instanceof FirebaseError) {
+        alert(error.message);
+      }
     }
     setLoading(false);
   };
