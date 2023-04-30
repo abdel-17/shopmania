@@ -1,29 +1,22 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
-import {
-  browserLocalPersistence,
-  browserSessionPersistence,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, useFirebaseAuth } from "../firebase-hooks/auth";
 import {
   Avatar,
   Box,
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Link as MuiLink,
   Typography,
 } from "@mui/material";
-import { LockOutlined as LockIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import FullscreenBox from "../components/FullscreenBox";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
 
-function Login() {
+function Register() {
   const user = useFirebaseAuth();
   const [loading, setLoading] = useState(false);
 
@@ -41,14 +34,10 @@ function Login() {
 
     const email = submission.email as string;
     const password = submission.password as string;
-    const shouldRemember = submission.remember === "yes";
 
     setLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      await auth.setPersistence(
-        shouldRemember ? browserLocalPersistence : browserSessionPersistence
-      );
+      await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
       console.error(error);
       alert("Incorrect email or password");
@@ -60,22 +49,22 @@ function Login() {
     <FullscreenBox display="flex" alignItems="center">
       <Container maxWidth="xs">
         <FormPaper>
-          <Avatar sx={{ marginBottom: 1.5, backgroundColor: "secondary.main" }}>
-            <LockIcon />
-          </Avatar>
+          <Avatar sx={{ marginBottom: 1.5, backgroundColor: "secondary.main" }} />
 
           <Typography component="h1" variant="h5">
-            Login
+            Create an account
           </Typography>
 
           <Box component="form" method="post" onSubmit={onSubmit} marginTop={2}>
             <EmailTextField id="email" autoFocus />
 
-            <PasswordTextField id="current-password" autoComplete="current-password" />
-
-            <FormControlLabel
-              control={<Checkbox name="remember" value="yes" />}
-              label="Remember me"
+            <PasswordTextField
+              id="new-password"
+              autoComplete="new-password"
+              helperText="Enter 8 or more characters"
+              inputProps={{
+                minLength: 8,
+              }}
             />
 
             <Button
@@ -85,11 +74,11 @@ function Login() {
               fullWidth
               sx={{ marginTop: 3, marginBottom: 1 }}
             >
-              Login
+              Create Account
             </Button>
 
-            <MuiLink component={Link} to="/register" color="primary.light">
-              Don't have an account? Register
+            <MuiLink component={Link} to="/login" color="primary.light">
+              Already have an account? Login
             </MuiLink>
           </Box>
         </FormPaper>
@@ -98,4 +87,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
