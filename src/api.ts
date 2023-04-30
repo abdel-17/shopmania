@@ -1,19 +1,26 @@
 import { useQuery } from "@tanstack/react-query";
 
+const productCategories = [
+  "electronics",
+  "jewelery",
+  "men's clothing",
+  "women's clothing",
+] as const;
+
+type ProductCategory = (typeof productCategories)[number];
+
 interface Product {
   id: number;
   title: string;
   price: number;
   description: string;
-  category: string;
+  category: ProductCategory;
   image: string;
   rating: {
     rate: number;
     count: number;
   };
 }
-
-type ProductCategory = "electronics" | "jewelery" | "men's clothing" | "women's clothing";
 
 const baseUrl = "https://fakestoreapi.com";
 
@@ -36,5 +43,5 @@ function useProduct(id: number) {
   });
 }
 
-export { useProducts, useProduct };
+export { useProducts, useProduct, productCategories };
 export type { Product, ProductCategory };

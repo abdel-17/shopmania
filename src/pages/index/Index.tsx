@@ -1,19 +1,13 @@
 import { Fragment } from "react";
-import { Product, ProductCategory as ProductCategory, useProducts } from "../../api";
+import { Product, ProductCategory, productCategories, useProducts } from "../../api";
 import "./Index.css";
 
 function Index() {
-  const categories = [
-    "electronics",
-    "jewelery",
-    "men's clothing",
-    "women's clothing",
-  ] as const;
   return (
     <div className="fullscreen">
       <h1 className="welcome-message">Welcome to Shopmania!</h1>
 
-      {categories.map((category) => (
+      {productCategories.map((category) => (
         <Fragment key={category}>
           <h2 className="category-name">{category}</h2>
           <CategoryProducts category={category} />
@@ -23,11 +17,7 @@ function Index() {
   );
 }
 
-interface CategoryProductsProps {
-  category: ProductCategory;
-}
-
-function CategoryProducts(props: CategoryProductsProps) {
+function CategoryProducts(props: { category: ProductCategory }) {
   const { data: products } = useProducts(props.category);
   return (
     <div className="products-container">
@@ -45,12 +35,7 @@ function CategoryProducts(props: CategoryProductsProps) {
     </div>
   );
 }
-
-interface ProductCardProps {
-  product: Product;
-}
-
-function ProductCard(props: ProductCardProps) {
+function ProductCard(props: { product: Product }) {
   const { product } = props;
   return (
     <div className="product-card">
