@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import {
-  AuthErrorCodes,
   browserLocalPersistence,
   browserSessionPersistence,
   signInWithEmailAndPassword,

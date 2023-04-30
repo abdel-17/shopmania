@@ -1,5 +1,4 @@
-import { InputAdornment, TextField, TextFieldProps } from "@mui/material";
-import { Email as EmailIcon } from "@mui/icons-material";
+import { TextField, TextFieldProps } from "@mui/material";
 
 function EmailTextField(props: TextFieldProps) {
   return (
