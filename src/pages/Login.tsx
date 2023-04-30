@@ -15,12 +15,13 @@ import {
   FormControlLabel,
   Link as MuiLink,
   Paper,
-  TextField,
   Typography,
 } from "@mui/material";
 import { LockOutlined as LockIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import FullscreenBox from "../components/FullscreenBox";
+import EmailTextField from "../components/EmailTextField";
+import PasswordTextField from "../components/PasswordTextField";
 
 function Login() {
   const user = useFirebaseAuth();
@@ -28,7 +29,7 @@ function Login() {
 
   const isLoggedIn = user !== null && user !== undefined;
   if (isLoggedIn) {
-    // Replace this commponent with the home page on login.
+    // Replace this component with the home page on login.
     return <Navigate to="/" replace />;
   }
 
@@ -41,13 +42,13 @@ function Login() {
 
     const email = submission.email as string;
     const password = submission.password as string;
-    const shouldRemember = submission.remember === "remember";
+    const shouldRemember = submission.remember === "yes";
 
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       await auth.setPersistence(
-        shouldRemember ? browserSessionPersistence : browserLocalPersistence
+        shouldRemember ? browserLocalPersistence : browserSessionPersistence
       );
     } catch (error) {
       console.error(error);
@@ -77,29 +78,12 @@ function Login() {
           </Typography>
 
           <Box component="form" method="post" onSubmit={onSubmit} marginTop={2}>
-            <TextField
-              type="email"
-              name="email"
-              label="Email Address"
-              autoComplete="email"
-              margin="normal"
-              required
-              fullWidth
-              autoFocus
-            />
+            <EmailTextField autoFocus />
 
-            <TextField
-              type="password"
-              name="password"
-              label="Password"
-              autoComplete="current-password"
-              margin="normal"
-              required
-              fullWidth
-            />
+            <PasswordTextField autoComplete="current-password" />
 
             <FormControlLabel
-              control={<Checkbox name="remember" value="remember" />}
+              control={<Checkbox name="remember" value="yes" />}
               label="Remember me"
             />
 
