@@ -1,8 +1,6 @@
 import { Fragment } from "react";
 import { Product, ProductCategory as ProductCategory, useProducts } from "../../api";
 import "./Index.css";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 
 function Index() {
   const categories = [
@@ -70,8 +68,9 @@ function ProductCard(props: ProductCardProps) {
 function ProductCardPlaceholder() {
   return (
     <div className="product-card">
-      <Skeleton width="100%" height={175} />
-      <Skeleton count={2} />
+      Loading...
+      {/* <Skeleton width="100%" height={175} />
+      <Skeleton count={2} /> */}
     </div>
   );
 }

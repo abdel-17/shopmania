@@ -6,16 +6,16 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
-import { auth, useAuth } from "../../firebase/auth";
+import { auth, useFirebaseAuth } from "../../firebase-hooks/auth";
 
 type FormTab = "login" | "register";
 
 function Login() {
   const [selectedTab, setSelectedTab] = useState<FormTab>("login");
   const [loading, setLoading] = useState(false);
-  const user = useAuth();
+  const user = useFirebaseAuth();
 
-  const isLoggedIn = user !== null && user !== undefined
+  const isLoggedIn = user !== null && user !== undefined;
   if (isLoggedIn) {
     // Replace this commponent with the home page on login.
     return <Navigate to="/" replace />;

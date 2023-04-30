@@ -1,10 +1,10 @@
 import { User, getAuth, onAuthStateChanged } from "firebase/auth";
-import app from "./firebase";
+import app from "./app";
 import { useEffect, useState } from "react";
 
 const auth = getAuth(app);
 
-function useAuth() {
+function useFirebaseAuth() {
   const [user, setUser] = useState<User | null>();
 
   useEffect(() => {
@@ -17,4 +17,4 @@ function useAuth() {
   return user;
 }
 
-export { auth, useAuth };
+export { auth, useFirebaseAuth };
