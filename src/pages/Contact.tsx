@@ -28,16 +28,11 @@ function Contact() {
         Contact Us
       </Typography>
 
-      <Typography component="h2" variant="h5" textAlign="center" marginTop={4}>
+      <Typography component="h2" variant="h5" textAlign="center" marginTop={3}>
         The best customer support at your service
       </Typography>
 
-      <Box
-        display="flex"
-        justifyContent="center"
-        flexWrap="wrap"
-        marginTop={2}
-      >
+      <Box display="flex" justifyContent="center" flexWrap="wrap" marginTop={2}>
         <ContactCard
           icon={<LocationIcon fontSize="large" htmlColor={green[400]} />}
           title="Address"
