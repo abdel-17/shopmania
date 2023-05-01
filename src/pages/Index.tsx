@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Product, ProductCategory, productCategories, useProducts } from "../../api";
+import { Product, ProductCategory, productCategories, useProducts } from "../api";
 import "./Index.css";
 
 function Index() {

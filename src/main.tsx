@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
 
+console.log(theme.typography)
+
 const queryClient = new QueryClient();
 const root = document.getElementById("root") as HTMLElement;
 ReactDOM.createRoot(root).render(
