@@ -17,7 +17,7 @@ import { green, blue, red } from "@mui/material/colors";
 
 function Contact() {
   return (
-    <Box display="flex" flexDirection="column" padding={2}>
+    <Box padding={2}>
       <Typography component="h1" variant="h4" textAlign="center" marginTop={2}>
         Contact Us
       </Typography>
@@ -116,9 +116,7 @@ function FAQAccordion(props: { title: string; description: string }) {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography fontSize={18}>
-          {props.title}
-        </Typography>
+        <Typography fontSize={18}>{props.title}</Typography>
       </AccordionSummary>
 
       <AccordionDetails>
