@@ -75,8 +75,8 @@ function Contact() {
         />
         <FAQAccordion
           title="The item I received is damaged. Can I refund it?"
-          description="We do not offer refunds for damaged items after the delivery courier has left.
-          Please check that the item is in a good condition at delivery time."
+          description="We do not offer refunds for damaged items after the delivery courier leaves.
+          Please check that the delivered item is in good condition at delivery time."
         />
       </Container>
     </Box>
