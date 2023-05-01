@@ -17,7 +17,7 @@ import { green, blue, red } from "@mui/material/colors";
 
 function Contact() {
   return (
-    <Box paddingY={2}>
+    <Container maxWidth="md" sx={{ padding: 2 }}>
       <Typography
         component="h1"
         variant="h4"
@@ -32,31 +32,28 @@ function Contact() {
         The best customer support at your service
       </Typography>
 
-      <Container>
-        <Box
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          flexWrap="wrap"
-          marginTop={2}
-        >
-          <ContactCard
-            icon={<LocationIcon fontSize="large" htmlColor={green[400]} />}
-            title="Address"
-            description="Lorem ipsum dolor"
-          />
-          <ContactCard
-            icon={<PhoneIcon fontSize="large" htmlColor={blue[400]} />}
-            title="Phone"
-            description="+20 123 456 7890"
-          />
-          <ContactCard
-            icon={<EmailIcon fontSize="large" htmlColor={red[400]} />}
-            title="Email"
-            description="lorem@ipsum.com"
-          />
-        </Box>
-      </Container>
+      <Box
+        display="flex"
+        justifyContent="center"
+        flexWrap="wrap"
+        marginTop={2}
+      >
+        <ContactCard
+          icon={<LocationIcon fontSize="large" htmlColor={green[400]} />}
+          title="Address"
+          description="Lorem ipsum dolor"
+        />
+        <ContactCard
+          icon={<PhoneIcon fontSize="large" htmlColor={blue[400]} />}
+          title="Phone"
+          description="+20 123 456 7890"
+        />
+        <ContactCard
+          icon={<EmailIcon fontSize="large" htmlColor={red[400]} />}
+          title="Email"
+          description="lorem@ipsum.com"
+        />
+      </Box>
 
       <Typography
         component="h1"
@@ -68,7 +65,7 @@ function Contact() {
         Frequently Asked Questions
       </Typography>
 
-      <Container maxWidth="md" sx={{ marginTop: 2 }}>
+      <Box marginTop={2}>
         <FAQAccordion
           title="Where do you deliver to?"
           description="We offer delivery to all governorates across Egypt."
@@ -89,8 +86,8 @@ function Contact() {
           description="We do not offer refunds for damaged items after the delivery courier leaves.
           Please check that the delivered item is in good condition at delivery time."
         />
-      </Container>
-    </Box>
+      </Box>
+    </Container>
   );
 }
 
