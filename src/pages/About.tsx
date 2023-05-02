@@ -23,17 +23,20 @@ function About() {
           </Typography>
 
           <Typography fontSize={18} marginTop={2} textAlign="justify">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Vel facilisis volutpat est velit.
-            Consequat id porta nibh venenatis cras. Vel orci porta non pulvinar neque
-            laoreet suspendisse interdum consectetur. Scelerisque fermentum dui faucibus
-            in ornare quam viverra orci. Feugiat scelerisque varius morbi enim nunc
-            faucibus a pellentesque sit. Morbi quis commodo odio aenean sed. Duis
-            tristique sollicitudin nibh sit amet commodo nulla facilisi nullam. Vitae
-            auctor eu augue ut. Tempus egestas sed sed risus pretium quam vulputate
-            dignissim. In egestas erat imperdiet sed euismod nisi. Adipiscing elit ut
-            aliquam purus sit amet luctus. Fames ac turpis egestas integer eget aliquet
-            nibh.
+            Welcome to Shopmania, the ultimate online shopping destination! Our mission is
+            to provide you with a seamless and enjoyable shopping experience, where you
+            can find everything you need in one place.
+            <br />
+            <br />
+            At Shopmania, we believe that shopping should be easy, affordable, and fun.
+            That's why we have carefully curated a selection of high-quality products from
+            top brands and reliable suppliers, all at competitive prices.
+            <br />
+            <br />
+            We are committed to providing top-notch customer service, and we strive to
+            make your shopping experience as smooth and hassle-free as possible. Our
+            website is easy to navigate, and our secure checkout process ensures that your
+            personal and financial information is always protected.
           </Typography>
         </Box>
       </Stack>
