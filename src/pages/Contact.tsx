@@ -92,7 +92,16 @@ function ContactCard(props: {
   description: string;
 }) {
   return (
-    <Paper sx={{ padding: 3, margin: 1 }}>
+    <Paper
+      sx={{
+        padding: 3,
+        margin: 1,
+        width: {
+          xs: "100%",
+          sm: 200,
+        },
+      }}
+    >
       <Box display="flex" justifyContent="center">
         {props.icon}
       </Box>
