@@ -1,20 +1,19 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import team from "../assets/team.svg";
 import FullscreenBox from "../components/FullscreenBox";
 
 function About() {
   return (
     <FullscreenBox display="flex" flexDirection="column" justifyContent="center">
-      <Box
-        display="flex"
-        flexDirection={{
+      <Stack
+        direction={{
           xs: "column",
           lg: "row-reverse",
         }}
         alignItems="center"
         justifyContent="center"
         margin={4}
-        gap={8}
+        spacing={8}
       >
         <img src={team} alt="team" style={{ maxWidth: 400 }} />
 
@@ -37,7 +36,7 @@ function About() {
             nibh.
           </Typography>
         </Box>
-      </Box>
+      </Stack>
     </FullscreenBox>
   );
 }
