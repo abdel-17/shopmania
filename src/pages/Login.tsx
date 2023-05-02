@@ -24,7 +24,7 @@ import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
 import { FirebaseError } from "firebase/app";
 
-function Login() {
+export default function Login() {
   const user = useFirebaseAuth();
   const [loading, setLoading] = useState(false);
 
@@ -100,5 +100,3 @@ function Login() {
     </FullscreenBox>
   );
 }
-
-export default Login;

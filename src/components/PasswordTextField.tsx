@@ -5,7 +5,7 @@ import {
 } from "@mui/icons-material";
 import { useState } from "react";
 
-function PasswordTextField(props: TextFieldProps) {
+export default function PasswordTextField(props: TextFieldProps) {
   const [hidden, setHidden] = useState(true);
   const onToggleHidden = () => setHidden((show) => !show);
   return (
@@ -29,5 +29,3 @@ function PasswordTextField(props: TextFieldProps) {
     />
   );
 }
-
-export default PasswordTextField;

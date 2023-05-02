@@ -10,7 +10,7 @@ import {
   ShoppingCart as CartIcon,
 } from "@mui/icons-material";
 
-function Layout(props: { children: ReactNode }) {
+export default function Layout(props: { children: ReactNode }) {
   const user = useFirebaseAuth();
 
   const isLoggedIn = user !== null && user !== undefined;
@@ -100,5 +100,3 @@ function CartButton() {
     </Tooltip>
   );
 }
-
-export default Layout;

@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { Product, ProductCategory, productCategories, useProducts } from "../api";
 import "./Index.css";
 
-function Index() {
+export default function Index() {
   return (
     <div className="fullscreen">
       <h1 className="welcome-message">Welcome to Shopmania!</h1>
@@ -59,5 +59,3 @@ function ProductCardPlaceholder() {
     </div>
   );
 }
-
-export default Index;

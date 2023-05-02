@@ -17,7 +17,7 @@ import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
 import { FirebaseError } from "firebase/app";
 
-function Register() {
+export default function Register() {
   const user = useFirebaseAuth();
   const [loading, setLoading] = useState(false);
 
@@ -89,5 +89,3 @@ function Register() {
     </FullscreenBox>
   );
 }
-
-export default Register;

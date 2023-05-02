@@ -15,7 +15,7 @@ import {
 } from "@mui/icons-material";
 import { green, blue, red } from "@mui/material/colors";
 
-function Contact() {
+export default function Contact() {
   return (
     <Container maxWidth="md" sx={{ padding: 2 }}>
       <Typography
@@ -132,5 +132,3 @@ function FAQAccordion(props: { title: string; description: string }) {
     </Accordion>
   );
 }
-
-export default Contact;

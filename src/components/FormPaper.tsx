@@ -1,6 +1,6 @@
 import { Paper, PaperProps } from "@mui/material";
 
-function FormPaper(props: PaperProps) {
+export default function FormPaper(props: PaperProps) {
   const { sx, ...rest } = props;
   return (
     <Paper
@@ -16,5 +16,3 @@ function FormPaper(props: PaperProps) {
     />
   );
 }
-
-export default FormPaper;

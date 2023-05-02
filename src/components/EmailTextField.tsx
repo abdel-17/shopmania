@@ -1,6 +1,6 @@
 import { TextField, TextFieldProps } from "@mui/material";
 
-function EmailTextField(props: TextFieldProps) {
+export default function EmailTextField(props: TextFieldProps) {
   return (
     <TextField
       type="email"
@@ -14,5 +14,3 @@ function EmailTextField(props: TextFieldProps) {
     />
   );
 }
-
-export default EmailTextField;

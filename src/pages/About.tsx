@@ -2,7 +2,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import team from "../assets/team.svg";
 import FullscreenBox from "../components/FullscreenBox";
 
-function About() {
+export default function About() {
   return (
     <FullscreenBox display="flex" flexDirection="column" justifyContent="center">
       <Stack
@@ -43,5 +43,3 @@ function About() {
     </FullscreenBox>
   );
 }
-
-export default About;
