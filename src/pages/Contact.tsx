@@ -97,7 +97,7 @@ function ContactCard(props: {
         padding: 3,
         margin: 1,
         width: {
-          xs: "100%",
+          xs: "80%",
           sm: 200,
         },
       }}
