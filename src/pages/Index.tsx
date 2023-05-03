@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Chip,
   Grid,
   Paper,
@@ -108,23 +109,11 @@ function ProductsGrid(props: { products: Product[] }) {
               />
             </Box>
 
-            <Typography
-              color="black"
-              textAlign="center"
-              textOverflow="ellipsis"
-              noWrap
-              marginTop={2}
-            >
+            <Typography color="black" textAlign="center" noWrap marginTop={2}>
               {product.title}
             </Typography>
 
-            <Typography
-              color="primary"
-              textAlign="center"
-              fontSize={18}
-              fontWeight={500}
-              marginTop={1}
-            >
+            <Typography color="primary" textAlign="center" fontSize={18} fontWeight={500}>
               {product.price} $
             </Typography>
           </Paper>
