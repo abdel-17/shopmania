@@ -15,7 +15,7 @@ export default function About() {
         margin={4}
         spacing={8}
       >
-        <img src={team} alt="team" style={{ maxWidth: 400 }} />
+        <img src={team} alt="The creators of shopmania" style={{ maxWidth: 400 }} />
 
         <Box maxWidth="sm">
           <Typography component="h1" variant="h3" textAlign="center" fontWeight="bold">
