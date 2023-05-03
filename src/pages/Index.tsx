@@ -2,9 +2,6 @@ import {
   Box,
   Chip,
   Grid,
-  ImageList,
-  ImageListItem,
-  ImageListItemBar,
   Paper,
   Stack,
   Typography,
@@ -33,7 +30,7 @@ export default function Index() {
         Welcome to <span style={brandStyle}>Shopmania!</span>
       </Typography>
 
-      <Typography component="h2" variant="h5" textAlign="center" marginTop={3}>
+      <Typography component="h2" variant="h5" textAlign="center" marginTop={2}>
         Browse our diverse product catalog
       </Typography>
 
@@ -44,12 +41,14 @@ export default function Index() {
           <Stack direction="row" spacing={2} marginTop={4}>
             {categories.map((category) => (
               <FilterChip
+                key={category}
                 category={category}
                 isSelected={selectedCategory === category}
                 setSelectedCategory={setSelectedCategory}
               />
             ))}
           </Stack>
+
           <ProductsGrid
             products={products.data.filter(
               (product) => !selectedCategory || product.category === selectedCategory
