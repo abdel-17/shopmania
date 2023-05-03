@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { auth, useFirebaseAuth } from "../firebase-hooks/auth";
+import { auth, useFirebaseAuth } from "../hooks/auth";
 import { FirebaseError } from "firebase/app";
 import { AppBar, Box, Button, IconButton, Toolbar, Tooltip } from "@mui/material";
 import {
@@ -12,10 +12,7 @@ import {
 
 export default function Layout(props: { children: ReactNode }) {
   const user = useFirebaseAuth();
-
-  const isLoggedIn = user !== null && user !== undefined;
   const isLoggedOut = user === null;
-
   return (
     <>
       <AppBar component="header">
@@ -27,8 +24,8 @@ export default function Layout(props: { children: ReactNode }) {
           </Box>
 
           {isLoggedOut && <LoginButton />}
-          {isLoggedIn && <CartButton />}
-          {isLoggedIn && <LogoutButton />}
+          {user && <CartButton />}
+          {user && <LogoutButton />}
         </Toolbar>
       </AppBar>
 

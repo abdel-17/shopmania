@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, useFirebaseAuth } from "../firebase-hooks/auth";
+import { auth, useFirebaseAuth } from "../hooks/auth";
 import {
   Avatar,
   Box,
@@ -19,7 +19,7 @@ import { FirebaseError } from "firebase/app";
 
 export default function Register() {
   const user = useFirebaseAuth();
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   if (user) {
     // Replace this component with the home page on login.
@@ -36,7 +36,7 @@ export default function Register() {
     const email = submission.email as string;
     const password = submission.password as string;
 
-    setLoading(true);
+    setSubmitting(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
     } catch (error) {
@@ -45,7 +45,7 @@ export default function Register() {
         alert(error.message);
       }
     }
-    setLoading(false);
+    setSubmitting(false);
   };
 
   return (
@@ -72,7 +72,7 @@ export default function Register() {
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={submitting}
               variant="contained"
               fullWidth
               sx={{ marginTop: 3, marginBottom: 1 }}

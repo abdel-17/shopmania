@@ -5,7 +5,7 @@ import {
   browserSessionPersistence,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth, useFirebaseAuth } from "../firebase-hooks/auth";
+import { auth, useFirebaseAuth } from "../hooks/auth";
 import {
   Avatar,
   Box,
@@ -26,7 +26,7 @@ import { FirebaseError } from "firebase/app";
 
 export default function Login() {
   const user = useFirebaseAuth();
-  const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   if (user) {
     // Replace this component with the home page on login.
@@ -44,7 +44,7 @@ export default function Login() {
     const password = submission.password as string;
     const shouldRemember = submission.remember === "yes";
 
-    setLoading(true);
+    setSubmitting(true);
     try {
       await signInWithEmailAndPassword(auth, email, password);
       await auth.setPersistence(
@@ -56,7 +56,7 @@ export default function Login() {
         alert(error.message);
       }
     }
-    setLoading(false);
+    setSubmitting(false);
   };
 
   return (
@@ -83,7 +83,7 @@ export default function Login() {
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={submitting}
               variant="contained"
               fullWidth
               sx={{ marginTop: 3, marginBottom: 1 }}
