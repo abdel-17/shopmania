@@ -37,7 +37,7 @@ export default function ProductDetail() {
           xs: "column",
           md: "row",
         }}
-        spacing={3}
+        spacing={4}
       >
         <img
           src={data.image}
