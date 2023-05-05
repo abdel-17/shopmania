@@ -30,15 +30,34 @@ export function useProducts() {
   });
 }
 
-export function useProduct(id: number) {
-  return useQuery<Product, Error>(["product", id], async ({ signal }) => {
-    try {
-      const url = new URL(`/products/${id}`, baseUrl);
-      const response = await fetch(url, { signal });
-      return await response.json();
-    } catch (error) {
-      console.error(error);
-      throw new Error("Failed to load product data");
-    }
+export function useProduct(id: number | string) {
+  const notFound = "Product not found";
+  return useQuery<Product, Error>({
+    queryKey: ["product", id],
+    queryFn: async ({ signal }) => {
+      let response;
+      try {
+        const url = new URL(`/products/${id}`, baseUrl);
+        response = await fetch(url, { signal });
+      } catch (error) {
+        console.error(error);
+        throw new Error("Failed to load product data");
+      }
+
+      // Something weird about the Fake Store API. It returns an
+      // empty response with status 200 if the product id is
+      // incorrect, so `response.ok` would return `true` even if
+      // it failed. To work around this, we check if `response.json()`
+      // fails to make sure the product id is correct.
+      try {
+        return await response.json();
+      } catch (error) {
+        console.error(error);
+        throw new Error(notFound);
+      }
+    },
+    retry: (failureCount, error) =>
+      // Retry upto 3 times only if fetching failed.
+      error.message !== notFound && failureCount <= 3,
   });
 }

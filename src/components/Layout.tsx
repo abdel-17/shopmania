@@ -18,7 +18,7 @@ export default function Layout(props: { children: ReactNode }) {
       <AppBar component="header">
         <Toolbar>
           <Box component="nav" display="flex" flexGrow={1}>
-            <NavLink to="/">Products</NavLink>
+            <NavLink to="/products">Products</NavLink>
             <NavLink to="/about">About</NavLink>
             <NavLink to="/contact">Contact Us</NavLink>
           </Box>
