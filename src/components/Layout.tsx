@@ -1,7 +1,5 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { auth, useFirebaseAuth } from "../hooks/auth";
-import { FirebaseError } from "firebase/app";
 import { AppBar, Box, Button, IconButton, Toolbar, Tooltip } from "@mui/material";
 import {
   Login as LoginIcon,
@@ -9,10 +7,12 @@ import {
   ShoppingCartOutlined as OutlinedCartIcon,
   ShoppingCart as CartIcon,
 } from "@mui/icons-material";
+import useSession from "../hooks/session";
+import supabase from "../supabase/client";
 
 export default function Layout(props: { children: ReactNode }) {
-  const user = useFirebaseAuth();
-  const isLoggedOut = user === null;
+  const session = useSession();
+  const isLoggedOut = session === null;
   return (
     <>
       <AppBar component="header">
@@ -24,8 +24,8 @@ export default function Layout(props: { children: ReactNode }) {
           </Box>
 
           {isLoggedOut && <LoginButton />}
-          {user && <CartButton />}
-          {user && <LogoutButton />}
+          {session && <CartButton />}
+          {session && <LogoutButton />}
         </Toolbar>
       </AppBar>
 
@@ -66,20 +66,21 @@ function LoginButton() {
 }
 
 function LogoutButton() {
+  const [loading, setLoading] = useState(false);
+  
   const onClick = async () => {
-    try {
-      await auth.signOut();
-    } catch (error) {
+    setLoading(true);
+    const { error } = await supabase.auth.signOut();
+    if (error) {
       console.error(error);
-      if (error instanceof FirebaseError) {
-        alert(error.message);
-      }
+      alert(error.message);
     }
+    setLoading(false);
   };
 
   return (
     <Tooltip title="Logout">
-      <IconButton onClick={onClick} sx={{ marginLeft: 1 }}>
+      <IconButton onClick={onClick} disabled={loading} sx={{ marginLeft: 1 }}>
         <LogoutIcon />
       </IconButton>
     </Tooltip>

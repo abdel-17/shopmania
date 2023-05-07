@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, useFirebaseAuth } from "../hooks/auth";
 import {
   Avatar,
   Box,
@@ -15,13 +13,14 @@ import FullscreenBox from "../components/FullscreenBox";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
-import { FirebaseError } from "firebase/app";
+import useSession from "../hooks/session";
+import supabase from "../supabase/client";
 
 export default function Register() {
-  const user = useFirebaseAuth();
+  const session = useSession();
   const [submitting, setSubmitting] = useState(false);
 
-  if (user) {
+  if (session) {
     // Replace this component with the home page on login.
     return <Navigate to="/" replace />;
   }
@@ -37,13 +36,15 @@ export default function Register() {
     const password = submission.password as string;
 
     setSubmitting(true);
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-    } catch (error) {
+    const { error } = await supabase.auth.signUp({
+      email: submission.email as string,
+      password: submission.password as string,
+    });
+    if (error) {
       console.error(error);
-      if (error instanceof FirebaseError) {
-        alert(error.message);
-      }
+      alert(error.message);
+    } else {
+      alert("A confirmation email will be sent to verify the account")
     }
     setSubmitting(false);
   };
@@ -79,12 +80,12 @@ export default function Register() {
             >
               Create Account
             </Button>
-
-            <MuiLink component={Link} to="/login" color="primary.light">
-              Already have an account? Login
-            </MuiLink>
           </Box>
         </FormPaper>
+
+        <MuiLink component={Link} to="/login" color="primary.light">
+          Already have an account? Login
+        </MuiLink>
       </Container>
     </FullscreenBox>
   );

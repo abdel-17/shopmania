@@ -1,18 +1,10 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import {
-  browserLocalPersistence,
-  browserSessionPersistence,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
-import { auth, useFirebaseAuth } from "../hooks/auth";
-import {
   Avatar,
   Box,
   Button,
-  Checkbox,
   Container,
-  FormControlLabel,
   Link as MuiLink,
   Typography,
 } from "@mui/material";
@@ -22,13 +14,14 @@ import FullscreenBox from "../components/FullscreenBox";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import FormPaper from "../components/FormPaper";
-import { FirebaseError } from "firebase/app";
+import useSession from "../hooks/session";
+import supabase from "../supabase/client";
 
 export default function Login() {
-  const user = useFirebaseAuth();
+  const session = useSession();
   const [submitting, setSubmitting] = useState(false);
 
-  if (user) {
+  if (session) {
     // Replace this component with the home page on login.
     return <Navigate to="/" replace />;
   }
@@ -40,21 +33,14 @@ export default function Login() {
     const formData = new FormData(event.currentTarget);
     const submission = Object.fromEntries(formData);
 
-    const email = submission.email as string;
-    const password = submission.password as string;
-    const shouldRemember = submission.remember === "yes";
-
     setSubmitting(true);
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      await auth.setPersistence(
-        shouldRemember ? browserLocalPersistence : browserSessionPersistence
-      );
-    } catch (error) {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: submission.email as string,
+      password: submission.password as string,
+    });
+    if (error) {
       console.error(error);
-      if (error instanceof FirebaseError) {
-        alert(error.message);
-      }
+      alert(error.message);
     }
     setSubmitting(false);
   };
@@ -76,26 +62,21 @@ export default function Login() {
 
             <PasswordTextField id="current-password" autoComplete="current-password" />
 
-            <FormControlLabel
-              control={<Checkbox name="remember" value="yes" />}
-              label="Remember me"
-            />
-
             <Button
               type="submit"
               disabled={submitting}
               variant="contained"
               fullWidth
-              sx={{ marginTop: 3, marginBottom: 1 }}
+              sx={{ marginTop: 3 }}
             >
               Login
             </Button>
-
-            <MuiLink component={Link} to="/register" color="primary.light">
-              Don't have an account? Register
-            </MuiLink>
           </Box>
         </FormPaper>
+
+        <MuiLink component={Link} to="/register" color="primary.light">
+          Don't have an account? Register
+        </MuiLink>
       </Container>
     </FullscreenBox>
   );

@@ -9,6 +9,7 @@ export default function FormPaper(props: PaperProps) {
         flexDirection: "column",
         alignItems: "center",
         padding: 3,
+        marginBottom: 1,
         borderRadius: 4,
         ...sx,
       }}
