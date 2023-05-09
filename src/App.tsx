@@ -12,7 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import supabase from "./supabase/client";
-import { SessionProvider } from "./hooks/session";
+import { SessionProvider } from "./components/SessionProvider";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);

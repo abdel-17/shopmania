@@ -7,162 +7,81 @@ import {
   Menu,
   MenuItem,
   Paper,
+  Skeleton,
   Stack,
   Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
 import ErrorFallback from "../components/ErrorFallback";
-import { Product, useProducts } from "../hooks/products";
 import { useState } from "react";
 import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-
-const categories = ["electronics", "jewelery", "men's clothing", "women's clothing"];
-const categoryStyle = { textTransform: "capitalize" } as const;
+import { useQuery } from "@tanstack/react-query";
+import supabase from "../supabase/client";
 
 interface SortMethod {
   label: string;
-  comparator?: (first: Product, second: Product) => number;
+  property: "title" | "price";
+  ascending: boolean;
 }
+
+const categories = ["Electronics", "Jewelery", "Men's Clothing", "Women's Clothing"];
 const sortMethods: SortMethod[] = [
   {
     label: "A-Z",
-    comparator: (first, second) => first.title.localeCompare(second.title),
-  },
-  {
-    label: "Price (Low to High)",
-    comparator: (first, second) => first.price - second.price,
+    property: "title",
+    ascending: true,
   },
   {
     label: "Price (High to Low)",
-    comparator: (first, second) => second.price - first.price,
+    property: "price",
+    ascending: false,
+  },
+  {
+    label: "Price (Low to High)",
+    property: "price",
+    ascending: true,
   },
 ];
 
 export default function Products() {
   const { palette } = useTheme();
-  const products = useProducts();
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedSortMethod, setSelectedSortMethod] = useState<SortMethod | null>(null);
+  const [category, setCategory] = useState<string | null>(null);
+  const [sortMethod, setSortMethod] = useState<SortMethod | null>(null);
 
-  if (products.error) {
-    return <ErrorFallback error={products.error} onRetry={products.refetch} />;
-  }
+  const { data: result, refetch } = useQuery(
+    ["products", category, sortMethod],
+    async ({ signal }) => {
+      let query = supabase.from("products").select("id, title, image, price");
 
-  // We show a menu for filtering/sorting products on mobile.
-  function FilterMenu() {
-    return (
-      <SelectMenu
-        selection={selectedCategory}
-        setSelection={setSelectedCategory}
-        tooltip="Filter"
-        ButtonIcon={<TuneIcon />}
-        items={categories}
-        renderItem={(category) => <span style={categoryStyle}>{category}</span>}
-      />
-    );
-  }
-  function SortMenu() {
-    return (
-      <SelectMenu
-        selection={selectedSortMethod}
-        setSelection={setSelectedSortMethod}
-        tooltip="Sort"
-        ButtonIcon={<SortIcon />}
-        items={sortMethods}
-        renderItem={(sortMethod) => sortMethod.label}
-      />
-    );
-  }
+      if (category) {
+        query = query.eq("category", category);
+      }
+      if (sortMethod) {
+        query = query.order(sortMethod.property, { ascending: sortMethod.ascending });
+      }
+      if (signal) {
+        query = query.abortSignal(signal);
+      }
 
-  // On tablets and desktops, we show two rows of chips, instead.
-  // One for filtering and another for sorting.
-  function FilterChips() {
-    return (
-      <SelectChips
-        selection={selectedCategory}
-        setSelection={setSelectedCategory}
-        items={categories}
-        renderLabel={(category) => <span style={categoryStyle}>{category}</span>}
-      />
-    );
-  }
-  function SortChips() {
-    return (
-      <SelectChips
-        selection={selectedSortMethod}
-        setSelection={setSelectedSortMethod}
-        items={sortMethods}
-        renderLabel={(sortMethod) => sortMethod.label}
-      />
-    );
-  }
-
-  function ProductsGrid(props: { products: Product[] }) {
-    let { products } = props;
-
-    if (selectedCategory) {
-      products = products.filter((product) => product.category === selectedCategory);
+      return await query;
     }
+  );
 
-    if (selectedSortMethod) {
-      // In JS, sorting is done in-place. For React to work properly,
-      // state should be updated immutably, so we replace `products`
-      // with a sorted copy of itself.
-      products = [...products].sort(selectedSortMethod.comparator);
-    }
-
-    return (
-      <Grid container spacing={2}>
-        {products.map((product) => (
-          <Grid key={product.id} item xs={12} sm={6} md={4}>
-            <Link to={product.id.toString()} style={{ textDecoration: "none" }}>
-              <Paper
-                sx={{
-                  padding: 2,
-                  background: "white",
-                  textDecoration: "none",
-                  transition: "0.5s",
-                  ":hover": {
-                    scale: "1.05",
-                  },
-                }}
-              >
-                <Box display="flex" justifyContent="center">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    width={200}
-                    height={200}
-                    style={{ objectFit: "contain" }}
-                  />
-                </Box>
-
-                <Typography color="black" textAlign="center" noWrap marginTop={2}>
-                  {product.title}
-                </Typography>
-
-                <Typography
-                  color="primary"
-                  textAlign="center"
-                  fontSize={18}
-                  fontWeight={500}
-                >
-                  {product.price} $
-                </Typography>
-              </Paper>
-            </Link>
-          </Grid>
-        ))}
-      </Grid>
-    );
+  if (result?.error) {
+    const error = result.error;
+    console.error(error);
+    return <ErrorFallback error={error.message} onRetry={refetch} />;
   }
 
+  const products = result?.data ?? Array<null>(6).fill(null);
+
+  const brandStyle = { color: palette.primary.light };
   return (
     <Box padding={4}>
       <Typography component="h1" variant="h4" textAlign="center" fontWeight="bold">
-        Welcome to <span style={{ color: palette.primary.light }}>Shopmania!</span>
+        Welcome to <span style={brandStyle}>Shopmania!</span>
       </Typography>
 
       <Typography
@@ -175,45 +94,116 @@ export default function Products() {
         Browse our diverse product catalog
       </Typography>
 
-      {products.isLoading ? (
-        <LoadingFallback />
-      ) : (
-        <Container maxWidth="lg">
-          <Stack
-            direction="row"
-            display={{
-              xs: "flex",
-              sm: "none",
-            }}
-            justifyContent="end"
-            spacing={1}
-            marginBottom={1}
-          >
-            <SortMenu />
-            <FilterMenu />
-          </Stack>
+      <Container maxWidth="lg">
+        <Stack
+          direction="row"
+          display={{
+            xs: "flex",
+            sm: "none",
+          }}
+          justifyContent="end"
+          spacing={1}
+          marginBottom={1}
+        >
+          {/* We show a menu for filtering/sorting products on mobile. */}
+          <SelectMenu
+            selection={sortMethod}
+            setSelection={setSortMethod}
+            tooltip="Sort"
+            ButtonIcon={<SortIcon />}
+            items={sortMethods}
+            renderItem={(sortMethod) => sortMethod.label}
+          />
 
-          <Stack
-            display={{
-              xs: "none",
-              sm: "flex",
-            }}
-            spacing={1}
-            marginBottom={2}
-          >
-            <FilterChips />
-            <SortChips />
-          </Stack>
+          <SelectMenu
+            selection={category}
+            setSelection={setCategory}
+            tooltip="Filter"
+            ButtonIcon={<TuneIcon />}
+            items={categories}
+            renderItem={(category) => category}
+          />
+        </Stack>
 
-          <ProductsGrid products={products.data} />
-        </Container>
-      )}
+        <Stack
+          display={{
+            xs: "none",
+            sm: "flex",
+          }}
+          spacing={1}
+          marginBottom={2}
+        >
+          {/* On tablets and desktops, we show two rows of chips instead of menus.*/}
+          <SelectChips
+            selection={category}
+            setSelection={setCategory}
+            items={categories}
+            renderLabel={(category) => category}
+          />
+
+          <SelectChips
+            selection={sortMethod}
+            setSelection={setSortMethod}
+            items={sortMethods}
+            renderLabel={(sortMethod) => sortMethod.label}
+          />
+        </Stack>
+
+        <Grid container spacing={2}>
+          {products.map((product, i) => (
+            <Grid key={product?.id ?? i} item xs={12} sm={6} md={4}>
+              <Paper
+                sx={{
+                  padding: 2,
+                  transition: "0.5s",
+                  ":hover": {
+                    scale: "1.05",
+                  },
+                }}
+              >
+                <Box display="flex" justifyContent="center">
+                  {product ? (
+                    <img
+                      src={product.image}
+                      alt={product.title}
+                      width={200}
+                      height={200}
+                      style={{
+                        objectFit: "contain",
+                        background: "white",
+                        padding: "12px",
+                        borderRadius: "8px",
+                      }}
+                    />
+                  ) : (
+                    <Skeleton
+                      variant="rectangular"
+                      width={200}
+                      height={200}
+                      sx={{ borderRadius: "8px" }}
+                    />
+                  )}
+                </Box>
+
+                <Typography textAlign="center" noWrap marginTop={2}>
+                  {product?.title ?? <Skeleton />}
+                </Typography>
+
+                <Typography
+                  color="primary.light"
+                  textAlign="center"
+                  fontSize={18}
+                  fontWeight={500}
+                >
+                  {product ? `${product.price} $` : <Skeleton />}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
     </Box>
   );
-}
-
-function LoadingFallback() {
-  return <div>Loading...</div>;
 }
 
 function SelectChips<T>(props: {

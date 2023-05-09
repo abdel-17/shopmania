@@ -8,7 +8,7 @@ import {
   ShoppingCart as CartIcon,
 } from "@mui/icons-material";
 import supabase from "../supabase/client";
-import { useSession } from "../hooks/session";
+import { useSession } from "./SessionProvider";
 
 export default function Layout() {
   const session = useSession();
