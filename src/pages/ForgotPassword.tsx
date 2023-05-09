@@ -4,6 +4,7 @@ import Logo from "../components/Logo";
 import supabase from "../supabase/client";
 import Form from "../components/Form";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function ForgotPassword() {
   const [submitting, setSubmitting] = useState(false);
@@ -34,7 +35,9 @@ export default function ForgotPassword() {
           alignItems: "center",
         }}
       >
-        <Logo />
+        <Link to="/">
+          <Logo />
+        </Link>
 
         <Form method="post" onFormData={onFormData} sx={{ marginTop: 4 }}>
           <EmailTextField id="email" autoFocus />

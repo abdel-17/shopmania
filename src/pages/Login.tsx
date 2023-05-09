@@ -50,7 +50,9 @@ export default function Login() {
             borderRadius: 4,
           }}
         >
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
 
           <Form method="post" onFormData={onFormData} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />

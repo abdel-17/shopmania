@@ -47,7 +47,9 @@ export default function Register() {
             borderRadius: 4,
           }}
         >
-          <Logo />
+          <Link to="/">
+            <Logo />
+          </Link>
 
           <Form method="post" onFormData={onFormData} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />
