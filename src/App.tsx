@@ -12,7 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import supabase from "./supabase/client";
-import { SessionContext } from "./hooks/session";
+import { SessionProvider } from "./hooks/session";
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -30,7 +30,7 @@ export default function App() {
   }, []);
 
   return (
-    <SessionContext.Provider value={session}>
+    <SessionProvider value={session}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -54,6 +54,6 @@ export default function App() {
           <Route path="/forgot" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
-    </SessionContext.Provider>
+    </SessionProvider>
   );
 }
