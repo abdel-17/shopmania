@@ -4,22 +4,22 @@ export const theme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#a34857",
-      light: "#b45766",
+      main: "#DE6987",
+      contrastText: "black",
     },
     secondary: {
       main: "#43998b",
-    }
+    },
   },
   components: {
     MuiToolbar: {
       styleOverrides: {
         regular: {
-          height: 64
-        }
-      }
-    }
-  }
+          height: 64,
+        },
+      },
+    },
+  },
 });
 
 export default theme;
