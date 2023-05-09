@@ -57,7 +57,7 @@ export default function Login() {
             borderRadius: 4,
           }}
         >
-          <Logo width={300} />
+          <Logo />
 
           <Box component="form" method="post" onSubmit={onSubmit} marginTop={3}>
             <EmailTextField id="email" autoFocus />

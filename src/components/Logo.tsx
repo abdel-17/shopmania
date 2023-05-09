@@ -5,5 +5,5 @@ export default function Logo(props: {
   height?: string | number;
   style?: React.CSSProperties;
 }) {
-  return <img src={logo} alt="Shopmania" {...props} />;
+  return <img src={logo} alt="Shopmania" width={300} {...props} />;
 }
