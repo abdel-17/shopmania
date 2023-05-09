@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Navigate } from "react-router";
+import { useState } from "react";
+import { useNavigate } from "react-router";
 import {
   Box,
   Button,
@@ -10,35 +10,28 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import supabase from "../supabase/client";
-import { useSession } from "../components/SessionProvider";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import Logo from "../components/Logo";
+import Form from "../components/Form";
 
 export default function Login() {
-  const session = useSession();
+  const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
 
-  if (session) {
-    // Replace this component with the home page on login.
-    return <Navigate to="/" replace />;
-  }
-
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // Prevent the page from reloading.
-    event.preventDefault();
-
+  const onFormData = async (formData: FormData) => {
     setSubmitting(true);
 
-    const formData = new FormData(event.currentTarget);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    });
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       console.error(error);
       alert(error.message);
+    } else {
+      // Replace this component with the home page if login succeeded.
+      navigate("/", { replace: true });
     }
 
     setSubmitting(false);
@@ -59,7 +52,7 @@ export default function Login() {
         >
           <Logo />
 
-          <Box component="form" method="post" onSubmit={onSubmit} marginTop={3}>
+          <Form method="post" onFormData={onFormData} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />
 
             <PasswordTextField id="current-password" autoComplete="current-password" />
@@ -73,7 +66,7 @@ export default function Login() {
             >
               Sign In
             </Button>
-          </Box>
+          </Form>
 
           <MuiLink component={Link} to="/forgot" color="text.secondary">
             Forgot your password?

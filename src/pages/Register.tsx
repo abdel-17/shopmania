@@ -12,21 +12,17 @@ import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import supabase from "../supabase/client";
 import Logo from "../components/Logo";
+import Form from "../components/Form";
 
 export default function Register() {
   const [submitting, setSubmitting] = useState(false);
 
-  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    // Prevent the page from reloading.
-    event.preventDefault();
-
+  const onFormData = async (formData: FormData) => {
     setSubmitting(true);
 
-    const formData = new FormData(event.currentTarget);
-    const { error } = await supabase.auth.signUp({
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    });
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const { error } = await supabase.auth.signUp({ email, password });
 
     if (error) {
       console.error(error);
@@ -53,7 +49,7 @@ export default function Register() {
         >
           <Logo />
 
-          <Box component="form" method="post" onSubmit={onSubmit} marginTop={3}>
+          <Form method="post" onFormData={onFormData} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />
 
             <PasswordTextField
@@ -74,7 +70,7 @@ export default function Register() {
             >
               Sign Up
             </Button>
-          </Box>
+          </Form>
         </Paper>
 
         <Typography color="text.primary">
