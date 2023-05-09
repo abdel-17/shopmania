@@ -1,5 +1,5 @@
-import { ReactNode, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { AppBar, Box, Button, IconButton, Toolbar, Tooltip } from "@mui/material";
 import {
   Login as LoginIcon,
@@ -7,12 +7,11 @@ import {
   ShoppingCartOutlined as OutlinedCartIcon,
   ShoppingCart as CartIcon,
 } from "@mui/icons-material";
-import useSession from "../hooks/session";
 import supabase from "../supabase/client";
+import { useSession } from "./SessionProvider";
 
-export default function Layout(props: { children: ReactNode }) {
+export default function Layout() {
   const session = useSession();
-  const isLoggedOut = session === null;
   return (
     <>
       <AppBar component="header">
@@ -23,7 +22,7 @@ export default function Layout(props: { children: ReactNode }) {
             <NavLink to="/contact">Contact Us</NavLink>
           </Box>
 
-          {isLoggedOut && <LoginButton />}
+          {!session && <LoginButton />}
           {session && <CartButton />}
           {session && <LogoutButton />}
         </Toolbar>
@@ -31,7 +30,9 @@ export default function Layout(props: { children: ReactNode }) {
 
       <Toolbar />
 
-      <main>{props.children}</main>
+      <main>
+        <Outlet />
+      </main>
     </>
   );
 }
@@ -67,7 +68,7 @@ function LoginButton() {
 
 function LogoutButton() {
   const [loading, setLoading] = useState(false);
-  
+
   const onClick = async () => {
     setLoading(true);
     const { error } = await supabase.auth.signOut();

@@ -8,12 +8,13 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Index from "./pages/Index";
+import ForgotPassword from "./pages/ForgotPassword";
 
 export default function App() {
   return (
     <BrowserRouter>
-      <Layout>
-        <Routes>
+      <Routes>
+        <Route path="/" element={<Layout />}>
           <Route index element={<Index />} />
 
           <Route path="/products" element={<Products />} />
@@ -24,13 +25,15 @@ export default function App() {
 
           <Route path="/about" element={<About />} />
 
-          <Route path="/login" element={<Login />} />
-
-          <Route path="/register" element={<Register />} />
-
           <Route path="/cart" element={<Cart />} />
-        </Routes>
-      </Layout>
+        </Route>
+
+        <Route path="/login" element={<Login />} />
+
+        <Route path="/register" element={<Register />} />
+
+        <Route path="/forgot" element={<ForgotPassword />} />
+      </Routes>
     </BrowserRouter>
   );
 }

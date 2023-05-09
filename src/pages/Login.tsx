@@ -1,21 +1,19 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router";
 import {
-  Avatar,
   Box,
   Button,
   Container,
   Link as MuiLink,
+  Paper,
   Typography,
 } from "@mui/material";
-import { LockOutlined as LockIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
-import FullscreenBox from "../components/FullscreenBox";
+import supabase from "../supabase/client";
+import { useSession } from "../components/SessionProvider";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
-import FormPaper from "../components/FormPaper";
-import useSession from "../hooks/session";
-import supabase from "../supabase/client";
+import Logo from "../components/Logo";
 
 export default function Login() {
   const session = useSession();
@@ -30,54 +28,65 @@ export default function Login() {
     // Prevent the page from reloading.
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const submission = Object.fromEntries(formData);
-
     setSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
     const { error } = await supabase.auth.signInWithPassword({
-      email: submission.email as string,
-      password: submission.password as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
     });
+
     if (error) {
       console.error(error);
       alert(error.message);
     }
+
     setSubmitting(false);
   };
 
   return (
-    <FullscreenBox display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" minHeight="100vh">
       <Container maxWidth="xs">
-        <FormPaper>
-          <Avatar sx={{ marginBottom: 1.5, backgroundColor: "secondary.main" }}>
-            <LockIcon />
-          </Avatar>
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: 4,
+            marginBottom: 2,
+            borderRadius: 4,
+          }}
+        >
+          <Logo width={300} />
 
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-
-          <Box component="form" method="post" onSubmit={onSubmit} marginTop={2}>
+          <Box component="form" method="post" onSubmit={onSubmit} marginTop={3}>
             <EmailTextField id="email" autoFocus />
 
             <PasswordTextField id="current-password" autoComplete="current-password" />
 
             <Button
               type="submit"
-              disabled={submitting}
               variant="contained"
+              disabled={submitting}
               fullWidth
-              sx={{ marginTop: 3 }}
+              sx={{ marginTop: 3, marginBottom: 2 }}
             >
-              Login
+              Sign In
             </Button>
           </Box>
-        </FormPaper>
 
-        <MuiLink component={Link} to="/register" color="primary.light">
-          Don't have an account? Register
-        </MuiLink>
+          <MuiLink component={Link} to="/forgot" color="text.secondary">
+            Forgot your password?
+          </MuiLink>
+        </Paper>
+
+        <Typography color="text.primary">
+          Don't have an account?
+          <MuiLink component={Link} to="/register" color="primary.light" marginLeft={1}>
+            Sign up
+          </MuiLink>
+        </Typography>
       </Container>
-    </FullscreenBox>
+    </Box>
   );
 }

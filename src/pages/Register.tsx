@@ -1,65 +1,59 @@
-import React, { useState } from "react";
-import { Navigate } from "react-router";
+import { useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
   Container,
   Link as MuiLink,
+  Paper,
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import FullscreenBox from "../components/FullscreenBox";
 import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
-import FormPaper from "../components/FormPaper";
-import useSession from "../hooks/session";
 import supabase from "../supabase/client";
+import Logo from "../components/Logo";
 
 export default function Register() {
-  const session = useSession();
   const [submitting, setSubmitting] = useState(false);
-
-  if (session) {
-    // Replace this component with the home page on login.
-    return <Navigate to="/" replace />;
-  }
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     // Prevent the page from reloading.
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const submission = Object.fromEntries(formData);
-
-    const email = submission.email as string;
-    const password = submission.password as string;
-
     setSubmitting(true);
+
+    const formData = new FormData(event.currentTarget);
     const { error } = await supabase.auth.signUp({
-      email: submission.email as string,
-      password: submission.password as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
     });
+
     if (error) {
       console.error(error);
       alert(error.message);
     } else {
-      alert("A confirmation email will be sent to verify the account")
+      alert("A confirmation email will be sent to verify your account");
     }
+
     setSubmitting(false);
   };
 
   return (
-    <FullscreenBox display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" minHeight="100vh">
       <Container maxWidth="xs">
-        <FormPaper>
-          <Avatar sx={{ marginBottom: 1.5, backgroundColor: "secondary.main" }} />
+        <Paper
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            padding: 4,
+            marginBottom: 2,
+            borderRadius: 4,
+          }}
+        >
+          <Logo width={300} />
 
-          <Typography component="h1" variant="h5">
-            Create an account
-          </Typography>
-
-          <Box component="form" method="post" onSubmit={onSubmit} marginTop={2}>
+          <Box component="form" method="post" onSubmit={onSubmit} marginTop={3}>
             <EmailTextField id="email" autoFocus />
 
             <PasswordTextField
@@ -73,20 +67,23 @@ export default function Register() {
 
             <Button
               type="submit"
-              disabled={submitting}
               variant="contained"
+              disabled={submitting}
               fullWidth
-              sx={{ marginTop: 3, marginBottom: 1 }}
+              sx={{ marginTop: 3 }}
             >
-              Create Account
+              Sign Up
             </Button>
           </Box>
-        </FormPaper>
+        </Paper>
 
-        <MuiLink component={Link} to="/login" color="primary.light">
-          Already have an account? Login
-        </MuiLink>
+        <Typography color="text.primary">
+          Already have an account?
+          <MuiLink component={Link} to="/login" color="primary.light" marginLeft={1}>
+            Sign in
+          </MuiLink>
+        </Typography>
       </Container>
-    </FullscreenBox>
+    </Box>
   );
 }
