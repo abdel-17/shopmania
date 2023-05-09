@@ -152,57 +152,74 @@ export default function Products() {
         <Grid container spacing={2}>
           {products.map((product, i) => (
             <Grid key={product?.id ?? i} item xs={12} sm={6} md={4}>
-              <Paper
-                sx={{
-                  padding: 2,
-                  transition: "0.5s",
-                  ":hover": {
-                    scale: "1.05",
-                  },
-                }}
-              >
-                <Box display="flex" justifyContent="center">
-                  {product ? (
-                    <img
-                      src={product.image}
-                      alt={product.title}
-                      width={200}
-                      height={200}
-                      style={{
-                        objectFit: "contain",
-                        background: "white",
-                        padding: "12px",
-                        borderRadius: "8px",
-                      }}
-                    />
-                  ) : (
-                    <Skeleton
-                      variant="rectangular"
-                      width={200}
-                      height={200}
-                      sx={{ borderRadius: "8px" }}
-                    />
-                  )}
-                </Box>
-
-                <Typography textAlign="center" noWrap marginTop={2}>
-                  {product?.title ?? <Skeleton />}
-                </Typography>
-
-                <Typography
-                  color="primary.light"
-                  textAlign="center"
-                  fontSize={18}
-                  fontWeight={500}
+              <ProductDetailLink id={product?.id}>
+                <Paper
+                  sx={{
+                    padding: 2,
+                    transition: "0.5s",
+                    ":hover": {
+                      scale: "1.05",
+                    },
+                  }}
                 >
-                  {product ? `${product.price} $` : <Skeleton />}
-                </Typography>
-              </Paper>
+                  <Box display="flex" justifyContent="center">
+                    {product ? (
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        width={200}
+                        height={200}
+                        style={{
+                          objectFit: "contain",
+                          background: "white",
+                          padding: "12px",
+                          borderRadius: "8px",
+                        }}
+                      />
+                    ) : (
+                      <Skeleton
+                        variant="rectangular"
+                        width={200}
+                        height={200}
+                        sx={{ borderRadius: "8px" }}
+                      />
+                    )}
+                  </Box>
+
+                  <Typography textAlign="center" noWrap marginTop={2}>
+                    {product?.title ?? <Skeleton />}
+                  </Typography>
+
+                  <Typography
+                    color="primary.light"
+                    textAlign="center"
+                    fontSize={18}
+                    fontWeight={500}
+                  >
+                    {product ? `${product.price} $` : <Skeleton />}
+                  </Typography>
+                </Paper>
+              </ProductDetailLink>
             </Grid>
           ))}
         </Grid>
       </Container>
     </Box>
+  );
+}
+
+function ProductDetailLink(props: { id: number | undefined; children: React.ReactNode }) {
+  const { id, children } = props;
+
+  // Don't link to any page until the data has been loaded.
+  if (!id) {
+    return <>{children}</>;
+  }
+
+  return (
+    <Link to={id.toString()} style={{ textDecoration: "none" }}>
+      {children}
+    </Link>
   );
 }
 
