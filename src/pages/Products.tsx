@@ -131,7 +131,7 @@ export default function Products() {
             sm: "flex",
           }}
           spacing={1}
-          marginBottom={2}
+          marginBottom={3}
         >
           {/* On tablets and desktops, we show two rows of chips instead of menus.*/}
           <SelectChips
