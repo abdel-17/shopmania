@@ -156,6 +156,7 @@ export default function Products() {
                 <Paper
                   sx={{
                     padding: 2,
+                    background: "#222",
                     transition: "0.5s",
                     ":hover": {
                       scale: "1.05",
