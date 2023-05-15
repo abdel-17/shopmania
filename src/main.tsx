@@ -5,9 +5,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
 
-const queryClient = new QueryClient();
-const root = document.getElementById("root") as HTMLElement;
-ReactDOM.createRoot(root).render(
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      useErrorBoundary: true,
+    },
+  },
+});
+
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>

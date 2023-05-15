@@ -70,7 +70,6 @@ export default function Products() {
       }
       return data;
     },
-    useErrorBoundary: true,
   });
 
   const products = data ?? Array<null>(6).fill(null);

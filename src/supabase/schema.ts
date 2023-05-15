@@ -9,6 +9,23 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      cart_items: {
+        Row: {
+          product_id: number
+          quantity: number
+          user_id: string
+        }
+        Insert: {
+          product_id: number
+          quantity: number
+          user_id: string
+        }
+        Update: {
+          product_id?: number
+          quantity?: number
+          user_id?: string
+        }
+      }
       products: {
         Row: {
           category: string
@@ -40,7 +57,13 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_cart_item: {
+        Args: {
+          increment: number
+          product: number
+        }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

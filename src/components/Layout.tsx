@@ -2,6 +2,7 @@ import { Fragment, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   AppBar,
+  Badge,
   Box,
   Button,
   Drawer,
@@ -29,6 +30,7 @@ import {
 import supabase from "../supabase/client";
 import Logo from "./Logo";
 import { useSession } from "../App";
+import { useCartItems } from "../hooks/cart";
 
 export default function Layout() {
   const session = useSession();
@@ -76,8 +78,8 @@ export default function Layout() {
 
           {session ? (
             <Fragment>
-              <CartButton />
               <LogoutButton />
+              <CartButton />
             </Fragment>
           ) : (
             <LoginButton />
@@ -164,7 +166,7 @@ function LogoutButton() {
 
   return (
     <Tooltip title="Logout">
-      <IconButton onClick={onClick} disabled={loading} sx={{ marginLeft: 1 }}>
+      <IconButton onClick={onClick} disabled={loading}>
         <LogoutIcon />
       </IconButton>
     </Tooltip>
@@ -172,12 +174,17 @@ function LogoutButton() {
 }
 
 function CartButton() {
+  const { data: items } = useCartItems("quantity");
   const { pathname } = useLocation();
+
   const isSelected = pathname === "/cart";
+  const totalQuantity = items?.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <Tooltip title="Shopping Cart">
-      <IconButton component={Link} to="/cart">
-        {isSelected ? <CartIcon /> : <OutlinedCartIcon />}
+      <IconButton component={Link} to="/cart" color={isSelected ? "primary" : "default"}>
+        <Badge color="primary" badgeContent={totalQuantity} invisible={isSelected}>
+          {isSelected ? <CartIcon /> : <OutlinedCartIcon />}
+        </Badge>
       </IconButton>
     </Tooltip>
   );

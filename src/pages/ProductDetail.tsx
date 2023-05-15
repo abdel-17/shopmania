@@ -5,6 +5,7 @@ import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
+import { useIncrementCartItem } from "../hooks/cart";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -32,11 +33,20 @@ export default function ProductDetail() {
       }
       return data;
     },
-    useErrorBoundary: true
   });
+  const incrementCartItem = useIncrementCartItem();
 
   const onIcrement = () => setQuantity((current) => current + 1);
-  const onDecrement = () => setQuantity((current) => current - 1);
+  const onDecrement = () => setQuantity((current) => Math.max(current - 1, 0));
+  const onAddToCart = () => {
+    if (!product) {
+      return;
+    }
+    incrementCartItem.mutate({
+      productId: product.id,
+      increment: quantity,
+    });
+  };
 
   return (
     <FullscreenBox display="flex" alignItems="center" justifyContent="center" padding={4}>
@@ -83,7 +93,13 @@ export default function ProductDetail() {
 
           {product && (
             <Box display="flex" alignItems="center">
-              <Button variant="contained" fullWidth sx={{ marginRight: 2 }}>
+              <Button
+                onClick={onAddToCart}
+                variant="contained"
+                fullWidth
+                disabled={quantity === 0 || incrementCartItem.isLoading}
+                sx={{ marginRight: 2 }}
+              >
                 Add to Cart
               </Button>
 
