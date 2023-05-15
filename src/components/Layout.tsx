@@ -1,16 +1,15 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   AppBar,
   Badge,
   Box,
   Button,
-  Drawer,
   IconButton,
-  List,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Tooltip,
 } from "@mui/material";
@@ -34,21 +33,23 @@ import { useCartItems } from "../hooks/cart";
 
 export default function Layout() {
   const session = useSession();
-  const [showDrawer, setShowDrawer] = useState(false);
+  const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
-  const onShowDrawer = () => setShowDrawer(true);
-  const onHideDrawer = () => setShowDrawer(false);
+  const onOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchor(event.currentTarget);
+  };
+  const onCloseMenu = () => setMenuAnchor(null);
 
   return (
     <>
       <AppBar component="header">
-        <Toolbar sx={{ position: "relative" }}>
+        <Toolbar>
           <Box width="100%">
             <Box
               component="nav"
               display={{
                 xs: "none",
-                md: "inherit",
+                md: "flex",
               }}
             >
               <NavLink to="/products">Products</NavLink>
@@ -57,61 +58,59 @@ export default function Layout() {
             </Box>
 
             <IconButton
-              onClick={onShowDrawer}
+              onClick={onOpenMenu}
               sx={{
-                display: {
-                  md: "none",
-                },
+                display: { md: "none" },
               }}
             >
               <MenuIcon />
             </IconButton>
           </Box>
 
+          {/** Center the logo horizontally in the toolbar */}
           <Logo
-            width={140}
+            width={150}
             style={{
               position: "absolute",
-              left: "calc(50% - 70px)",
+              left: "50%",
+              translate: "-50%",
             }}
           />
 
           {session ? (
-            <Fragment>
+            <>
               <LogoutButton />
               <CartButton />
-            </Fragment>
+            </>
           ) : (
             <LoginButton />
           )}
         </Toolbar>
       </AppBar>
 
-      <Drawer open={showDrawer} onClose={onHideDrawer}>
-        <List sx={{ width: 200, paddingTop: 2 }}>
-          <ListItemLink
-            to="/products"
-            Icon={<StoreOutlinedIcon />}
-            SelectedIcon={<StoreIcon />}
-            label="Products"
-            onClick={onHideDrawer}
-          />
-          <ListItemLink
-            to="/about"
-            Icon={<InfoOutlinedIcon />}
-            SelectedIcon={<InfoIcon />}
-            label="About"
-            onClick={onHideDrawer}
-          />
-          <ListItemLink
-            to="/contact"
-            Icon={<SupportAgentOutlinedIcon />}
-            SelectedIcon={<SupportAgentIcon />}
-            label="Contact Us"
-            onClick={onHideDrawer}
-          />
-        </List>
-      </Drawer>
+      <Menu anchorEl={menuAnchor} open={menuAnchor !== null} onClose={onCloseMenu}>
+        <MenuLinkItem
+          to="/products"
+          Icon={<StoreOutlinedIcon />}
+          SelectedIcon={<StoreIcon />}
+          label="Products"
+          onClick={onCloseMenu}
+        />
+        <MenuLinkItem
+          to="/about"
+          Icon={<InfoOutlinedIcon />}
+          SelectedIcon={<InfoIcon />}
+          label="About"
+          onClick={onCloseMenu}
+        />
+        <MenuLinkItem
+          to="/contact"
+          Icon={<SupportAgentOutlinedIcon />}
+          SelectedIcon={<SupportAgentIcon />}
+          label="Contact Us"
+          onClick={onCloseMenu}
+        />
+      </Menu>
 
       <Toolbar />
 
@@ -190,7 +189,7 @@ function CartButton() {
   );
 }
 
-function ListItemLink(props: {
+function MenuLinkItem(props: {
   to: string;
   Icon: React.ReactNode;
   SelectedIcon: React.ReactNode;
@@ -201,9 +200,15 @@ function ListItemLink(props: {
   const { pathname } = useLocation();
   const isSelected = to === pathname;
   return (
-    <ListItemButton component={Link} to={to} selected={isSelected} onClick={onClick}>
+    <MenuItem
+      component={Link}
+      to={to}
+      selected={isSelected}
+      onClick={onClick}
+      sx={{ width: 200, height: 50 }}
+    >
       <ListItemIcon>{isSelected ? SelectedIcon : Icon}</ListItemIcon>
       <ListItemText>{label}</ListItemText>
-    </ListItemButton>
+    </MenuItem>
   );
 }
