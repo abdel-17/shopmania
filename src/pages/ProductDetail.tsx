@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import FullscreenBox from "../components/FullscreenBox";
 import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import { useIncrementCartItem } from "../hooks/cart";
+import { useSession } from "../App";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -17,6 +18,9 @@ export default function ProductDetail() {
   }
 
   const [quantity, setQuantity] = useState(0);
+  const navigate = useNavigate();
+  const session = useSession();
+
   const { data: product } = useQuery({
     queryKey: ["products", id],
     queryFn: async ({ signal }) => {
@@ -34,12 +38,18 @@ export default function ProductDetail() {
       return data;
     },
   });
-  const incrementCartItem = useIncrementCartItem();
 
   const onIcrement = () => setQuantity((current) => current + 1);
   const onDecrement = () => setQuantity((current) => Math.max(current - 1, 0));
+
+  const incrementCartItem = useIncrementCartItem();
   const onAddToCart = () => {
     if (!product) {
+      return;
+    }
+    // Users must be logged in to add items to their cart.
+    if (!session) {
+      navigate("/login");
       return;
     }
     incrementCartItem.mutate({
