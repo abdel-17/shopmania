@@ -13,7 +13,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import ErrorFallback from "../components/ErrorFallback";
 import { useState } from "react";
 import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -50,9 +49,9 @@ export default function Products() {
   const [category, setCategory] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<SortMethod | null>(null);
 
-  const { data: result, refetch } = useQuery(
-    ["products", category, sortMethod],
-    async ({ signal }) => {
+  const { data } = useQuery({
+    queryKey: ["products", category, sortMethod],
+    queryFn: async ({ signal }) => {
       let query = supabase.from("products").select("id, title, image, price");
 
       if (category) {
@@ -65,17 +64,16 @@ export default function Products() {
         query = query.abortSignal(signal);
       }
 
-      return await query;
-    }
-  );
+      const { data, error } = await query;
+      if (error) {
+        throw error;
+      }
+      return data;
+    },
+    useErrorBoundary: true,
+  });
 
-  if (result?.error) {
-    const error = result.error;
-    console.error(error);
-    return <ErrorFallback error={error.message} onRetry={refetch} />;
-  }
-
-  const products = result?.data ?? Array<null>(6).fill(null);
+  const products = data ?? Array<null>(6).fill(null);
 
   const brandStyle = { color: palette.primary.light };
   return (

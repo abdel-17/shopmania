@@ -1,15 +1,6 @@
 import { useParams } from "react-router";
-import ErrorFallback from "../components/ErrorFallback";
 import FullscreenBox from "../components/FullscreenBox";
-import {
-  Box,
-  Button,
-  IconButton,
-  Rating,
-  Skeleton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -25,24 +16,24 @@ export default function ProductDetail() {
   }
 
   const [quantity, setQuantity] = useState(0);
-  const { data: result, refetch } = useQuery(["product", id], async ({ signal }) => {
-    let query = supabase.from("products").select().eq("id", id);
+  const { data: product } = useQuery({
+    queryKey: ["products", id],
+    queryFn: async ({ signal }) => {
+      let query = supabase.from("products").select().eq("id", id);
 
-    if (signal) {
-      query = query.abortSignal(signal);
-    }
+      if (signal) {
+        query = query.abortSignal(signal);
+      }
 
-    // Return a single value instead of an array.
-    return await query.single();
+      // Return a single value instead of an array.
+      const { data, error } = await query.single();
+      if (error) {
+        throw error;
+      }
+      return data;
+    },
+    useErrorBoundary: true
   });
-
-  if (result?.error) {
-    const error = result.error;
-    console.error(error);
-    return <ErrorFallback error={error.message} onRetry={refetch} />;
-  }
-
-  const product = result?.data;
 
   const onIcrement = () => setQuantity((current) => current + 1);
   const onDecrement = () => setQuantity((current) => current - 1);

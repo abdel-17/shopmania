@@ -27,8 +27,8 @@ import {
   InfoOutlined as InfoOutlinedIcon,
 } from "@mui/icons-material";
 import supabase from "../supabase/client";
-import { useSession } from "./SessionProvider";
 import Logo from "./Logo";
+import { useSession } from "../App";
 
 export default function Layout() {
   const session = useSession();
