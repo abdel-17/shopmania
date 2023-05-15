@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Button,
@@ -13,13 +12,10 @@ import PasswordTextField from "../components/PasswordTextField";
 import supabase from "../supabase/client";
 import Logo from "../components/Logo";
 import Form from "../components/Form";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Register() {
-  const [submitting, setSubmitting] = useState(false);
-
-  const onFormData = async (formData: FormData) => {
-    setSubmitting(true);
-
+  const { mutate: register, isLoading } = useMutation(async (formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const { error } = await supabase.auth.signUp({ email, password });
@@ -27,12 +23,10 @@ export default function Register() {
     if (error) {
       console.error(error);
       alert(error.message);
-    } else {
-      alert("A confirmation email will be sent to verify your account");
+      return;
     }
-
-    setSubmitting(false);
-  };
+    alert("A confirmation email will be sent to verify your account");
+  });
 
   return (
     <Box display="flex" alignItems="center" minHeight="100vh">
@@ -51,7 +45,7 @@ export default function Register() {
             <Logo />
           </Link>
 
-          <Form method="post" onFormData={onFormData} sx={{ marginTop: 3 }}>
+          <Form method="post" action={register} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />
 
             <PasswordTextField
@@ -66,7 +60,7 @@ export default function Register() {
             <Button
               type="submit"
               variant="contained"
-              disabled={submitting}
+              disabled={isLoading}
               fullWidth
               sx={{ marginTop: 3 }}
             >

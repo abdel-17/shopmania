@@ -3,27 +3,20 @@ import EmailTextField from "../components/EmailTextField";
 import Logo from "../components/Logo";
 import supabase from "../supabase/client";
 import Form from "../components/Form";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
 export default function ForgotPassword() {
-  const [submitting, setSubmitting] = useState(false);
-
-  const onFormData = async (formData: FormData) => {
-    setSubmitting(true);
-
+  const { mutate: reset, isLoading } = useMutation(async (formData: FormData) => {
     const email = formData.get("email") as string;
     const { error } = await supabase.auth.resetPasswordForEmail(email);
-
     if (error) {
       console.error(error);
       alert(error.message);
-    } else {
-      alert("An email will been sent to reset your password");
+      return;
     }
-
-    setSubmitting(false);
-  };
+    alert("An email will been sent to reset your password");
+  });
 
   return (
     <Box display="flex" alignItems="center" minHeight="100vh">
@@ -39,13 +32,13 @@ export default function ForgotPassword() {
           <Logo />
         </Link>
 
-        <Form method="post" onFormData={onFormData} sx={{ marginTop: 4 }}>
+        <Form method="post" action={reset} sx={{ marginTop: 4 }}>
           <EmailTextField id="email" autoFocus />
 
           <Button
             type="submit"
             variant="contained"
-            disabled={submitting}
+            disabled={isLoading}
             fullWidth
             sx={{ marginTop: 2 }}
           >

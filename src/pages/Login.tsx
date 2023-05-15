@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Box,
@@ -14,14 +13,11 @@ import EmailTextField from "../components/EmailTextField";
 import PasswordTextField from "../components/PasswordTextField";
 import Logo from "../components/Logo";
 import Form from "../components/Form";
+import { useMutation } from "@tanstack/react-query";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [submitting, setSubmitting] = useState(false);
-
-  const onFormData = async (formData: FormData) => {
-    setSubmitting(true);
-
+  const { mutate: login, isLoading } = useMutation(async (formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const { error } = await supabase.auth.signInWithPassword({ email, password });
@@ -29,13 +25,10 @@ export default function Login() {
     if (error) {
       console.error(error);
       alert(error.message);
-    } else {
-      // Replace this component with the home page if login succeeded.
-      navigate("/", { replace: true });
+      return;
     }
-
-    setSubmitting(false);
-  };
+    navigate("/", { replace: true });
+  });
 
   return (
     <Box display="flex" alignItems="center" minHeight="100vh">
@@ -54,7 +47,7 @@ export default function Login() {
             <Logo />
           </Link>
 
-          <Form method="post" onFormData={onFormData} sx={{ marginTop: 3 }}>
+          <Form method="post" action={login} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />
 
             <PasswordTextField id="current-password" autoComplete="current-password" />
@@ -62,7 +55,7 @@ export default function Login() {
             <Button
               type="submit"
               variant="contained"
-              disabled={submitting}
+              disabled={isLoading}
               fullWidth
               sx={{ marginTop: 3, marginBottom: 2 }}
             >
