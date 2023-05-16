@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import getData from "../supabase/getData";
+import { useTheme } from "@mui/material";
 
 interface SortMethod {
   label: string;
@@ -45,6 +46,7 @@ const sortMethods: SortMethod[] = [
 ];
 
 export default function Products() {
+  const { palette } = useTheme();
   const [category, setCategory] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<SortMethod | null>(null);
 
@@ -76,10 +78,11 @@ export default function Products() {
   const renderCategory = (category: string) => category;
   const renderSortMethod = (sortMethod: SortMethod) => sortMethod.label;
 
+  const brandStyle = { color: palette.primary.light };
   return (
     <Box padding={4}>
       <Typography component="h1" variant="h4" textAlign="center" fontWeight="bold">
-        Welcome to <Typography color="primary.light">Shopmania</Typography>
+        Welcome to <span style={brandStyle}>Shopmania</span>
       </Typography>
 
       <Typography
