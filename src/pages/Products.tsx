@@ -11,13 +11,13 @@ import {
   Stack,
   Tooltip,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
+import getData from "../supabase/getData";
 
 interface SortMethod {
   label: string;
@@ -45,7 +45,6 @@ const sortMethods: SortMethod[] = [
 ];
 
 export default function Products() {
-  const { palette } = useTheme();
   const [category, setCategory] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<SortMethod | null>(null);
 
@@ -57,28 +56,30 @@ export default function Products() {
       if (category) {
         query = query.eq("category", category);
       }
+
       if (sortMethod) {
-        query = query.order(sortMethod.property, { ascending: sortMethod.ascending });
+        const { property, ascending } = sortMethod;
+        query = query.order(property, { ascending });
       }
+
       if (signal) {
         query = query.abortSignal(signal);
       }
 
-      const { data, error } = await query;
-      if (error) {
-        throw error;
-      }
-      return data;
+      return getData(await query);
     },
   });
 
+  // Show 6 placeholder cards while loading.
   const products = data ?? Array<null>(6).fill(null);
 
-  const brandStyle = { color: palette.primary.light };
+  const renderCategory = (category: string) => category;
+  const renderSortMethod = (sortMethod: SortMethod) => sortMethod.label;
+
   return (
     <Box padding={4}>
       <Typography component="h1" variant="h4" textAlign="center" fontWeight="bold">
-        Welcome to <span style={brandStyle}>Shopmania!</span>
+        Welcome to <Typography color="primary.light">Shopmania</Typography>
       </Typography>
 
       <Typography
@@ -106,19 +107,19 @@ export default function Products() {
           <SelectMenu
             selection={sortMethod}
             setSelection={setSortMethod}
+            items={sortMethods}
             tooltip="Sort"
             ButtonIcon={<SortIcon />}
-            items={sortMethods}
-            renderItem={(sortMethod) => sortMethod.label}
+            renderItem={renderSortMethod}
           />
 
           <SelectMenu
             selection={category}
             setSelection={setCategory}
+            items={categories}
             tooltip="Filter"
             ButtonIcon={<TuneIcon />}
-            items={categories}
-            renderItem={(category) => category}
+            renderItem={renderCategory}
           />
         </Stack>
 
@@ -135,14 +136,14 @@ export default function Products() {
             selection={category}
             setSelection={setCategory}
             items={categories}
-            renderLabel={(category) => category}
+            renderItem={renderCategory}
           />
 
           <SelectChips
             selection={sortMethod}
             setSelection={setSortMethod}
             items={sortMethods}
-            renderLabel={(sortMethod) => sortMethod.label}
+            renderItem={renderSortMethod}
           />
         </Stack>
 
@@ -206,7 +207,7 @@ export default function Products() {
   );
 }
 
-function ProductDetailLink(props: { id: number | undefined; children: React.ReactNode }) {
+function ProductDetailLink(props: { id?: number; children: React.ReactNode }) {
   const { id, children } = props;
 
   // Don't link to any page until the data has been loaded.
@@ -225,34 +226,27 @@ function SelectChips<T>(props: {
   selection: T | null;
   setSelection: React.Dispatch<React.SetStateAction<T | null>>;
   items: T[];
-  renderLabel: (item: T) => React.ReactNode;
+  renderItem: (item: T) => React.ReactNode;
 }) {
-  const { selection, setSelection, items, renderLabel } = props;
-
-  function SelectChip(props: { item: T }) {
-    const { item } = props;
-    const isSelected = item === selection;
-
-    const onClick = () => setSelection(item);
-    // Chips can only be deleted (deselected) if they are selected.
-    const onDelete = isSelected ? () => setSelection(null) : undefined;
-
-    return (
-      <Chip
-        variant="filled"
-        label={renderLabel(item)}
-        color={isSelected ? "secondary" : "default"}
-        onClick={onClick}
-        onDelete={onDelete}
-      />
-    );
-  }
-
+  const { selection, setSelection, items, renderItem } = props;
   return (
     <Stack direction="row" justifyContent="center" spacing={1}>
-      {items.map((item, i) => (
-        <SelectChip key={i} item={item} />
-      ))}
+      {items.map((item, i) => {
+        const isSelected = item === selection;
+        return (
+          <Chip
+            key={i}
+            variant="filled"
+            label={renderItem(item)}
+            color={isSelected ? "secondary" : "default"}
+            onClick={() => setSelection(item)}
+            onDelete={
+              // Chips can only be deleted (deselected) if they are selected.
+              isSelected ? () => setSelection(null) : undefined
+            }
+          />
+        );
+      })}
     </Stack>
   );
 }
@@ -260,37 +254,16 @@ function SelectChips<T>(props: {
 function SelectMenu<T>(props: {
   selection: T | null;
   setSelection: React.Dispatch<React.SetStateAction<T | null>>;
+  items: T[];
   tooltip: string;
   ButtonIcon: React.ReactNode;
-  items: T[];
   renderItem: (item: T) => React.ReactNode;
 }) {
-  const { selection, setSelection, tooltip, ButtonIcon, items, renderItem } = props;
+  const { selection, setSelection, items, tooltip, ButtonIcon, renderItem } = props;
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
-  const onOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchor(event.currentTarget);
-  };
-  const onClose = () => {
-    setAnchor(null);
-  };
-
-  function SelectMenuItem(props: { item: T }) {
-    const { item } = props;
-
-    const onClick = () => {
-      // If the option is currently selected, deselect it.
-      // Otherwise, set it as selected.
-      setSelection((selection) => (item === selection ? null : item));
-      onClose();
-    };
-
-    return (
-      <MenuItem selected={item === selection} onClick={onClick}>
-        {renderItem(item)}
-      </MenuItem>
-    );
-  }
+  const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchor(event.currentTarget);
+  const onClose = () => setAnchor(null);
 
   return (
     <>
@@ -312,7 +285,18 @@ function SelectMenu<T>(props: {
         onClose={onClose}
       >
         {items.map((item, i) => (
-          <SelectMenuItem key={i} item={item} />
+          <MenuItem
+            key={i}
+            selected={item === selection}
+            onClick={() => {
+              // If the option is currently selected, deselect it.
+              // Otherwise, select it.
+              setSelection((selection) => (item === selection ? null : item));
+              onClose();
+            }}
+          >
+            {renderItem(item)}
+          </MenuItem>
         ))}
       </Menu>
     </>

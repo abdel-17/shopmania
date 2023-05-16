@@ -9,15 +9,27 @@ import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Index from "./pages/Index";
 import ForgotPassword from "./pages/ForgotPassword";
-import { useAuthListener } from "./hooks/auth";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import ErrorBoundary from "./components/ErrorBoundary";
+import supabase from "./supabase/client";
 
 const SessionContext = createContext<Session | null>(null);
 
 export function App() {
-  const { event, session } = useAuthListener();
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    // Listen to changes to the auth state.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log(event, session);
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <SessionContext.Provider value={session}>

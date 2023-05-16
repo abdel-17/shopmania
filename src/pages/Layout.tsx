@@ -29,7 +29,8 @@ import {
 import supabase from "../supabase/client";
 import Logo from "../components/Logo";
 import { useSession } from "../App";
-import { useCartItems } from "../hooks/cart";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import getData from "../supabase/getData";
 
 export default function Layout() {
   const session = useSession();
@@ -151,21 +152,17 @@ function LoginButton() {
 }
 
 function LogoutButton() {
-  const [loading, setLoading] = useState(false);
-
-  const onClick = async () => {
-    setLoading(true);
+  const { mutate: logout, isLoading } = useMutation(async () => {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error(error);
       alert(error.message);
     }
-    setLoading(false);
-  };
-
+  });
+  const onClick = () => logout();
   return (
     <Tooltip title="Logout">
-      <IconButton onClick={onClick} disabled={loading}>
+      <IconButton onClick={onClick} disabled={isLoading}>
         <LogoutIcon />
       </IconButton>
     </Tooltip>
@@ -173,11 +170,23 @@ function LogoutButton() {
 }
 
 function CartButton() {
-  const { data: items } = useCartItems("quantity");
   const { pathname } = useLocation();
-
   const isSelected = pathname === "/cart";
-  const totalQuantity = items?.reduce((sum, item) => sum + item.quantity, 0);
+
+  const { data: totalQuantity } = useQuery({
+    queryKey: ["cart", "quantity"],
+    queryFn: async ({ signal }) => {
+      let query = supabase.from("cart_items").select("quantity");
+      if (signal) {
+        query = query.abortSignal(signal);
+      }
+
+      const items = getData(await query);
+      // Add the quantities of all items in the cart.
+      return items.reduce((sum, item) => sum + item.quantity, 0);
+    },
+  });
+
   return (
     <Tooltip title="Shopping Cart">
       <IconButton component={Link} to="/cart" color={isSelected ? "primary" : "default"}>

@@ -3,46 +3,60 @@ import FullscreenBox from "../components/FullscreenBox";
 import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabase/client";
-import { useIncrementCartItem } from "../hooks/cart";
 import { useSession } from "../App";
+import getData from "../supabase/getData";
 
 export default function ProductDetail() {
   const { id } = useParams();
-
-  // Make sure we use this component in the correct route.
   if (!id) {
-    console.error("ProductDetail needs an id url parameter");
+    console.error("ProductDetail needs an id url parameter.");
     return null;
   }
 
   const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
   const session = useSession();
+  const queryClient = useQueryClient();
 
   const { data: product } = useQuery({
     queryKey: ["products", id],
     queryFn: async ({ signal }) => {
       let query = supabase.from("products").select().eq("id", id);
-
       if (signal) {
         query = query.abortSignal(signal);
       }
-
       // Return a single value instead of an array.
-      const { data, error } = await query.single();
-      if (error) {
-        throw error;
-      }
-      return data;
+      return getData(await query.single());
     },
   });
 
+  const addToCart = useMutation(async (quantity: number) => {
+    if (!product) {
+      console.error("Product is added to the cart before the page loads.");
+      return;
+    }
+
+    const { error } = await supabase.rpc("add_to_cart", {
+      product: product.id,
+      amount: quantity,
+    });
+
+    if (error) {
+      console.error(error);
+      alert("Failed to add items to cart.");
+      return;
+    }
+    queryClient.invalidateQueries(["cart"]); // Refetch queries that depend on cart data.
+    alert(`${quantity === 1 ? "Item" : "Items"} added to cart successfully.`);
+  });
+
   const onIcrement = () => setQuantity((current) => current + 1);
+
+  // Make sure the quantity never drops below zero.
   const onDecrement = () => setQuantity((current) => Math.max(current - 1, 0));
 
-  const incrementCartItem = useIncrementCartItem();
   const onAddToCart = () => {
     if (!product) {
       return;
@@ -52,10 +66,7 @@ export default function ProductDetail() {
       navigate("/login");
       return;
     }
-    incrementCartItem.mutate({
-      productId: product.id,
-      increment: quantity,
-    });
+    addToCart.mutate(quantity);
   };
 
   return (
@@ -107,7 +118,7 @@ export default function ProductDetail() {
                 onClick={onAddToCart}
                 variant="contained"
                 fullWidth
-                disabled={quantity === 0 || incrementCartItem.isLoading}
+                disabled={quantity === 0 || addToCart.isLoading}
                 sx={{ marginRight: 2 }}
               >
                 Add to Cart

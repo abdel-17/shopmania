@@ -57,12 +57,12 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      increment_cart_item: {
+      add_to_cart: {
         Args: {
-          increment: number
           product: number
+          amount: number
         }
-        Returns: number
+        Returns: undefined
       }
     }
     Enums: {
