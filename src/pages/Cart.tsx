@@ -74,13 +74,13 @@ function CartItem(props: {
     <Box display="flex" marginX={3} marginY={2}>
       <img
         src={product.image}
-        width={150}
-        height={150}
+        width={120}
+        height={120}
         style={{
           objectFit: "contain",
           flexShrink: 0,
           padding: 8,
-          borderRadius: 16,
+          borderRadius: 8,
           background: "white",
         }}
       />
