@@ -27,7 +27,7 @@ import {
   InfoOutlined as InfoOutlinedIcon,
 } from "@mui/icons-material";
 import supabase from "../supabase/client";
-import Logo from "./Logo";
+import Logo from "../components/Logo";
 import { useSession } from "../App";
 import { useCartItems } from "../hooks/cart";
 
