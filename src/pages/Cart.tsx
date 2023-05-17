@@ -72,8 +72,7 @@ function CartItem(props: {
 }) {
   const { product } = props;
   const [quantity, setQuantity] = useState(product.quantity);
-
-  const formattedPrice = (product.price * quantity).toFixed(2);
+  const totalPrice = product.price * quantity;
   return (
     <Box display="flex" marginX={3} marginY={2}>
       <img
@@ -114,8 +113,9 @@ function CartItem(props: {
           <Box display="flex" alignItems="center" flexGrow={1}>
             <Stepper value={quantity} onChange={setQuantity} />
 
-            <Typography fontSize={18} textAlign="end" flexGrow={1}>
-              {formattedPrice} $
+            <Typography fontSize={20} textAlign="end" flexGrow={1}>
+              {/** Show only two decimal places */}
+              {totalPrice.toFixed(2)} $
             </Typography>
           </Box>
         </Box>
