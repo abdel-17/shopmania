@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { Navigate } from "react-router";
 import {
   Box,
   Button,
@@ -14,9 +14,11 @@ import PasswordTextField from "../components/PasswordTextField";
 import Logo from "../components/Logo";
 import Form from "../components/Form";
 import { useMutation } from "@tanstack/react-query";
+import { useSession } from "../App";
 
 export default function Login() {
-  const navigate = useNavigate();
+  const session = useSession();
+
   const { mutate: login, isLoading } = useMutation(async (formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
@@ -25,10 +27,13 @@ export default function Login() {
     if (error) {
       console.error(error);
       alert(error.message);
-      return;
     }
-    navigate("/", { replace: true });
   });
+
+  // Navigate back to the home page on login success.
+  if (session) {
+    return <Navigate to="/" replace />
+  }
 
   return (
     <Box display="flex" alignItems="center" minHeight="100vh">
