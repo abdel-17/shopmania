@@ -14,6 +14,7 @@ import Stepper from "../components/Stepper";
 import { useSession } from "../App";
 import cart from "../assets/cart.svg";
 import FullscreenBox from "../components/FullscreenBox";
+import { useEffect, useState } from "react";
 
 export default function Cart() {
   const session = useSession();
@@ -85,7 +86,13 @@ function CartItem(props: {
   };
 }) {
   const { product } = props;
+  const [optimisticQuantity, setOptimisticQuantity] = useState(product.quantity);
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    // Keep the optimistic quantity in sync with the actual quantity.
+    setOptimisticQuantity(product.quantity);
+  }, [product.quantity]);
 
   const updateQuantity = useMutation(async (newQuantity: number) => {
     if (newQuantity === product.quantity) {
@@ -104,7 +111,8 @@ function CartItem(props: {
       return;
     }
 
-    console.log(`Updated quantity of ${product.id} to ${newQuantity}`);
+    console.log(`Updated quantity of ${product.id} to ${newQuantity}.`);
+    setOptimisticQuantity(newQuantity);
     queryClient.invalidateQueries(["cart"]); // Refetch the cart items from the database.
   });
 
@@ -112,7 +120,7 @@ function CartItem(props: {
     updateQuantity.mutate(newQuantity);
   };
 
-  const totalPrice = product.quantity * product.price;
+  const totalPrice = optimisticQuantity * product.price;
   return (
     <Box display="flex" marginX={3} marginY={2}>
       <img
@@ -148,7 +156,7 @@ function CartItem(props: {
         <Box display="flex" alignItems="end" flexGrow={1}>
           <Box display="flex" alignItems="center" flexGrow={1}>
             <Stepper
-              value={product.quantity}
+              value={optimisticQuantity}
               onChange={onQuantityChange}
               disabled={updateQuantity.isLoading}
             />
