@@ -6,14 +6,12 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import getData from "../supabase/getData";
 import { Link, Navigate } from "react-router-dom";
 import Stepper from "../components/Stepper";
-import { useEffect, useState } from "react";
 import { useSession } from "../App";
-import { useDebouncedCallback } from "use-debounce";
 import cart from "../assets/cart.svg";
 import FullscreenBox from "../components/FullscreenBox";
 
@@ -87,43 +85,34 @@ function CartItem(props: {
   };
 }) {
   const { product } = props;
-  const [quantity, setQuantity] = useState(product.quantity);
   const queryClient = useQueryClient();
 
-  useEffect(() => {
-    // Keep `quantity` in sync with the product's quantity.
-    setQuantity(product.quantity);
-  }, [product.quantity]);
-
-  // Debounce requests to update the quantity to reduce the number
-  // of requests to the database when multiple clicks are registered.
-  const updateDatabaseQuantity = useDebouncedCallback(async (quantity: number) => {
-    if (quantity === product.quantity) {
+  const updateQuantity = useMutation(async (newQuantity: number) => {
+    if (newQuantity === product.quantity) {
       // No need for a server request if the quantity is the same.
       return;
     }
 
     const { error } = await supabase.rpc("update_cart_quantity", {
       product: product.id,
-      new_quantity: quantity,
+      new_quantity: newQuantity,
     });
 
     if (error) {
       console.error(error);
       alert("Failed to update cart items");
-      setQuantity(product.quantity); // Rollback the changes.
       return;
     }
-    console.log(`Updated quantity of ${product.id} to ${quantity}`);
+
+    console.log(`Updated quantity of ${product.id} to ${newQuantity}`);
     queryClient.invalidateQueries(["cart"]); // Refetch the cart items from the database.
-  }, 500);
+  });
 
   const onQuantityChange = (newQuantity: number) => {
-    setQuantity(newQuantity);
-    updateDatabaseQuantity(newQuantity);
+    updateQuantity.mutate(newQuantity);
   };
 
-  const totalPrice = product.price * quantity;
+  const totalPrice = product.quantity * product.price;
   return (
     <Box display="flex" marginX={3} marginY={2}>
       <img
@@ -158,7 +147,11 @@ function CartItem(props: {
 
         <Box display="flex" alignItems="end" flexGrow={1}>
           <Box display="flex" alignItems="center" flexGrow={1}>
-            <Stepper value={quantity} onChange={onQuantityChange} />
+            <Stepper
+              value={product.quantity}
+              onChange={onQuantityChange}
+              disabled={updateQuantity.isLoading}
+            />
 
             <Typography fontSize={20} textAlign="end" flexGrow={1}>
               {/** Show only two decimal places */}

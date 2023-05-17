@@ -6,17 +6,23 @@ export default function Stepper({
   onChange,
   min = 0,
   max = Infinity,
+  disabled = false,
 }: {
   value: number;
   onChange: (newValue: number) => void;
   min?: number;
   max?: number;
+  disabled?: boolean;
 }) {
   const onIncrement = () => onChange(Math.min(max, value + 1));
   const onDecrement = () => onChange(Math.max(min, value - 1));
   return (
     <Box display="flex" alignItems="center">
-      <IconButton onClick={onIncrement} disabled={value === max} color="secondary">
+      <IconButton
+        onClick={onIncrement}
+        disabled={disabled || value === max}
+        color="secondary"
+      >
         <AddIcon />
       </IconButton>
 
@@ -24,7 +30,11 @@ export default function Stepper({
         {value}
       </Typography>
 
-      <IconButton onClick={onDecrement} disabled={value === min} color="secondary">
+      <IconButton
+        onClick={onDecrement}
+        disabled={disabled || value === min}
+        color="secondary"
+      >
         <RemoveIcon />
       </IconButton>
     </Box>
