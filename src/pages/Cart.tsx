@@ -77,6 +77,7 @@ function CartItem(props: {
     <Box display="flex" marginX={3} marginY={2}>
       <img
         src={product.image}
+        alt={product.title}
         width={120}
         height={120}
         style={{
