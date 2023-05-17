@@ -8,12 +8,12 @@ export default function Stepper({
   max = Infinity,
 }: {
   value: number;
-  onChange: React.Dispatch<React.SetStateAction<number>>;
+  onChange: (newValue: number) => void;
   min?: number;
   max?: number;
 }) {
-  const onIncrement = () => onChange((value) => Math.min(max, value + 1));
-  const onDecrement = () => onChange((value) => Math.max(min, value - 1));
+  const onIncrement = () => onChange(Math.min(max, value + 1));
+  const onDecrement = () => onChange(Math.max(min, value - 1));
   return (
     <Box display="flex" alignItems="center">
       <IconButton onClick={onIncrement} disabled={value === max} color="secondary">

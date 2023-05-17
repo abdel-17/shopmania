@@ -14,6 +14,8 @@ import Stepper from "../components/Stepper";
 import { useEffect, useState } from "react";
 import { useSession } from "../App";
 import { useDebouncedCallback } from "use-debounce";
+import cart from "../assets/cart.svg";
+import FullscreenBox from "../components/FullscreenBox";
 
 export default function Cart() {
   const session = useSession();
@@ -45,6 +47,10 @@ export default function Cart() {
 
   if (!items) {
     return <div>Loading...</div>;
+  }
+
+  if (items.length === 0) {
+    return <EmptyCartPlaceholder />;
   }
 
   return (
@@ -84,11 +90,16 @@ function CartItem(props: {
   const [quantity, setQuantity] = useState(product.quantity);
   const queryClient = useQueryClient();
 
+  useEffect(() => {
+    // Keep `quantity` in sync with the product's quantity.
+    setQuantity(product.quantity);
+  }, [product.quantity]);
+
   // Debounce requests to update the quantity to reduce the number
   // of requests to the database when multiple clicks are registered.
   const updateDatabaseQuantity = useDebouncedCallback(async (quantity: number) => {
     if (quantity === product.quantity) {
-      // No need for a server request if the data is the same.
+      // No need for a server request if the quantity is the same.
       return;
     }
 
@@ -103,19 +114,14 @@ function CartItem(props: {
       setQuantity(product.quantity); // Rollback the changes.
       return;
     }
-    // Refetch the cart items from the database.
-    queryClient.invalidateQueries(["cart"]);
+    console.log(`Updated quantity of ${product.id} to ${quantity}`);
+    queryClient.invalidateQueries(["cart"]); // Refetch the cart items from the database.
   }, 500);
 
-  useEffect(() => {
-    // Synchornize quantity changes with the database.
-    updateDatabaseQuantity(quantity);
-  }, [quantity, updateDatabaseQuantity]);
-
-  // Hide this item if the quantity is zero.
-  if (quantity === 0) {
-    return null;
-  }
+  const onQuantityChange = (newQuantity: number) => {
+    setQuantity(newQuantity);
+    updateDatabaseQuantity(newQuantity);
+  };
 
   const totalPrice = product.price * quantity;
   return (
@@ -138,13 +144,8 @@ function CartItem(props: {
         <MuiLink
           component={Link}
           to={`/products/${product.id.toString()}`}
-          sx={{
-            color: "white",
-            textDecoration: "none",
-            ":hover": {
-              textDecoration: "underline",
-            },
-          }}
+          color="white"
+          underline="hover"
         >
           <Typography fontWeight={500} fontSize={17}>
             {product.title}
@@ -157,7 +158,7 @@ function CartItem(props: {
 
         <Box display="flex" alignItems="end" flexGrow={1}>
           <Box display="flex" alignItems="center" flexGrow={1}>
-            <Stepper value={quantity} onChange={setQuantity} />
+            <Stepper value={quantity} onChange={onQuantityChange} />
 
             <Typography fontSize={20} textAlign="end" flexGrow={1}>
               {/** Show only two decimal places */}
@@ -167,5 +168,33 @@ function CartItem(props: {
         </Box>
       </Stack>
     </Box>
+  );
+}
+
+function EmptyCartPlaceholder() {
+  return (
+    <FullscreenBox
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      padding={4}
+    >
+      <img src={cart} alt="Customer browsing Shopmania" style={{ maxWidth: 400 }} />
+
+      <Typography component="h1" variant="h5" marginTop={4}>
+        You have no items in your cart
+      </Typography>
+
+      <MuiLink
+        component={Link}
+        to="/products"
+        color="primary.light"
+        fontSize={18}
+        marginTop={1}
+      >
+        Browse our products
+      </MuiLink>
+    </FullscreenBox>
   );
 }
