@@ -11,8 +11,7 @@ import Stepper from "../components/Stepper";
 export default function ProductDetail() {
   const { id } = useParams();
   if (!id) {
-    console.error("ProductDetail needs an id url parameter.");
-    return null;
+    throw new Error("ProductDetail needs an id url parameter.");
   }
 
   const [quantity, setQuantity] = useState(0);
