@@ -6,14 +6,18 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import getData from "../supabase/getData";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import Stepper from "../components/Stepper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSession } from "../App";
+import { useDebouncedCallback } from "use-debounce";
 
 export default function Cart() {
+  const session = useSession();
+
   const { data: items } = useQuery({
     queryKey: ["cart"],
     queryFn: async () =>
@@ -34,9 +38,15 @@ export default function Cart() {
       ),
   });
 
+  // Navigate to the login page if the user is logged out.
+  if (!session) {
+    return <Navigate to="/login" />;
+  }
+
   if (!items) {
     return <div>Loading...</div>;
   }
+
   return (
     <Container maxWidth="md" disableGutters sx={{ paddingY: 2 }}>
       <Typography
@@ -72,6 +82,41 @@ function CartItem(props: {
 }) {
   const { product } = props;
   const [quantity, setQuantity] = useState(product.quantity);
+  const queryClient = useQueryClient();
+
+  // Debounce requests to update the quantity to reduce the number
+  // of requests to the database when multiple clicks are registered.
+  const updateDatabaseQuantity = useDebouncedCallback(async (quantity: number) => {
+    if (quantity === product.quantity) {
+      // No need for a server request if the data is the same.
+      return;
+    }
+
+    const { error } = await supabase.rpc("update_cart_quantity", {
+      product: product.id,
+      new_quantity: quantity,
+    });
+
+    if (error) {
+      console.error(error);
+      alert("Failed to update cart items");
+      setQuantity(product.quantity); // Rollback the changes.
+      return;
+    }
+    // Refetch the cart items from the database.
+    queryClient.invalidateQueries(["cart"]);
+  }, 500);
+
+  useEffect(() => {
+    // Synchornize quantity changes with the database.
+    updateDatabaseQuantity(quantity);
+  }, [quantity, updateDatabaseQuantity]);
+
+  // Hide this item if the quantity is zero.
+  if (quantity === 0) {
+    return null;
+  }
+
   const totalPrice = product.price * quantity;
   return (
     <Box display="flex" marginX={3} marginY={2}>

@@ -64,6 +64,13 @@ export interface Database {
         }
         Returns: undefined
       }
+      update_cart_quantity: {
+        Args: {
+          product: number
+          new_quantity: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
