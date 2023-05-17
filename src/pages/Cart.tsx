@@ -2,7 +2,6 @@ import {
   Box,
   Container,
   Divider,
-  IconButton,
   Link as MuiLink,
   Stack,
   Typography,
@@ -10,8 +9,9 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import getData from "../supabase/getData";
-import { Add, Remove } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import Stepper from "../components/Stepper";
+import { useState } from "react";
 
 export default function Cart() {
   const { data: items } = useQuery({
@@ -52,7 +52,8 @@ export default function Cart() {
 
       <Stack divider={<Divider />}>
         {items.map(({ product, quantity }) => (
-          <CartItem key={product.id} product={product} quantity={quantity} />
+          // @ts-expect-error
+          <CartItem key={product.id} product={{ ...product, quantity: quantity }} />
         ))}
       </Stack>
     </Container>
@@ -66,10 +67,13 @@ function CartItem(props: {
     category: string;
     image: string;
     price: number;
+    quantity: number;
   };
-  quantity: number;
 }) {
-  const { product, quantity } = props;
+  const { product } = props;
+  const [quantity, setQuantity] = useState(product.quantity);
+
+  const formattedPrice = (product.price * quantity).toFixed(2);
   return (
     <Box display="flex" marginX={3} marginY={2}>
       <img
@@ -108,20 +112,10 @@ function CartItem(props: {
 
         <Box display="flex" alignItems="end" flexGrow={1}>
           <Box display="flex" alignItems="center" flexGrow={1}>
-            <IconButton size="medium">
-              <Add fontSize="inherit" />
-            </IconButton>
-
-            <Typography fontWeight={500} fontSize={18} marginX={1}>
-              {quantity}
-            </Typography>
-
-            <IconButton size="medium">
-              <Remove fontSize="inherit" />
-            </IconButton>
+            <Stepper value={quantity} onChange={setQuantity} />
 
             <Typography fontSize={18} textAlign="end" flexGrow={1}>
-              {product.price * quantity} $
+              {formattedPrice} $
             </Typography>
           </Box>
         </Box>

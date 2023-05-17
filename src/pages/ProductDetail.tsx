@@ -1,12 +1,12 @@
 import { useNavigate, useParams } from "react-router";
 import FullscreenBox from "../components/FullscreenBox";
-import { Box, Button, IconButton, Skeleton, Stack, Typography } from "@mui/material";
-import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
+import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import { useSession } from "../App";
 import getData from "../supabase/getData";
+import Stepper from "../components/Stepper";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -51,11 +51,6 @@ export default function ProductDetail() {
     queryClient.invalidateQueries(["cart"]); // Refetch queries that depend on cart data.
     alert(`${quantity === 1 ? "Item" : "Items"} added to cart successfully.`);
   });
-
-  const onIcrement = () => setQuantity((current) => current + 1);
-
-  // Make sure the quantity never drops below zero.
-  const onDecrement = () => setQuantity((current) => Math.max(current - 1, 0));
 
   const onAddToCart = () => {
     if (!product) {
@@ -124,17 +119,7 @@ export default function ProductDetail() {
                 Add to Cart
               </Button>
 
-              <IconButton onClick={onIcrement}>
-                <AddIcon />
-              </IconButton>
-
-              <Typography fontSize={18} marginX={1}>
-                {quantity}
-              </Typography>
-
-              <IconButton onClick={onDecrement} disabled={quantity === 0}>
-                <RemoveIcon />
-              </IconButton>
+              <Stepper value={quantity} onChange={setQuantity} />
             </Box>
           )}
         </Box>
