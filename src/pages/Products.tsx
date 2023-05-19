@@ -17,7 +17,6 @@ import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
-import getData from "../supabase/getData";
 import { useTheme } from "@mui/material";
 
 interface SortMethod {
@@ -68,7 +67,7 @@ export default function Products() {
         query = query.abortSignal(signal);
       }
 
-      return getData(await query);
+      return (await query.throwOnError()).data;
     },
   });
 

@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabase/client";
-import getData from "../supabase/getData";
 import { Link, Navigate } from "react-router-dom";
 import Stepper from "../components/Stepper";
 import { useSession } from "../App";
@@ -21,12 +20,11 @@ export default function Cart() {
 
   const { data: items } = useQuery({
     queryKey: ["cart"],
-    queryFn: async () =>
-      getData(
-        await supabase
-          .from("cart_items")
-          .select(
-            `quantity,
+    queryFn: async ({ signal }) => {
+      let query = supabase
+        .from("cart_items")
+        .select(
+          `quantity,
              product:products(
               id,
               title,
@@ -34,9 +32,15 @@ export default function Cart() {
               image,
               price
             )`
-          )
-          .order("quantity", { ascending: false })
-      ),
+        )
+        .order("quantity", { ascending: false });
+
+      if (signal) {
+        query = query.abortSignal(signal);
+      }
+
+      return (await query.throwOnError()).data;
+    },
   });
 
   // Navigate to the login page if the user is logged out.

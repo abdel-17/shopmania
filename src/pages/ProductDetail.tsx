@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import { useSession } from "../App";
-import getData from "../supabase/getData";
 import Stepper from "../components/Stepper";
 
 export default function ProductDetail() {
@@ -27,7 +26,7 @@ export default function ProductDetail() {
         query = query.abortSignal(signal);
       }
       // Return a single value instead of an array.
-      return getData(await query.single());
+      return (await query.single().throwOnError()).data;
     },
   });
 

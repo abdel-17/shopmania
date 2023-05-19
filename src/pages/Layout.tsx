@@ -30,7 +30,6 @@ import supabase from "../supabase/client";
 import Logo from "../components/Logo";
 import { useSession } from "../App";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import getData from "../supabase/getData";
 
 export default function Layout() {
   const session = useSession();
@@ -176,14 +175,11 @@ function CartButton() {
   const { data: totalQuantity } = useQuery({
     queryKey: ["cart", "quantity"],
     queryFn: async ({ signal }) => {
-      let query = supabase.from("cart_items").select("quantity");
+      let query = supabase.rpc("get_total_cart_quantity");
       if (signal) {
         query = query.abortSignal(signal);
       }
-
-      const items = getData(await query);
-      // Add the quantities of all items in the cart.
-      return items.reduce((sum, item) => sum + item.quantity, 0);
+      return (await query.throwOnError()).data;
     },
   });
 
