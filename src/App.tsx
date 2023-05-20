@@ -19,7 +19,7 @@ const SessionContext = createContext<Session | null>(null);
 
 export function App() {
   const [session, setSession] = useState<Session | null>(null);
-  const [showResetDialog, setShowResetDialog] = useState(true);
+  const [showResetDialog, setShowResetDialog] = useState(false);
 
   const onCloseResetDialog = () => setShowResetDialog(false);
 
