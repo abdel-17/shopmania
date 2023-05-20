@@ -1,15 +1,14 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import PasswordTextField from "./PasswordTextField";
-import Form from "./Form";
+import { Button, Box, Container } from "@mui/material";
+import PasswordTextField from "../components/PasswordTextField";
+import Form from "../components/Form";
 import { useMutation } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import { useState } from "react";
+import Logo from "../components/Logo";
+import { useNavigate } from "react-router";
 
-export default function ResetPasswordDialog(props: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const { open, onClose } = props;
+export default function ResetPassword() {
+  const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
 
   const onPasswordChange = () => setError(null);
@@ -32,15 +31,22 @@ export default function ResetPasswordDialog(props: {
       return;
     }
     console.log("Updated password successfully");
-    onClose(); 
+    navigate("/", { replace: true });
   });
 
   return (
-    <Dialog open={open} maxWidth="xs">
-      <Form action={action}>
-        <DialogTitle>Reset Password</DialogTitle>
+    <Box display="flex" alignItems="center" minHeight="100vh">
+      <Container
+        maxWidth="xs"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Logo />
 
-        <DialogContent>
+        <Form action={action} sx={{ marginTop: 3 }}>
           <PasswordTextField
             id="new-password"
             name="password"
@@ -58,18 +64,18 @@ export default function ResetPasswordDialog(props: {
             helperText={error}
             onChange={onPasswordChange}
           />
-        </DialogContent>
 
-        <DialogActions>
-          <Button type="button" onClick={onClose} disabled={updatePassword.isLoading}>
-            Cancel
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={updatePassword.isLoading}
+            sx={{ marginTop: 2 }}
+          >
+            Reset Password
           </Button>
-
-          <Button type="submit" disabled={updatePassword.isLoading}>
-            Confirm
-          </Button>
-        </DialogActions>
-      </Form>
-    </Dialog>
+        </Form>
+      </Container>
+    </Box>
   );
 }

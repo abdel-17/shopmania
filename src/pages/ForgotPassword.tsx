@@ -9,7 +9,9 @@ import { useMutation } from "@tanstack/react-query";
 export default function ForgotPassword() {
   const { mutate: reset, isLoading } = useMutation(async (formData: FormData) => {
     const email = formData.get("email") as string;
-    const { error } = await supabase.auth.resetPasswordForEmail(email);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "https://shopmania.pages.dev/reset"
+    });
     if (error) {
       console.error(error);
       alert(error.message);

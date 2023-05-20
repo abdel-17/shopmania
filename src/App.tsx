@@ -9,31 +9,24 @@ import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Index from "./pages/Index";
 import ForgotPassword from "./pages/ForgotPassword";
+import ErrorBoundary from "./components/ErrorBoundary";
+import ResetPassword from "./pages/ResetPassword";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
-import ErrorBoundary from "./components/ErrorBoundary";
 import supabase from "./supabase/client";
-import ResetPasswordDialog from "./components/ResetPasswordDialog";
 
 const SessionContext = createContext<Session | null>(null);
 
 export function App() {
   const [session, setSession] = useState<Session | null>(null);
-  const [showResetDialog, setShowResetDialog] = useState(false);
-
-  const onCloseResetDialog = () => setShowResetDialog(false);
 
   useEffect(() => {
     // Listen to changes to the auth state.
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      setSession(session);
-
       console.log(event);
-      if (event === "PASSWORD_RECOVERY") {
-        setShowResetDialog(true);
-      }
+      setSession(session);
     });
 
     return () => subscription.unsubscribe();
@@ -63,9 +56,9 @@ export function App() {
             <Route path="/register" element={<Register />} />
 
             <Route path="/forgot" element={<ForgotPassword />} />
-          </Routes>
 
-          <ResetPasswordDialog open={showResetDialog} onClose={onCloseResetDialog} />
+            <Route path="/reset" element={<ResetPassword />} />
+          </Routes>
         </BrowserRouter>
       </ErrorBoundary>
     </SessionContext.Provider>
