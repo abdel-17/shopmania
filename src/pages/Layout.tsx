@@ -68,14 +68,16 @@ export default function Layout() {
           </Box>
 
           {/** Center the logo horizontally in the toolbar */}
-          <Logo
-            width={150}
+          <Link
+            to="/"
             style={{
               position: "absolute",
               left: "50%",
               translate: "-50%",
             }}
-          />
+          >
+            <Logo width={150} />
+          </Link>
 
           {session ? (
             <>
