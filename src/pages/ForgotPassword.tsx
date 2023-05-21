@@ -34,7 +34,7 @@ export default function ForgotPassword() {
           <Logo />
         </Link>
 
-        <Form method="post" action={reset} sx={{ marginTop: 4 }}>
+        <Form method="post" action={reset} sx={{ marginTop: 3 }}>
           <EmailTextField id="email" autoFocus />
 
           <Button
