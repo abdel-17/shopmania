@@ -3,6 +3,7 @@ import {
   Container,
   Divider,
   Link as MuiLink,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -18,7 +19,7 @@ import { useEffect, useState } from "react";
 export default function Cart() {
   const session = useSession();
 
-  const { data: items } = useQuery({
+  const { data } = useQuery({
     queryKey: ["cart"],
     queryFn: async ({ signal }) => {
       let query = supabase
@@ -48,9 +49,7 @@ export default function Cart() {
     return <Navigate to="/login" />;
   }
 
-  if (!items) {
-    return <div>Loading...</div>;
-  }
+  const items = data ?? Array<null>(3).fill(null);
 
   if (items.length === 0) {
     return <EmptyCartPlaceholder />;
@@ -70,16 +69,16 @@ export default function Cart() {
       </Typography>
 
       <Stack divider={<Divider />}>
-        {items.map(({ product, quantity }) => (
+        {items.map((item, i) => (
           // @ts-expect-error
-          <CartItem key={product.id} product={{ ...product, quantity: quantity }} />
+          <CartItem key={item?.product?.id ?? i} item={item} />
         ))}
       </Stack>
     </Container>
   );
 }
 
-function CartItem(props: {
+interface Item {
   product: {
     id: number;
     title: string;
@@ -88,86 +87,116 @@ function CartItem(props: {
     price: number;
     quantity: number;
   };
-}) {
-  const { product } = props;
-  const [optimisticQuantity, setOptimisticQuantity] = useState(product.quantity);
+  quantity: number;
+}
+
+function CartItem(props: { item: Item | null }) {
+  const { item } = props;
+  const [optimisticQuantity, setOptimisticQuantity] = useState(item?.quantity);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    // Keep the optimistic quantity in sync with the actual quantity.
-    setOptimisticQuantity(product.quantity);
-  }, [product.quantity]);
+    if (item?.quantity !== undefined) {
+      // Keep the optimistic quantity in sync with the actual quantity.
+      setOptimisticQuantity(item.quantity);
+    }
+  }, [item?.quantity]);
 
-  const updateQuantity = useMutation(async (newQuantity: number) => {
-    if (newQuantity === product.quantity) {
+  const updateQuantity = useMutation(
+    async ({ item, newQuantity }: { item: Item; newQuantity: number }) => {
+      setOptimisticQuantity(newQuantity); // Optimistically update the quantity.
+
+      const { error } = await supabase.rpc("update_cart_quantity", {
+        product: item.product.id,
+        new_quantity: newQuantity,
+      });
+
+      if (error) {
+        console.error(error);
+        alert("Failed to update cart items");
+        setOptimisticQuantity(item.quantity); // Rollback the optimistic update.
+        return;
+      }
+
+      console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
+      queryClient.invalidateQueries(["cart"]); // Refetch the cart items from the database.
+    }
+  );
+
+  const onQuantityChange = (newQuantity: number) => {
+    if (!item) {
+      return;
+    }
+    if (newQuantity === item.quantity) {
       // No need for a server request if the quantity is the same.
       return;
     }
-
-    const { error } = await supabase.rpc("update_cart_quantity", {
-      product: product.id,
-      new_quantity: newQuantity,
-    });
-
-    if (error) {
-      console.error(error);
-      alert("Failed to update cart items");
-      return;
-    }
-
-    console.log(`Updated quantity of ${product.id} to ${newQuantity}.`);
-    setOptimisticQuantity(newQuantity);
-    queryClient.invalidateQueries(["cart"]); // Refetch the cart items from the database.
-  });
-
-  const onQuantityChange = (newQuantity: number) => {
-    updateQuantity.mutate(newQuantity);
+    updateQuantity.mutate({ item, newQuantity });
   };
 
-  const totalPrice = optimisticQuantity * product.price;
   return (
     <Box display="flex" marginX={3} marginY={2}>
-      <img
-        src={product.image}
-        alt={product.title}
-        width={120}
-        height={120}
-        style={{
-          objectFit: "contain",
-          flexShrink: 0,
-          padding: 8,
-          borderRadius: 8,
-          background: "white",
-        }}
-      />
+      {item ? (
+        <img
+          src={item.product.image}
+          alt={item.product.title}
+          width={120}
+          height={120}
+          style={{
+            objectFit: "contain",
+            flexShrink: 0,
+            padding: 8,
+            borderRadius: 8,
+            background: "white",
+          }}
+        />
+      ) : (
+        <Skeleton
+          variant="rectangular"
+          width={120}
+          height={120}
+          sx={{ borderRadius: "8px" }}
+        />
+      )}
 
       <Stack marginLeft={2} flexGrow={1}>
-        <MuiLink
-          component={Link}
-          to={`/products/${product.id.toString()}`}
-          color="white"
-          underline="hover"
-        >
-          <Typography fontWeight={500} fontSize={17}>
-            {product.title}
+        {item ? (
+          <MuiLink
+            component={Link}
+            to={`/products/${item.product.id.toString()}`}
+            color="white"
+            underline="hover"
+          >
+            <Typography fontWeight={500} fontSize={17}>
+              {item.product.title}
+            </Typography>
+          </MuiLink>
+        ) : (
+          <Typography fontSize={17}>
+            <Skeleton />
           </Typography>
-        </MuiLink>
+        )}
 
         <Typography color="text.secondary" fontSize={15}>
-          {product.category}
+          {item ? item.product.category : <Skeleton />}
         </Typography>
 
         <Box display="flex" alignItems="end" flexGrow={1}>
           <Box display="flex" alignItems="center" flexGrow={1}>
-            <Stepper
-              value={optimisticQuantity}
-              onChange={onQuantityChange}
-              disabled={updateQuantity.isLoading}
-            />
+            {optimisticQuantity !== undefined ? (
+              <Stepper
+                value={optimisticQuantity}
+                onChange={onQuantityChange}
+                disabled={updateQuantity.isLoading}
+              />
+            ) : (
+              <Skeleton variant="rectangular" width={100} />
+            )}
 
             <Typography fontSize={20} textAlign="end" flexGrow={1}>
-              {/** Show only two decimal places */}
-              {totalPrice.toFixed(2)} $
+              {item &&
+                // Show only two decimal places
+                `${(item.product.price * item.quantity).toFixed(2)} $`}
             </Typography>
           </Box>
         </Box>
