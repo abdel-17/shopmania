@@ -15,7 +15,7 @@ export default function ProductDetail() {
     throw new Error("ProductDetail needs an id url parameter.");
   }
 
-  const [quantity, setQuantity] = useState(0);
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const session = useSession();
   const cartItems = useCartItems();
@@ -118,7 +118,7 @@ export default function ProductDetail() {
                 Add to Cart
               </Button>
 
-              <Stepper value={quantity} onChange={setQuantity} />
+              <Stepper value={quantity} onChange={setQuantity} min={1} />
             </Box>
           )}
         </Box>
