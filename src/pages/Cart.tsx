@@ -69,8 +69,6 @@ function CartListItem(props: { item: CartItem | null }) {
 
   const updateQuantity = useMutation(
     async ({ item, newQuantity }: { item: CartItem; newQuantity: number }) => {
-      setOptimisticQuantity(newQuantity); // Optimistically update the quantity.
-
       const { error } = await supabase.rpc("update_cart_quantity", {
         product: item.product.id,
         new_quantity: newQuantity,
@@ -78,13 +76,13 @@ function CartListItem(props: { item: CartItem | null }) {
 
       if (error) {
         console.error(error);
-        setOptimisticQuantity(item.quantity); // Rollback the optimistic update.
-        enqueueSnackbar("Failed to update cart items", { variant: "error" });
+        enqueueSnackbar("Failed to update quantity", { variant: "error" });
         return;
       }
 
       console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
       cartItems.refetch();
+      setOptimisticQuantity(newQuantity); // Update quantity before the refetch finishes.
     }
   );
 
