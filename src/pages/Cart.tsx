@@ -16,6 +16,7 @@ import FullscreenBox from "../components/FullscreenBox";
 import { useEffect, useState } from "react";
 import { CartItem, useCartItems } from "../providers/CartItemsProvider";
 import { useSession } from "../providers/SessionProvider";
+import { enqueueSnackbar } from "notistack";
 
 export default function Cart() {
   const session = useSession();
@@ -77,8 +78,8 @@ function CartListItem(props: { item: CartItem | null }) {
 
       if (error) {
         console.error(error);
-        alert("Failed to update cart items");
         setOptimisticQuantity(item.quantity); // Rollback the optimistic update.
+        enqueueSnackbar("Failed to update cart items", { variant: "error" });
         return;
       }
 

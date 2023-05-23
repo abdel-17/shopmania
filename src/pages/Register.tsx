@@ -13,6 +13,7 @@ import supabase from "../supabase/client";
 import Logo from "../components/Logo";
 import Form from "../components/Form";
 import { useMutation } from "@tanstack/react-query";
+import { enqueueSnackbar } from "notistack";
 
 export default function Register() {
   const { mutate: register, isLoading } = useMutation(async (formData: FormData) => {
@@ -22,10 +23,12 @@ export default function Register() {
 
     if (error) {
       console.error(error);
-      alert(error.message);
+      enqueueSnackbar(error.message, { variant: "error" });
       return;
     }
-    alert("A confirmation email will be sent to verify your account");
+    enqueueSnackbar("A confirmation email will be sent to verify your account", {
+      variant: "info",
+    });
   });
 
   return (

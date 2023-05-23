@@ -15,6 +15,7 @@ import Logo from "../components/Logo";
 import Form from "../components/Form";
 import { useMutation } from "@tanstack/react-query";
 import { useSession } from "../providers/SessionProvider";
+import { enqueueSnackbar } from "notistack";
 
 export default function Login() {
   const session = useSession();
@@ -26,13 +27,13 @@ export default function Login() {
 
     if (error) {
       console.error(error);
-      alert(error.message);
+      enqueueSnackbar(error.message, { variant: "error" });
     }
   });
 
   // Navigate back to the home page on login success.
   if (session) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
   return (

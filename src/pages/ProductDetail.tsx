@@ -7,6 +7,7 @@ import supabase from "../supabase/client";
 import Stepper from "../components/Stepper";
 import { useSession } from "../providers/SessionProvider";
 import { useCartItems } from "../providers/CartItemsProvider";
+import { enqueueSnackbar } from "notistack";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -44,11 +45,10 @@ export default function ProductDetail() {
 
     if (error) {
       console.error(error);
-      alert("Failed to add items to cart.");
+      enqueueSnackbar("Failed to add items to cart.", { variant: "error" });
       return;
     }
     cartItems.refetch();
-    alert(`${quantity === 1 ? "Item" : "Items"} added to cart successfully.`);
   });
 
   const onAddToCart = () => {

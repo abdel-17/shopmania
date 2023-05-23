@@ -5,19 +5,23 @@ import supabase from "../supabase/client";
 import Form from "../components/Form";
 import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { enqueueSnackbar } from "notistack";
 
 export default function ForgotPassword() {
   const { mutate: reset, isLoading } = useMutation(async (formData: FormData) => {
     const email = formData.get("email") as string;
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: "https://shopmania.pages.dev/reset"
+      redirectTo: "https://shopmania.pages.dev/reset",
     });
+    
     if (error) {
       console.error(error);
-      alert(error.message);
+      enqueueSnackbar(error.message, { variant: "error" });
       return;
     }
-    alert("An email will been sent to reset your password");
+    enqueueSnackbar("An email will been sent to reset your password", {
+      variant: "info",
+    });
   });
 
   return (

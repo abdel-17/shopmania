@@ -31,6 +31,7 @@ import Logo from "../components/Logo";
 import { useSession } from "../providers/SessionProvider";
 import { useMutation } from "@tanstack/react-query";
 import { useCartItems } from "../providers/CartItemsProvider";
+import { enqueueSnackbar } from "notistack";
 
 export default function Layout() {
   const session = useSession();
@@ -158,7 +159,7 @@ function LogoutButton() {
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error(error);
-      alert(error.message);
+      enqueueSnackbar(error.message, { variant: "error" });
     }
   });
   const onClick = () => logout();
