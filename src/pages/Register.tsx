@@ -28,6 +28,7 @@ export default function Register() {
     }
     enqueueSnackbar("A confirmation email will be sent to verify your account", {
       variant: "info",
+      autoHideDuration: 5000
     });
   });
 
