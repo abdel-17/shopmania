@@ -50,7 +50,7 @@ export default function ProductDetail() {
     }
 
     enqueueSnackbar(`Added ${quantity} ${quantity === 1 ? "item" : `items`} to cart`, {
-      variant: "info",
+      variant: "success",
     });
     cartItems.refetch();
   });
