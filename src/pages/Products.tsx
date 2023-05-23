@@ -17,7 +17,6 @@ import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
-import { useTheme } from "@mui/material";
 
 interface SortMethod {
   label: string;
@@ -45,7 +44,6 @@ const sortMethods: SortMethod[] = [
 ];
 
 export default function Products() {
-  const { palette } = useTheme();
   const [category, setCategory] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<SortMethod | null>(null);
 
@@ -77,11 +75,13 @@ export default function Products() {
   const renderCategory = (category: string) => category;
   const renderSortMethod = (sortMethod: SortMethod) => sortMethod.label;
 
-  const brandStyle = { color: palette.primary.light };
   return (
     <Box padding={4}>
       <Typography component="h1" variant="h4" textAlign="center" fontWeight="bold">
-        Welcome to <span style={brandStyle}>Shopmania</span>
+        Welcome to{" "}
+        <Box component="span" color="primary.light">
+          Shopmania
+        </Box>
       </Typography>
 
       <Typography
@@ -138,69 +138,27 @@ export default function Products() {
             selection={category}
             setSelection={setCategory}
             items={categories}
-            renderItem={renderCategory}
+            renderLabel={renderCategory}
           />
 
           <SelectChips
             selection={sortMethod}
             setSelection={setSortMethod}
             items={sortMethods}
-            renderItem={renderSortMethod}
+            renderLabel={renderSortMethod}
           />
         </Stack>
 
         <Grid container spacing={2}>
           {products.map((product, i) => (
             <Grid key={product?.id ?? i} item xs={12} sm={6} md={4}>
-              <ProductDetailLink id={product?.id}>
-                <Paper
-                  sx={{
-                    padding: 2,
-                    background: "#222",
-                    transition: "0.5s",
-                    ":hover": {
-                      scale: "1.05",
-                    },
-                  }}
-                >
-                  <Box display="flex" justifyContent="center">
-                    {product ? (
-                      <img
-                        src={product.image}
-                        alt={product.title}
-                        width={200}
-                        height={200}
-                        style={{
-                          objectFit: "contain",
-                          background: "white",
-                          padding: "12px",
-                          borderRadius: "8px",
-                        }}
-                      />
-                    ) : (
-                      <Skeleton
-                        variant="rectangular"
-                        width={200}
-                        height={200}
-                        sx={{ borderRadius: "8px" }}
-                      />
-                    )}
-                  </Box>
-
-                  <Typography textAlign="center" noWrap marginTop={2}>
-                    {product?.title ?? <Skeleton />}
-                  </Typography>
-
-                  <Typography
-                    color="primary.light"
-                    textAlign="center"
-                    fontSize={18}
-                    fontWeight={500}
-                  >
-                    {product ? `${product.price} $` : <Skeleton />}
-                  </Typography>
-                </Paper>
-              </ProductDetailLink>
+              {product ? (
+                <Link to={`${product.id}`} style={{ textDecoration: "none" }}>
+                  <ProductCard product={product} />
+                </Link>
+              ) : (
+                <ProductCard />
+              )}
             </Grid>
           ))}
         </Grid>
@@ -209,18 +167,58 @@ export default function Products() {
   );
 }
 
-function ProductDetailLink(props: { id?: number; children: React.ReactNode }) {
-  const { id, children } = props;
+interface Product {
+  id: number;
+  title: string;
+  image: string;
+  price: number;
+}
 
-  // Don't link to any page until the data has been loaded.
-  if (!id) {
-    return <>{children}</>;
-  }
-
+function ProductCard(props: { product?: Product }) {
+  const { product } = props;
   return (
-    <Link to={id.toString()} style={{ textDecoration: "none" }}>
-      {children}
-    </Link>
+    <Paper
+      sx={{
+        padding: 2,
+        background: "#222",
+        transition: "0.5s",
+        ":hover": {
+          scale: "1.05",
+        },
+      }}
+    >
+      <Box display="flex" justifyContent="center">
+        {product ? (
+          <img
+            src={product.image}
+            alt={product.title}
+            width={200}
+            height={200}
+            style={{
+              objectFit: "contain",
+              background: "white",
+              padding: "12px",
+              borderRadius: "8px",
+            }}
+          />
+        ) : (
+          <Skeleton
+            variant="rectangular"
+            width={200}
+            height={200}
+            sx={{ borderRadius: "8px" }}
+          />
+        )}
+      </Box>
+
+      <Typography textAlign="center" noWrap marginTop={2}>
+        {product?.title ?? <Skeleton />}
+      </Typography>
+
+      <Typography color="primary.light" textAlign="center" fontSize={18} fontWeight={500}>
+        {product ? `${product.price} $` : <Skeleton />}
+      </Typography>
+    </Paper>
   );
 }
 
@@ -228,9 +226,9 @@ function SelectChips<T>(props: {
   selection: T | null;
   setSelection: React.Dispatch<React.SetStateAction<T | null>>;
   items: T[];
-  renderItem: (item: T) => React.ReactNode;
+  renderLabel: (item: T) => React.ReactNode;
 }) {
-  const { selection, setSelection, items, renderItem } = props;
+  const { selection, setSelection, items, renderLabel: renderItem } = props;
   return (
     <Stack direction="row" justifyContent="center" spacing={1}>
       {items.map((item, i) => {
