@@ -6,6 +6,7 @@ import supabase from "../supabase/client";
 import { useState } from "react";
 import Logo from "../components/Logo";
 import { useNavigate } from "react-router";
+import { enqueueSnackbar } from "notistack";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
@@ -27,10 +28,11 @@ export default function ResetPassword() {
   const updatePassword = useMutation(async (newPassword: string) => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
     if (error) {
-      setError(error.message);
+      console.error(error);
+      enqueueSnackbar(error.message, { variant: "error" });
       return;
     }
-    console.log("Updated password successfully");
+    enqueueSnackbar("Password updated successfully", { variant: "success" });
     navigate("/", { replace: true });
   });
 
