@@ -11,13 +11,9 @@ export const theme = createTheme({
       main: "#43998b",
     },
   },
-  components: {
-    MuiToolbar: {
-      styleOverrides: {
-        regular: {
-          height: 64,
-        },
-      },
+  mixins: {
+    toolbar: {
+      height: 64,
     },
   },
 });
