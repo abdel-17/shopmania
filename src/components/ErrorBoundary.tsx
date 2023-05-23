@@ -1,5 +1,4 @@
-import FullscreenBox from "./FullscreenBox";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import errorIcon from "../assets/error.svg";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
@@ -11,11 +10,12 @@ export default function ErrorBoundary({ children }: { children: React.ReactNode 
         <ReactErrorBoundary
           onReset={reset}
           fallbackRender={({ resetErrorBoundary, error }) => (
-            <FullscreenBox
+            <Box
               display="flex"
               flexDirection="column"
               alignItems="center"
               justifyContent="center"
+              minHeight="100vh"
               padding={4}
             >
               <img src={errorIcon} alt="error" style={{ maxWidth: 400 }} />
@@ -27,7 +27,7 @@ export default function ErrorBoundary({ children }: { children: React.ReactNode 
               <Button variant="contained" size="large" onClick={resetErrorBoundary}>
                 Retry
               </Button>
-            </FullscreenBox>
+            </Box>
           )}
         >
           {children}
