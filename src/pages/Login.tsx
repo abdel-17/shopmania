@@ -14,7 +14,7 @@ import PasswordTextField from "../components/PasswordTextField";
 import Logo from "../components/Logo";
 import Form from "../components/Form";
 import { useMutation } from "@tanstack/react-query";
-import { useSession } from "../App";
+import { useSession } from "../providers/SessionProvider";
 
 export default function Login() {
   const session = useSession();

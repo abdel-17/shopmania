@@ -64,10 +64,6 @@ export interface Database {
         }
         Returns: undefined
       }
-      get_total_cart_quantity: {
-        Args: Record<PropertyKey, never>
-        Returns: number
-      }
       update_cart_quantity: {
         Args: {
           product: number

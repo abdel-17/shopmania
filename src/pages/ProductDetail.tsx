@@ -2,10 +2,11 @@ import { useNavigate, useParams } from "react-router";
 import FullscreenBox from "../components/FullscreenBox";
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
-import { useSession } from "../App";
 import Stepper from "../components/Stepper";
+import { useSession } from "../providers/SessionProvider";
+import { useCartItems } from "../providers/CartProvider";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -16,7 +17,7 @@ export default function ProductDetail() {
   const [quantity, setQuantity] = useState(0);
   const navigate = useNavigate();
   const session = useSession();
-  const queryClient = useQueryClient();
+  const cartItems = useCartItems();
 
   const { data: product } = useQuery({
     queryKey: ["products", id],
@@ -46,7 +47,7 @@ export default function ProductDetail() {
       alert("Failed to add items to cart.");
       return;
     }
-    queryClient.invalidateQueries(["cart"]); // Refetch queries that depend on cart data.
+    cartItems.refetch();
     alert(`${quantity === 1 ? "Item" : "Items"} added to cart successfully.`);
   });
 

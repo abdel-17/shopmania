@@ -28,8 +28,9 @@ import {
 } from "@mui/icons-material";
 import supabase from "../supabase/client";
 import Logo from "../components/Logo";
-import { useSession } from "../App";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useSession } from "../providers/SessionProvider";
+import { useMutation } from "@tanstack/react-query";
+import { useCartItems } from "../providers/CartProvider";
 
 export default function Layout() {
   const session = useSession();
@@ -171,19 +172,12 @@ function LogoutButton() {
 }
 
 function CartButton() {
+  const cartItems = useCartItems();
   const { pathname } = useLocation();
   const isSelected = pathname === "/cart";
 
-  const { data: totalQuantity } = useQuery({
-    queryKey: ["cart", "quantity"],
-    queryFn: async ({ signal }) => {
-      let query = supabase.rpc("get_total_cart_quantity");
-      if (signal) {
-        query = query.abortSignal(signal);
-      }
-      return (await query.throwOnError()).data;
-    },
-  });
+  // Add up the quantities of all items in the cart.
+  const totalQuantity = cartItems.data?.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <Tooltip title="Shopping Cart">

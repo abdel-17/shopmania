@@ -7,42 +7,19 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import { Link, Navigate } from "react-router-dom";
 import Stepper from "../components/Stepper";
-import { useSession } from "../App";
 import cart from "../assets/cart.svg";
 import FullscreenBox from "../components/FullscreenBox";
 import { useEffect, useState } from "react";
+import { CartItem, useCartItems } from "../providers/CartProvider";
+import { useSession } from "../providers/SessionProvider";
 
 export default function Cart() {
   const session = useSession();
-
-  const { data } = useQuery({
-    queryKey: ["cart"],
-    queryFn: async ({ signal }) => {
-      let query = supabase
-        .from("cart_items")
-        .select(
-          `quantity,
-             product:products(
-              id,
-              title,
-              category,
-              image,
-              price
-            )`
-        )
-        .order("quantity", { ascending: false });
-
-      if (signal) {
-        query = query.abortSignal(signal);
-      }
-
-      return (await query.throwOnError()).data;
-    },
-  });
+  const { data } = useCartItems();
 
   // Navigate to the login page if the user is logged out.
   if (!session) {
@@ -70,30 +47,17 @@ export default function Cart() {
 
       <Stack divider={<Divider />}>
         {items.map((item, i) => (
-          // @ts-expect-error
-          <CartItem key={item?.product?.id ?? i} item={item} />
+          <CartListItem key={item?.product?.id ?? i} item={item} />
         ))}
       </Stack>
     </Container>
   );
 }
 
-interface Item {
-  product: {
-    id: number;
-    title: string;
-    category: string;
-    image: string;
-    price: number;
-    quantity: number;
-  };
-  quantity: number;
-}
-
-function CartItem(props: { item: Item | null }) {
+function CartListItem(props: { item: CartItem | null }) {
   const { item } = props;
   const [optimisticQuantity, setOptimisticQuantity] = useState(item?.quantity);
-  const queryClient = useQueryClient();
+  const cartItems = useCartItems();
 
   useEffect(() => {
     if (item?.quantity !== undefined) {
@@ -103,7 +67,7 @@ function CartItem(props: { item: Item | null }) {
   }, [item?.quantity]);
 
   const updateQuantity = useMutation(
-    async ({ item, newQuantity }: { item: Item; newQuantity: number }) => {
+    async ({ item, newQuantity }: { item: CartItem; newQuantity: number }) => {
       setOptimisticQuantity(newQuantity); // Optimistically update the quantity.
 
       const { error } = await supabase.rpc("update_cart_quantity", {
@@ -119,7 +83,7 @@ function CartItem(props: { item: Item | null }) {
       }
 
       console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
-      queryClient.invalidateQueries(["cart"]); // Refetch the cart items from the database.
+      cartItems.refetch();
     }
   );
 
