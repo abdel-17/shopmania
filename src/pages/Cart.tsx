@@ -14,7 +14,7 @@ import Stepper from "../components/Stepper";
 import cart from "../assets/cart.svg";
 import FullscreenBox from "../components/FullscreenBox";
 import { useEffect, useState } from "react";
-import { CartItem, useCartItems } from "../providers/CartProvider";
+import { CartItem, useCartItems } from "../providers/CartItemsProvider";
 import { useSession } from "../providers/SessionProvider";
 
 export default function Cart() {

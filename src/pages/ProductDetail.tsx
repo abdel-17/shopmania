@@ -6,7 +6,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import Stepper from "../components/Stepper";
 import { useSession } from "../providers/SessionProvider";
-import { useCartItems } from "../providers/CartProvider";
+import { useCartItems } from "../providers/CartItemsProvider";
 
 export default function ProductDetail() {
   const { id } = useParams();

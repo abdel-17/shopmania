@@ -30,7 +30,7 @@ import supabase from "../supabase/client";
 import Logo from "../components/Logo";
 import { useSession } from "../providers/SessionProvider";
 import { useMutation } from "@tanstack/react-query";
-import { useCartItems } from "../providers/CartProvider";
+import { useCartItems } from "../providers/CartItemsProvider";
 
 export default function Layout() {
   const session = useSession();

@@ -12,7 +12,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { SessionProvider } from "./providers/SessionProvider";
-import { CartItemsProvider } from "./providers/CartProvider";
+import { CartItemsProvider } from "./providers/CartItemsProvider";
 
 export function App() {
   return (
