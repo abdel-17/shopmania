@@ -48,6 +48,10 @@ export default function ProductDetail() {
       enqueueSnackbar("Failed to add items to cart.", { variant: "error" });
       return;
     }
+
+    enqueueSnackbar(`Added ${quantity} ${quantity === 1 ? "item" : `items`} to cart`, {
+      variant: "info",
+    });
     cartItems.refetch();
   });
 
