@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   AppBar,
@@ -81,14 +81,13 @@ export default function Layout() {
             <Logo width={150} />
           </Link>
 
-          {session ? (
-            <>
+          {session && (
+            <Fragment>
               <LogoutButton />
               <CartButton />
-            </>
-          ) : (
-            <LoginButton />
+            </Fragment>
           )}
+          {session === null && <LoginButton />}
         </Toolbar>
       </AppBar>
 

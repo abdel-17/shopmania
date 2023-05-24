@@ -22,7 +22,7 @@ export default function Cart() {
   const { data } = useCartItems();
 
   // Navigate to the login page if the user is logged out.
-  if (!session) {
+  if (session === null) {
     return <Navigate to="/login" />;
   }
 

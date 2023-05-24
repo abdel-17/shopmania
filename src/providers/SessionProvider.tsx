@@ -2,10 +2,10 @@ import { PropsWithChildren, createContext, useContext, useEffect, useState } fro
 import { Session } from "@supabase/supabase-js";
 import supabase from "../supabase/client";
 
-const SessionContext = createContext<Session | null>(null);
+const SessionContext = createContext<Session | null | undefined>(null);
 
 export function SessionProvider(props: PropsWithChildren) {
-  const [session, setSession] = useState<Session | null>(null);
+  const [session, setSession] = useState<Session | null>();
 
   useEffect(() => {
     // Listen to changes to the auth state.

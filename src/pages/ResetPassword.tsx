@@ -5,11 +5,13 @@ import { useMutation } from "@tanstack/react-query";
 import supabase from "../supabase/client";
 import { useState } from "react";
 import Logo from "../components/Logo";
-import { useNavigate } from "react-router";
+import { Navigate, useNavigate } from "react-router";
 import { enqueueSnackbar } from "notistack";
+import { useSession } from "../providers/SessionProvider";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const session = useSession();
   const [error, setError] = useState<string | null>(null);
 
   const onPasswordChange = () => setError(null);
@@ -35,6 +37,13 @@ export default function ResetPassword() {
     enqueueSnackbar("Password updated successfully", { variant: "success" });
     navigate("/", { replace: true });
   });
+
+  // Protect this route from unauthenticated users. It's not insecure to let an
+  // unauthenticated user visit this page because the password change will fail
+  // anyway, but it's pointless to let them try.
+  if (session === null) {
+    return <Navigate to="/" replace />
+  }
 
   return (
     <Box className="fullscreen-no-toolbar centered" padding={1}>
