@@ -33,14 +33,14 @@ export default function Register() {
   });
 
   return (
-    <Box display="flex" alignItems="center" minHeight="100vh">
+    <Box display="flex" alignItems="center" minHeight="100vh" padding={1}>
       <Container maxWidth="xs">
         <Paper
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: 4,
+            padding: 3,
             marginBottom: 2,
             borderRadius: 4,
           }}

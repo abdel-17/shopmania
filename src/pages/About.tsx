@@ -13,16 +13,15 @@ export default function About() {
         alignItems="center"
         justifyContent="center"
         margin={4}
-        spacing={8}
       >
-        <img src={team} alt="The creators of shopmania" style={{ maxWidth: 400 }} />
+        <img src={team} alt="The creators of Shopmania" style={{ maxWidth: 400 }} />
 
-        <Box maxWidth="sm">
+        <Box maxWidth="sm" marginTop={4}>
           <Typography component="h1" variant="h3" textAlign="center" fontWeight="bold">
             About Us
           </Typography>
 
-          <Typography fontSize={18} marginTop={2} textAlign="justify">
+          <Typography fontSize={18} marginTop={3} letterSpacing={1}>
             Welcome to Shopmania, the ultimate online shopping destination! Our mission is
             to provide you with a seamless and enjoyable shopping experience, where you
             can find everything you need in one place.

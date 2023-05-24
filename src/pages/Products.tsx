@@ -89,7 +89,7 @@ export default function Products() {
         variant="h5"
         textAlign="center"
         marginTop={2}
-        marginBottom={4}
+        marginBottom={3}
       >
         Browse our diverse product catalog
       </Typography>

@@ -37,7 +37,7 @@ export default function ResetPassword() {
   });
 
   return (
-    <Box display="flex" alignItems="center" minHeight="100vh">
+    <Box display="flex" alignItems="center" minHeight="100vh" padding={1}>
       <Container
         maxWidth="xs"
         sx={{
@@ -72,7 +72,7 @@ export default function ResetPassword() {
             variant="contained"
             fullWidth
             disabled={updatePassword.isLoading}
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 3 }}
           >
             Reset Password
           </Button>

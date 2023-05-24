@@ -13,7 +13,7 @@ export default function ForgotPassword() {
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: "https://shopmania.pages.dev/reset",
     });
-    
+
     if (error) {
       console.error(error);
       enqueueSnackbar(error.message, { variant: "error" });
@@ -21,12 +21,12 @@ export default function ForgotPassword() {
     }
     enqueueSnackbar("An email will been sent to reset your password", {
       variant: "info",
-      autoHideDuration: 5000
+      autoHideDuration: 5000,
     });
   });
 
   return (
-    <Box display="flex" alignItems="center" minHeight="100vh">
+    <Box display="flex" alignItems="center" minHeight="100vh" padding={1}>
       <Container
         maxWidth="xs"
         sx={{
@@ -47,7 +47,7 @@ export default function ForgotPassword() {
             variant="contained"
             disabled={isLoading}
             fullWidth
-            sx={{ marginTop: 2 }}
+            sx={{ marginTop: 1 }}
           >
             Reset Password
           </Button>

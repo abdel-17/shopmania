@@ -5,5 +5,16 @@ export default function Logo(props: {
   height?: string | number;
   style?: React.CSSProperties;
 }) {
-  return <img src={logo} alt="Shopmania" width={300} {...props} />;
+  return (
+    <img
+      src={logo}
+      alt="Shopmania"
+      width={250}
+      style={{
+        // Contain the image within the parent component.
+        maxWidth: "100%",
+      }}
+      {...props}
+    />
+  );
 }
