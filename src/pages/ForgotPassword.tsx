@@ -26,7 +26,7 @@ export default function ForgotPassword() {
   });
 
   return (
-    <Box display="flex" alignItems="center" minHeight="100vh" padding={1}>
+    <Box className="fullscreen-no-toolbar centered" padding={1}>
       <Container
         maxWidth="xs"
         sx={{

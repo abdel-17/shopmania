@@ -1,0 +1,21 @@
+.fullscreen {
+  /** For browsers that don't support dvh. */
+  min-height: calc(100vh - 64px);
+  /**
+    For mobile browsers. 100vh does not work well in mobile.
+    https://web.dev/viewport-units/
+  */
+  min-height: calc(100dvh - 64px);
+}
+
+.fullscreen-no-toolbar {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

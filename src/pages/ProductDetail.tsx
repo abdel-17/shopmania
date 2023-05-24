@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from "react-router";
-import FullscreenBox from "../components/FullscreenBox";
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -68,7 +67,7 @@ export default function ProductDetail() {
   };
 
   return (
-    <FullscreenBox display="flex" alignItems="center" justifyContent="center" padding={4}>
+    <Box display="flex" alignItems="center" justifyContent="center" padding={4}>
       <Stack
         direction={{
           xs: "column",
@@ -127,6 +126,6 @@ export default function ProductDetail() {
           )}
         </Box>
       </Stack>
-    </FullscreenBox>
+    </Box>
   );
 }

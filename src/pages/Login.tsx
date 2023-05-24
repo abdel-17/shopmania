@@ -37,19 +37,18 @@ export default function Login() {
   }
 
   return (
-    <Box display="flex" alignItems="center" minHeight="100vh" padding={1}>
+    <Box className="fullscreen-no-toolbar centered" padding={1}>
       <Container maxWidth="xs">
         <Paper
           sx={{
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
             padding: 3,
             marginBottom: 2,
             borderRadius: 4,
           }}
         >
-          <Link to="/">
+          <Link to="/" style={{ alignSelf: "center" }}>
             <Logo />
           </Link>
 
@@ -69,7 +68,12 @@ export default function Login() {
             </Button>
           </Form>
 
-          <MuiLink component={Link} to="/forgot" color="text.secondary">
+          <MuiLink
+            component={Link}
+            to="/forgot"
+            textAlign="center"
+            color="text.secondary"
+          >
             Forgot your password?
           </MuiLink>
         </Paper>

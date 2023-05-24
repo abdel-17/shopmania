@@ -1,22 +1,27 @@
 import { Box, Stack, Typography } from "@mui/material";
 import team from "../assets/team.svg";
-import FullscreenBox from "../components/FullscreenBox";
 
 export default function About() {
   return (
-    <FullscreenBox display="flex" flexDirection="column" justifyContent="center">
+    <div className="fullscreen centered">
       <Stack
         direction={{
           xs: "column",
           lg: "row-reverse",
         }}
-        alignItems="center"
-        justifyContent="center"
         margin={4}
+        spacing={4}
       >
-        <img src={team} alt="The creators of Shopmania" style={{ maxWidth: 400 }} />
+        <img
+          src={team}
+          alt="The creators of Shopmania"
+          style={{
+            maxWidth: 400,
+            alignSelf: "center",
+          }}
+        />
 
-        <Box maxWidth="sm" marginTop={4}>
+        <Box maxWidth="md">
           <Typography component="h1" variant="h3" textAlign="center" fontWeight="bold">
             About Us
           </Typography>
@@ -39,6 +44,6 @@ export default function About() {
           </Typography>
         </Box>
       </Stack>
-    </FullscreenBox>
+    </div>
   );
 }

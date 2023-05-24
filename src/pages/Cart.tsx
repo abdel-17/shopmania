@@ -12,7 +12,6 @@ import supabase from "../supabase/client";
 import { Link, Navigate } from "react-router-dom";
 import Stepper from "../components/Stepper";
 import cart from "../assets/cart.svg";
-import FullscreenBox from "../components/FullscreenBox";
 import { useEffect, useState } from "react";
 import { CartItem, useCartItems } from "../providers/CartItemsProvider";
 import { useSession } from "../providers/SessionProvider";
@@ -170,28 +169,32 @@ function CartListItem(props: { item: CartItem | null }) {
 
 function EmptyCartPlaceholder() {
   return (
-    <FullscreenBox
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      padding={4}
-    >
-      <img src={cart} alt="Customer browsing Shopmania" style={{ maxWidth: 400 }} />
+    <div className="fullscreen centered">
+      <Box display="flex" flexDirection="column" padding={4}>
+        <img
+          src={cart}
+          alt="Customer browsing Shopmania"
+          style={{
+            maxWidth: 400,
+            alignSelf: "center",
+          }}
+        />
 
-      <Typography component="h1" variant="h5" marginTop={4}>
-        You have no items in your cart
-      </Typography>
+        <Typography component="h1" variant="h5" textAlign="center" marginTop={4}>
+          You have no items in your cart
+        </Typography>
 
-      <MuiLink
-        component={Link}
-        to="/products"
-        color="primary.light"
-        fontSize={18}
-        marginTop={1}
-      >
-        Browse our products
-      </MuiLink>
-    </FullscreenBox>
+        <MuiLink
+          component={Link}
+          to="/products"
+          textAlign="center"
+          color="primary.light"
+          fontSize={18}
+          marginTop={1}
+        >
+          Browse our products
+        </MuiLink>
+      </Box>
+    </div>
   );
 }
