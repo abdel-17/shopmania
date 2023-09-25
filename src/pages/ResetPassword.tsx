@@ -42,7 +42,7 @@ export default function ResetPassword() {
   // unauthenticated user visit this page because the password change will fail
   // anyway, but it's pointless to let them try.
   if (session === null) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/" replace />;
   }
 
   return (

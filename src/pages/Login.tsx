@@ -20,16 +20,21 @@ import { enqueueSnackbar } from "notistack";
 export default function Login() {
   const session = useSession();
 
-  const { mutate: login, isLoading } = useMutation(async (formData: FormData) => {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { mutate: login, isLoading } = useMutation(
+    async (formData: FormData) => {
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      console.error(error);
-      enqueueSnackbar(error.message, { variant: "error" });
-    }
-  });
+      if (error) {
+        console.error(error);
+        enqueueSnackbar(error.message, { variant: "error" });
+      }
+    },
+  );
 
   // Navigate back to the home page on login success.
   if (session) {
@@ -55,7 +60,10 @@ export default function Login() {
           <Form method="post" action={login} sx={{ marginTop: 3 }}>
             <EmailTextField id="email" autoFocus />
 
-            <PasswordTextField id="current-password" autoComplete="current-password" />
+            <PasswordTextField
+              id="current-password"
+              autoComplete="current-password"
+            />
 
             <Button
               type="submit"
@@ -80,7 +88,12 @@ export default function Login() {
 
         <Typography color="text.primary">
           Don't have an account?
-          <MuiLink component={Link} to="/register" color="primary.light" marginLeft={1}>
+          <MuiLink
+            component={Link}
+            to="/register"
+            color="primary.light"
+            marginLeft={1}
+          >
             Sign up
           </MuiLink>
         </Typography>

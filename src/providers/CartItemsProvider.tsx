@@ -32,7 +32,7 @@ export function CartItemsProvider(props: PropsWithChildren) {
               category,
               image,
               price
-            )`
+            )`,
         )
         .order("quantity", { ascending: false });
 
@@ -41,7 +41,7 @@ export function CartItemsProvider(props: PropsWithChildren) {
       }
 
       const { data } = await query.throwOnError();
-      return data as CartItem[];
+      return data as unknown as CartItem[];
     },
     enabled: Boolean(session), // Fetch cart items only if the user is authenticated.
   });
@@ -52,7 +52,9 @@ export function CartItemsProvider(props: PropsWithChildren) {
 export function useCartItems() {
   const cartItems = useContext(CartItemsContext);
   if (!cartItems) {
-    throw new Error("CartItemsProvider needs to be a parent of this component.");
+    throw new Error(
+      "CartItemsProvider needs to be a parent of this component.",
+    );
   }
   return cartItems;
 }

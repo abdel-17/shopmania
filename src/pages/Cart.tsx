@@ -82,7 +82,7 @@ function CartListItem(props: { item: CartItem | null }) {
       console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
       cartItems.refetch();
       setOptimisticQuantity(newQuantity); // Update quantity before the refetch finishes.
-    }
+    },
   );
 
   const onQuantityChange = (newQuantity: number) => {
@@ -180,7 +180,12 @@ function EmptyCartPlaceholder() {
           }}
         />
 
-        <Typography component="h1" variant="h5" textAlign="center" marginTop={4}>
+        <Typography
+          component="h1"
+          variant="h5"
+          textAlign="center"
+          marginTop={4}
+        >
           You have no items in your cart
         </Typography>
 

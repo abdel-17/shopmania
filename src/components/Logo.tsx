@@ -14,7 +14,7 @@ export default function Logo(props: {
       style={{
         // Contain the image within the parent component.
         maxWidth: "100%",
-        ...style
+        ...style,
       }}
       {...rest}
     />

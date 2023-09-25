@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import { SnackbarProvider } from "notistack";
-import "./global.css"
+import "./global.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,5 +28,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         </ThemeProvider>
       </SnackbarProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

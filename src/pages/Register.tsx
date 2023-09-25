@@ -16,21 +16,26 @@ import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 
 export default function Register() {
-  const { mutate: register, isLoading } = useMutation(async (formData: FormData) => {
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const { error } = await supabase.auth.signUp({ email, password });
+  const { mutate: register, isLoading } = useMutation(
+    async (formData: FormData) => {
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+      const { error } = await supabase.auth.signUp({ email, password });
 
-    if (error) {
-      console.error(error);
-      enqueueSnackbar(error.message, { variant: "error" });
-      return;
-    }
-    enqueueSnackbar("A confirmation email will be sent to verify your account", {
-      variant: "info",
-      autoHideDuration: 5000,
-    });
-  });
+      if (error) {
+        console.error(error);
+        enqueueSnackbar(error.message, { variant: "error" });
+        return;
+      }
+      enqueueSnackbar(
+        "A confirmation email will be sent to verify your account",
+        {
+          variant: "info",
+          autoHideDuration: 5000,
+        },
+      );
+    },
+  );
 
   return (
     <Box className="fullscreen-no-toolbar centered" padding={1}>
@@ -74,7 +79,12 @@ export default function Register() {
 
         <Typography color="text.primary">
           Already have an account?
-          <MuiLink component={Link} to="/login" color="primary.light" marginLeft={1}>
+          <MuiLink
+            component={Link}
+            to="/login"
+            color="primary.light"
+            marginLeft={1}
+          >
             Sign in
           </MuiLink>
         </Typography>

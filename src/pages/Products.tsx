@@ -24,7 +24,12 @@ interface SortMethod {
   ascending: boolean;
 }
 
-const categories = ["Electronics", "Jewelery", "Men's Clothing", "Women's Clothing"];
+const categories = [
+  "Electronics",
+  "Jewelery",
+  "Men's Clothing",
+  "Women's Clothing",
+];
 const sortMethods: SortMethod[] = [
   {
     label: "A-Z",
@@ -77,7 +82,12 @@ export default function Products() {
 
   return (
     <Box padding={4}>
-      <Typography component="h1" variant="h4" textAlign="center" fontWeight="bold">
+      <Typography
+        component="h1"
+        variant="h4"
+        textAlign="center"
+        fontWeight="bold"
+      >
         Welcome to{" "}
         <Box component="span" color="primary.light">
           Shopmania
@@ -215,7 +225,12 @@ function ProductCard(props: { product?: Product }) {
         {product?.title ?? <Skeleton />}
       </Typography>
 
-      <Typography color="primary.light" textAlign="center" fontSize={18} fontWeight={500}>
+      <Typography
+        color="primary.light"
+        textAlign="center"
+        fontSize={18}
+        fontWeight={500}
+      >
         {product ? `${product.price} $` : <Skeleton />}
       </Typography>
     </Paper>
@@ -259,10 +274,12 @@ function SelectMenu<T>(props: {
   ButtonIcon: React.ReactNode;
   renderItem: (item: T) => React.ReactNode;
 }) {
-  const { selection, setSelection, items, tooltip, ButtonIcon, renderItem } = props;
+  const { selection, setSelection, items, tooltip, ButtonIcon, renderItem } =
+    props;
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
 
-  const onOpen = (event: React.MouseEvent<HTMLElement>) => setAnchor(event.currentTarget);
+  const onOpen = (event: React.MouseEvent<HTMLElement>) =>
+    setAnchor(event.currentTarget);
   const onClose = () => setAnchor(null);
 
   return (

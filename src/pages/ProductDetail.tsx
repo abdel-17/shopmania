@@ -48,9 +48,12 @@ export default function ProductDetail() {
       return;
     }
 
-    enqueueSnackbar(`Added ${quantity} ${quantity === 1 ? "item" : `items`} to cart`, {
-      variant: "success",
-    });
+    enqueueSnackbar(
+      `Added ${quantity} ${quantity === 1 ? "item" : `items`} to cart`,
+      {
+        variant: "success",
+      },
+    );
     cartItems.refetch();
   });
 
@@ -98,7 +101,12 @@ export default function ProductDetail() {
           />
         )}
 
-        <Box display="flex" flexDirection="column" justifyContent="center" maxWidth={500}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          maxWidth={500}
+        >
           <Typography component="h1" variant="h5" fontWeight={500}>
             {product?.title ?? <Skeleton width={300} />}
           </Typography>
@@ -107,7 +115,9 @@ export default function ProductDetail() {
             {product?.category ?? <Skeleton width={100} />}
           </Typography>
 
-          <Typography marginY={3}>{product?.description ?? <Skeleton />}</Typography>
+          <Typography marginY={3}>
+            {product?.description ?? <Skeleton />}
+          </Typography>
 
           {product && (
             <Box display="flex" alignItems="center">

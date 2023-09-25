@@ -91,7 +91,11 @@ export default function Layout() {
         </Toolbar>
       </AppBar>
 
-      <Menu anchorEl={menuAnchor} open={menuAnchor !== null} onClose={onCloseMenu}>
+      <Menu
+        anchorEl={menuAnchor}
+        open={menuAnchor !== null}
+        onClose={onCloseMenu}
+      >
         <MenuLinkItem
           to="/products"
           Icon={<StoreOutlinedIcon />}
@@ -177,12 +181,23 @@ function CartButton() {
   const isSelected = pathname === "/cart";
 
   // Add up the quantities of all items in the cart.
-  const totalQuantity = cartItems.data?.reduce((sum, item) => sum + item.quantity, 0);
+  const totalQuantity = cartItems.data?.reduce(
+    (sum, item) => sum + item.quantity,
+    0,
+  );
 
   return (
     <Tooltip title="Shopping Cart">
-      <IconButton component={Link} to="/cart" color={isSelected ? "primary" : "default"}>
-        <Badge color="primary" badgeContent={totalQuantity} invisible={isSelected}>
+      <IconButton
+        component={Link}
+        to="/cart"
+        color={isSelected ? "primary" : "default"}
+      >
+        <Badge
+          color="primary"
+          badgeContent={totalQuantity}
+          invisible={isSelected}
+        >
           {isSelected ? <CartIcon /> : <OutlinedCartIcon />}
         </Badge>
       </IconButton>
