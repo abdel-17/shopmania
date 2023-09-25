@@ -31,10 +31,9 @@ export default function Register() {
         "A confirmation email will be sent to verify your account",
         {
           variant: "info",
-          autoHideDuration: 5000,
-        },
+        }
       );
-    },
+    }
   );
 
   return (

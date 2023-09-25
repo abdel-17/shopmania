@@ -22,9 +22,8 @@ export default function ForgotPassword() {
       }
       enqueueSnackbar("An email will been sent to reset your password", {
         variant: "info",
-        autoHideDuration: 5000,
       });
-    },
+    }
   );
 
   return (
