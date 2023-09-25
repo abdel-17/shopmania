@@ -1,15 +1,14 @@
-import { Button, Box, Container } from "@mui/material";
-import PasswordTextField from "../components/PasswordTextField";
-import Form from "../components/Form";
+import { Box, Button, Container } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import supabase from "../supabase/client";
-import { useState } from "react";
-import Logo from "../components/Logo";
-import { Navigate, useNavigate } from "react-router";
 import { enqueueSnackbar } from "notistack";
-import { useSession } from "../providers/SessionProvider";
+import { useState } from "react";
+import { Navigate, useNavigate } from "react-router";
 
-export default function ResetPassword() {
+import { Form, Logo, PasswordTextField } from "../components";
+import { useSession } from "../hooks";
+import { supabase } from "../supabase";
+
+export function ResetPassword() {
   const navigate = useNavigate();
   const session = useSession();
   const [error, setError] = useState<string | null>(null);
@@ -17,23 +16,26 @@ export default function ResetPassword() {
   const onPasswordChange = () => setError(null);
 
   const action = (formData: FormData) => {
-    const newPassword = formData.get("password") as string;
+    const password = formData.get("password") as string;
     const confirm = formData.get("confirm") as string;
 
-    if (newPassword !== confirm) {
+    if (password !== confirm) {
       setError("Passwords do not match");
       return;
     }
-    updatePassword.mutate(newPassword);
+
+    updatePassword.mutate(password);
   };
 
   const updatePassword = useMutation(async (newPassword: string) => {
     const { error } = await supabase.auth.updateUser({ password: newPassword });
+
     if (error) {
       console.error(error);
       enqueueSnackbar(error.message, { variant: "error" });
       return;
     }
+
     enqueueSnackbar("Password updated successfully", { variant: "success" });
     navigate("/", { replace: true });
   });
@@ -46,7 +48,12 @@ export default function ResetPassword() {
   }
 
   return (
-    <Box className="fullscreen-no-toolbar centered" padding={1}>
+    <Box
+      className="fullscreen-no-toolbar"
+      display="flex"
+      alignItems="center"
+      padding={1}
+    >
       <Container
         maxWidth="xs"
         sx={{
@@ -57,23 +64,24 @@ export default function ResetPassword() {
       >
         <Logo />
 
-        <Form action={action} sx={{ marginTop: 3 }}>
+        <Form method="post" action={action} sx={{ marginTop: 4 }}>
           <PasswordTextField
-            id="new-password"
             name="password"
             autoFocus
             autoComplete="new-password"
             label="New password"
             onChange={onPasswordChange}
+            fullWidth
           />
           <PasswordTextField
-            id="confirm-password"
             name="confirm"
             autoComplete="new-password"
             label="Confirm password"
             error={error !== null}
             helperText={error}
             onChange={onPasswordChange}
+            fullWidth
+            margin="normal"
           />
 
           <Button

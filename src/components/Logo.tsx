@@ -1,22 +1,11 @@
 import logo from "../assets/logo.svg";
 
-export default function Logo(props: {
+type LogoProps = {
   width?: string | number;
   height?: string | number;
-  style?: React.CSSProperties;
-}) {
-  const { style, ...rest } = props;
-  return (
-    <img
-      src={logo}
-      alt="Shopmania"
-      width={250}
-      style={{
-        // Contain the image within the parent component.
-        maxWidth: "100%",
-        ...style,
-      }}
-      {...rest}
-    />
-  );
+};
+
+export function Logo(props: LogoProps) {
+  const { width = 250, height = "auto" } = props;
+  return <img src={logo} alt="Shopmania logo" width={width} height={height} />;
 }

@@ -1,13 +1,11 @@
 import { Box, Button, Container } from "@mui/material";
-import EmailTextField from "../components/EmailTextField";
-import Logo from "../components/Logo";
-import supabase from "../supabase/client";
-import Form from "../components/Form";
-import { Link } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 
-export default function ForgotPassword() {
+import { EmailTextField, Form, Logo } from "../components";
+import { supabase } from "../supabase";
+
+export function ForgotPassword() {
   const { mutate: reset, isLoading } = useMutation(
     async (formData: FormData) => {
       const email = formData.get("email") as string;
@@ -20,14 +18,20 @@ export default function ForgotPassword() {
         enqueueSnackbar(error.message, { variant: "error" });
         return;
       }
+
       enqueueSnackbar("An email will been sent to reset your password", {
         variant: "info",
       });
-    }
+    },
   );
 
   return (
-    <Box className="fullscreen-no-toolbar centered" padding={1}>
+    <Box
+      className="fullscreen-no-toolbar"
+      display="flex"
+      alignItems="center"
+      padding={1}
+    >
       <Container
         maxWidth="xs"
         sx={{
@@ -36,19 +40,17 @@ export default function ForgotPassword() {
           alignItems: "center",
         }}
       >
-        <Link to="/">
-          <Logo />
-        </Link>
+        <Logo />
 
-        <Form method="post" action={reset} sx={{ marginTop: 3 }}>
-          <EmailTextField id="email" autoFocus />
+        <Form method="post" action={reset} sx={{ marginTop: 4 }}>
+          <EmailTextField autoFocus fullWidth />
 
           <Button
             type="submit"
             variant="contained"
             disabled={isLoading}
             fullWidth
-            sx={{ marginTop: 1 }}
+            sx={{ marginTop: 3 }}
           >
             Reset Password
           </Button>

@@ -1,27 +1,22 @@
 import { Add as AddIcon, Remove as RemoveIcon } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
 
-export default function Stepper({
-  value,
-  onChange,
-  min = 0,
-  max = Infinity,
-  disabled = false,
-}: {
+type StepperProps = {
   value: number;
   onChange: (newValue: number) => void;
   min?: number;
   max?: number;
   disabled?: boolean;
-}) {
-  const onIncrement = () => onChange(Math.min(max, value + 1));
-  const onDecrement = () => onChange(Math.max(min, value - 1));
+};
+
+export function Stepper(props: StepperProps) {
+  const { value, onChange, min = 0, max = Infinity, disabled = false } = props;
   return (
     <Box display="flex" alignItems="center">
       <IconButton
-        onClick={onIncrement}
-        disabled={disabled || value === max}
         color="secondary"
+        disabled={disabled || value === max}
+        onClick={() => onChange(Math.min(max, value + 1))}
       >
         <AddIcon />
       </IconButton>
@@ -31,9 +26,9 @@ export default function Stepper({
       </Typography>
 
       <IconButton
-        onClick={onDecrement}
-        disabled={disabled || value === min}
         color="secondary"
+        disabled={disabled || value === min}
+        onClick={() => onChange(Math.max(min, value - 1))}
       >
         <RemoveIcon />
       </IconButton>

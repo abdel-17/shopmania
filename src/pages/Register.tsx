@@ -1,64 +1,56 @@
-import {
-  Box,
-  Button,
-  Container,
-  Link as MuiLink,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { Link } from "react-router-dom";
-import EmailTextField from "../components/EmailTextField";
-import PasswordTextField from "../components/PasswordTextField";
-import supabase from "../supabase/client";
-import Logo from "../components/Logo";
-import Form from "../components/Form";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
 
-export default function Register() {
+import {
+  EmailTextField,
+  Form,
+  Link,
+  Logo,
+  PasswordTextField,
+} from "../components";
+import { supabase } from "../supabase";
+
+export function Register() {
   const { mutate: register, isLoading } = useMutation(
     async (formData: FormData) => {
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { error } = await supabase.auth.signUp({
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+      });
 
       if (error) {
         console.error(error);
         enqueueSnackbar(error.message, { variant: "error" });
         return;
       }
+
       enqueueSnackbar(
         "A confirmation email will be sent to verify your account",
-        {
-          variant: "info",
-        }
+        { variant: "info" },
       );
-    }
+    },
   );
 
   return (
-    <Box className="fullscreen-no-toolbar centered" padding={1}>
+    <Box
+      className="fullscreen-no-toolbar"
+      display="flex"
+      alignItems="center"
+      padding={1}
+    >
       <Container maxWidth="xs">
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            padding: 3,
-            marginBottom: 2,
-            borderRadius: 4,
-          }}
-        >
-          <Link to="/" style={{ alignSelf: "center" }}>
-            <Logo />
-          </Link>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Logo />
 
-          <Form method="post" action={register} sx={{ marginTop: 3 }}>
-            <EmailTextField id="email" autoFocus />
+          <Form method="post" action={register} sx={{ marginTop: 4 }}>
+            <EmailTextField autoFocus fullWidth />
 
             <PasswordTextField
-              id="new-password"
               autoComplete="new-password"
               helperText="Enter 8 or more characters"
+              fullWidth
+              margin="normal"
               inputProps={{
                 minLength: 8,
               }}
@@ -74,18 +66,13 @@ export default function Register() {
               Sign Up
             </Button>
           </Form>
-        </Paper>
+        </Box>
 
-        <Typography color="text.primary">
-          Already have an account?
-          <MuiLink
-            component={Link}
-            to="/login"
-            color="primary.light"
-            marginLeft={1}
-          >
+        <Typography marginTop={4}>
+          Already have an account?{" "}
+          <Link to="/login" color="primary.light">
             Sign in
-          </MuiLink>
+          </Link>
         </Typography>
       </Container>
     </Box>

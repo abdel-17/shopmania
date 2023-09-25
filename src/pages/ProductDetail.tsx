@@ -1,14 +1,14 @@
-import { useNavigate, useParams } from "react-router";
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
-import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import supabase from "../supabase/client";
-import Stepper from "../components/Stepper";
-import { useSession } from "../providers/SessionProvider";
-import { useCartItems } from "../providers/CartItemsProvider";
 import { enqueueSnackbar } from "notistack";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
-export default function ProductDetail() {
+import { Stepper } from "../components";
+import { useCartItems, useSession } from "../hooks";
+import { supabase } from "../supabase";
+
+export function ProductDetail() {
   const { id } = useParams();
   if (!id) {
     throw new Error("ProductDetail needs an id url parameter.");

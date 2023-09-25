@@ -1,22 +1,21 @@
-import { Box, SxProps, Theme } from "@mui/material";
+import { Box, type BoxProps } from "@mui/material";
 
-export default function Form(props: {
-  action: (formData: FormData) => void;
-  method?: string;
-  sx?: SxProps<Theme>;
-  children: React.ReactNode;
-}) {
-  const { action, method, sx, children } = props;
+type FormProps = Omit<
+  BoxProps<"form", { action: (formData: FormData) => void }>,
+  "component" | "onSubmit"
+>;
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // Prevent the page from reloading.
-    const formData = new FormData(event.currentTarget);
-    action(formData);
-  };
-
+export function Form(props: FormProps) {
+  const { action, ...rest } = props;
   return (
-    <Box component="form" method={method} onSubmit={onSubmit} sx={sx}>
-      {children}
-    </Box>
+    <Box
+      {...rest}
+      component="form"
+      onSubmit={(event) => {
+        event.preventDefault(); // Prevent the page from reloading.
+        const formData = new FormData(event.currentTarget);
+        action(formData);
+      }}
+    />
   );
 }

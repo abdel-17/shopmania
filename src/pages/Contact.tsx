@@ -1,4 +1,10 @@
 import {
+  Email as EmailIcon,
+  ExpandMore as ExpandMoreIcon,
+  Phone as PhoneIcon,
+  Place as PlaceIcon,
+} from "@mui/icons-material";
+import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
@@ -7,15 +13,9 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import {
-  Place as LocationIcon,
-  Phone as PhoneIcon,
-  Email as EmailIcon,
-  ExpandMore as ExpandMoreIcon,
-} from "@mui/icons-material";
-import { green, blue, red } from "@mui/material/colors";
+import { blue, green, red } from "@mui/material/colors";
 
-export default function Contact() {
+export function Contact() {
   return (
     <Container maxWidth="md" sx={{ padding: 2 }}>
       <Typography
@@ -34,7 +34,7 @@ export default function Contact() {
 
       <Box display="flex" justifyContent="center" flexWrap="wrap" marginTop={2}>
         <ContactCard
-          icon={<LocationIcon fontSize="large" htmlColor={green[400]} />}
+          icon={<PlaceIcon fontSize="large" htmlColor={green[400]} />}
           title="Address"
           description="Lorem ipsum dolor"
         />

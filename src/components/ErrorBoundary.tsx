@@ -1,13 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
-import errorIcon from "../assets/error.svg";
-import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
+import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 
-export default function ErrorBoundary({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import errorIcon from "../assets/error.svg";
+
+export function ErrorBoundary({ children }: { children: React.ReactNode }) {
   return (
     <QueryErrorResetBoundary>
       {({ reset }) => (

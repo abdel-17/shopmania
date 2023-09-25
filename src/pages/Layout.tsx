@@ -1,5 +1,16 @@
-import { Fragment, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import {
+  Info as InfoIcon,
+  InfoOutlined as InfoOutlinedIcon,
+  Login as LoginIcon,
+  Logout as LogoutIcon,
+  Menu as MenuIcon,
+  ShoppingCart as ShoppingCartIcon,
+  ShoppingCartOutlined as ShoppingCartOutlinedIcon,
+  Store as StoreIcon,
+  StoreOutlined as StoreOutlinedIcon,
+  SupportAgent as SupportAgentIcon,
+  SupportAgentOutlined as SupportAgentOutlinedIcon,
+} from "@mui/icons-material";
 import {
   AppBar,
   Badge,
@@ -13,27 +24,16 @@ import {
   Toolbar,
   Tooltip,
 } from "@mui/material";
-import {
-  Login as LoginIcon,
-  Logout as LogoutIcon,
-  ShoppingCartOutlined as OutlinedCartIcon,
-  ShoppingCart as CartIcon,
-  Menu as MenuIcon,
-  Store as StoreIcon,
-  StoreOutlined as StoreOutlinedIcon,
-  SupportAgent as SupportAgentIcon,
-  SupportAgentOutlined as SupportAgentOutlinedIcon,
-  Info as InfoIcon,
-  InfoOutlined as InfoOutlinedIcon,
-} from "@mui/icons-material";
-import supabase from "../supabase/client";
-import Logo from "../components/Logo";
-import { useSession } from "../providers/SessionProvider";
 import { useMutation } from "@tanstack/react-query";
-import { useCartItems } from "../providers/CartItemsProvider";
 import { enqueueSnackbar } from "notistack";
+import { Fragment, useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
-export default function Layout() {
+import { Logo } from "../components";
+import { useCartItems, useSession } from "../hooks";
+import { supabase } from "../supabase";
+
+export function Layout() {
   const session = useSession();
   const [menuAnchor, setMenuAnchor] = useState<HTMLElement | null>(null);
 
@@ -198,7 +198,7 @@ function CartButton() {
           badgeContent={totalQuantity}
           invisible={isSelected}
         >
-          {isSelected ? <CartIcon /> : <OutlinedCartIcon />}
+          {isSelected ? <ShoppingCartIcon /> : <ShoppingCartOutlinedIcon />}
         </Badge>
       </IconButton>
     </Tooltip>

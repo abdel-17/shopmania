@@ -1,3 +1,4 @@
+import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import {
   Box,
   Chip,
@@ -12,11 +13,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import supabase from "../supabase/client";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+import { supabase } from "../supabase";
 
 interface SortMethod {
   label: string;
@@ -48,7 +49,7 @@ const sortMethods: SortMethod[] = [
   },
 ];
 
-export default function Products() {
+export function Products() {
   const [category, setCategory] = useState<string | null>(null);
   const [sortMethod, setSortMethod] = useState<SortMethod | null>(null);
 

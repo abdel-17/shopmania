@@ -1,9 +1,15 @@
 import { Box, Stack, Typography } from "@mui/material";
+
 import team from "../assets/team.svg";
 
-export default function About() {
+export function About() {
   return (
-    <div className="fullscreen centered">
+    <Box
+      className="fullscreen"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Stack
         direction={{
           xs: "column",
@@ -51,6 +57,6 @@ export default function About() {
           </Typography>
         </Box>
       </Stack>
-    </div>
+    </Box>
   );
 }

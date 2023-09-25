@@ -1,32 +1,26 @@
-import { Navigate } from "react-router";
-import {
-  Box,
-  Button,
-  Container,
-  Link as MuiLink,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { Link } from "react-router-dom";
-import supabase from "../supabase/client";
-import EmailTextField from "../components/EmailTextField";
-import PasswordTextField from "../components/PasswordTextField";
-import Logo from "../components/Logo";
-import Form from "../components/Form";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import { useSession } from "../providers/SessionProvider";
 import { enqueueSnackbar } from "notistack";
+import { Navigate } from "react-router";
 
-export default function Login() {
+import {
+  EmailTextField,
+  Form,
+  Link,
+  Logo,
+  PasswordTextField,
+} from "../components";
+import { useSession } from "../hooks";
+import { supabase } from "../supabase";
+
+export function Login() {
   const session = useSession();
 
   const { mutate: login, isLoading } = useMutation(
     async (formData: FormData) => {
-      const email = formData.get("email") as string;
-      const password = formData.get("password") as string;
       const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
       });
 
       if (error) {
@@ -36,33 +30,28 @@ export default function Login() {
     },
   );
 
-  // Navigate back to the home page on login success.
+  // Navigate back to the home page on login.
   if (session) {
     return <Navigate to="/" replace />;
   }
 
   return (
-    <Box className="fullscreen-no-toolbar centered" padding={1}>
+    <Box
+      className="fullscreen-no-toolbar"
+      display="flex"
+      alignItems="center"
+      padding={1}
+    >
       <Container maxWidth="xs">
-        <Paper
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            padding: 3,
-            marginBottom: 2,
-            borderRadius: 4,
-          }}
-        >
-          <Link to="/" style={{ alignSelf: "center" }}>
-            <Logo />
-          </Link>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Logo />
 
-          <Form method="post" action={login} sx={{ marginTop: 3 }}>
-            <EmailTextField id="email" autoFocus />
-
+          <Form method="post" action={login} sx={{ marginTop: 4 }}>
+            <EmailTextField autoFocus fullWidth />
             <PasswordTextField
-              id="current-password"
               autoComplete="current-password"
+              fullWidth
+              margin="normal"
             />
 
             <Button
@@ -70,32 +59,22 @@ export default function Login() {
               variant="contained"
               disabled={isLoading}
               fullWidth
-              sx={{ marginTop: 3, marginBottom: 2 }}
+              sx={{ marginTop: 3 }}
             >
               Sign In
             </Button>
           </Form>
 
-          <MuiLink
-            component={Link}
-            to="/forgot"
-            textAlign="center"
-            color="text.secondary"
-          >
+          <Link to="/forgot" color="text.secondary" sx={{ marginTop: 2 }}>
             Forgot your password?
-          </MuiLink>
-        </Paper>
+          </Link>
+        </Box>
 
-        <Typography color="text.primary">
-          Don't have an account?
-          <MuiLink
-            component={Link}
-            to="/register"
-            color="primary.light"
-            marginLeft={1}
-          >
+        <Typography marginTop={4}>
+          Don't have an account?{" "}
+          <Link to="/register" color="primary.light">
             Sign up
-          </MuiLink>
+          </Link>
         </Typography>
       </Container>
     </Box>

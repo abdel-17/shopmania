@@ -8,16 +8,16 @@ import {
   Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
-import supabase from "../supabase/client";
-import { Link, Navigate } from "react-router-dom";
-import Stepper from "../components/Stepper";
-import cart from "../assets/cart.svg";
-import { useEffect, useState } from "react";
-import { CartItem, useCartItems } from "../providers/CartItemsProvider";
-import { useSession } from "../providers/SessionProvider";
 import { enqueueSnackbar } from "notistack";
+import { useEffect, useState } from "react";
+import { Link, Navigate } from "react-router-dom";
 
-export default function Cart() {
+import cart from "../assets/cart.svg";
+import { Stepper } from "../components";
+import { useCartItems, useSession, type CartItem } from "../hooks";
+import { supabase } from "../supabase";
+
+export function Cart() {
   const session = useSession();
   const { data } = useCartItems();
 
@@ -169,7 +169,12 @@ function CartListItem(props: { item: CartItem | null }) {
 
 function EmptyCartPlaceholder() {
   return (
-    <div className="fullscreen centered">
+    <Box
+      className="fullscreen"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+    >
       <Box display="flex" flexDirection="column" padding={4}>
         <img
           src={cart}
@@ -200,6 +205,6 @@ function EmptyCartPlaceholder() {
           Browse our products
         </MuiLink>
       </Box>
-    </div>
+    </Box>
   );
 }

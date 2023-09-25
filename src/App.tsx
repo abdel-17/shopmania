@@ -1,50 +1,40 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Layout from "./pages/Layout";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Cart from "./pages/Cart";
-import Index from "./pages/Index";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import ErrorBoundary from "./pages/ErrorBoundary";
-import { SessionProvider } from "./providers/SessionProvider";
-import { CartItemsProvider } from "./providers/CartItemsProvider";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+
+import { ErrorBoundary, SessionProvider } from "./components";
+import {
+  About,
+  Cart,
+  Contact,
+  ForgotPassword,
+  Layout,
+  Login,
+  ProductDetail,
+  Products,
+  Register,
+  ResetPassword,
+} from "./pages";
 
 export function App() {
   return (
     <ErrorBoundary>
       <SessionProvider>
-        <CartItemsProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Index />} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Navigate to="/products" replace />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
+            </Route>
 
-                <Route path="/products" element={<Products />} />
-
-                <Route path="/products/:id" element={<ProductDetail />} />
-
-                <Route path="/contact" element={<Contact />} />
-
-                <Route path="/about" element={<About />} />
-
-                <Route path="/cart" element={<Cart />} />
-              </Route>
-
-              <Route path="/login" element={<Login />} />
-
-              <Route path="/register" element={<Register />} />
-
-              <Route path="/forgot" element={<ForgotPassword />} />
-
-              <Route path="/reset" element={<ResetPassword />} />
-            </Routes>
-          </BrowserRouter>
-        </CartItemsProvider>
+            <Route path="/forgot" element={<ForgotPassword />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/reset" element={<ResetPassword />} />
+          </Routes>
+        </BrowserRouter>
       </SessionProvider>
     </ErrorBoundary>
   );

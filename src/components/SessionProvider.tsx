@@ -1,16 +1,19 @@
+import type { Session } from "@supabase/supabase-js";
 import {
-  PropsWithChildren,
   createContext,
   useContext,
   useEffect,
   useState,
+  type ReactNode,
 } from "react";
-import { Session } from "@supabase/supabase-js";
-import supabase from "../supabase/client";
+
+import { supabase } from "../supabase";
 
 const SessionContext = createContext<Session | null | undefined>(null);
 
-export function SessionProvider(props: PropsWithChildren) {
+type SessionProviderProps = { children: ReactNode };
+
+export function SessionProvider(props: SessionProviderProps) {
   const [session, setSession] = useState<Session | null>();
 
   useEffect(() => {
