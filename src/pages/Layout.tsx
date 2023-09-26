@@ -48,8 +48,10 @@ export function Layout() {
       <AppBar component="header">
         <Toolbar>
           <Box width="100%">
-            <Box
+            <Stack
               component="nav"
+              direction="row"
+              spacing={0.5}
               display={{
                 xs: "none",
                 md: "flex",
@@ -58,7 +60,7 @@ export function Layout() {
               <NavLink to="/products">Products</NavLink>
               <NavLink to="/about">About</NavLink>
               <NavLink to="/contact">Contact Us</NavLink>
-            </Box>
+            </Stack>
 
             <IconButton
               onClick={onOpenMenu}
@@ -68,6 +70,34 @@ export function Layout() {
             >
               <MenuIcon />
             </IconButton>
+
+            <Menu
+              anchorEl={menuAnchor}
+              open={menuAnchor !== null}
+              onClose={onCloseMenu}
+            >
+              <MenuLinkItem
+                to="/products"
+                label="Products"
+                Icon={<StoreOutlinedIcon />}
+                SelectedIcon={<StoreIcon />}
+                onClick={onCloseMenu}
+              />
+              <MenuLinkItem
+                to="/about"
+                label="About"
+                Icon={<InfoOutlinedIcon />}
+                SelectedIcon={<InfoIcon />}
+                onClick={onCloseMenu}
+              />
+              <MenuLinkItem
+                to="/contact"
+                label="Contact Us"
+                Icon={<SupportAgentOutlinedIcon />}
+                SelectedIcon={<SupportAgentIcon />}
+                onClick={onCloseMenu}
+              />
+            </Menu>
           </Box>
 
           {/** Center the logo horizontally in the toolbar */}
@@ -92,34 +122,6 @@ export function Layout() {
         </Toolbar>
       </AppBar>
 
-      <Menu
-        anchorEl={menuAnchor}
-        open={menuAnchor !== null}
-        onClose={onCloseMenu}
-      >
-        <MenuLinkItem
-          to="/products"
-          Icon={<StoreOutlinedIcon />}
-          SelectedIcon={<StoreIcon />}
-          label="Products"
-          onClick={onCloseMenu}
-        />
-        <MenuLinkItem
-          to="/about"
-          Icon={<InfoOutlinedIcon />}
-          SelectedIcon={<InfoIcon />}
-          label="About"
-          onClick={onCloseMenu}
-        />
-        <MenuLinkItem
-          to="/contact"
-          Icon={<SupportAgentOutlinedIcon />}
-          SelectedIcon={<SupportAgentIcon />}
-          label="Contact Us"
-          onClick={onCloseMenu}
-        />
-      </Menu>
-
       <Toolbar />
 
       <main>
@@ -138,10 +140,7 @@ function NavLink(props: { to: string; children: string }) {
       component={Link}
       to={to}
       variant="text"
-      sx={{
-        marginRight: 1,
-        color: isSelected ? "primary.light" : "white",
-      }}
+      color={isSelected ? "primary" : "inherit"}
     >
       {children}
     </Button>
@@ -166,10 +165,10 @@ function LogoutButton() {
       enqueueSnackbar(error.message, { variant: "error" });
     }
   });
-  const onClick = () => logout();
+
   return (
     <Tooltip title="Logout">
-      <IconButton onClick={onClick} disabled={isLoading}>
+      <IconButton onClick={() => logout()} disabled={isLoading}>
         <LogoutIcon />
       </IconButton>
     </Tooltip>
@@ -179,6 +178,7 @@ function LogoutButton() {
 function CartButton() {
   const cartItems = useCartItems();
   const { pathname } = useLocation();
+
   const isSelected = pathname === "/cart";
 
   // Add up the quantities of all items in the cart.
@@ -208,12 +208,12 @@ function CartButton() {
 
 function MenuLinkItem(props: {
   to: string;
+  label: string;
   Icon: React.ReactNode;
   SelectedIcon: React.ReactNode;
-  label: string;
   onClick: () => void;
 }) {
-  const { to, Icon, SelectedIcon, label, onClick } = props;
+  const { to, label, Icon, SelectedIcon, onClick } = props;
   const { pathname } = useLocation();
   const isSelected = to === pathname;
   return (
