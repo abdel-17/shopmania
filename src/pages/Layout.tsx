@@ -188,7 +188,7 @@ function CartButton() {
   );
 
   return (
-    <Tooltip title="Shopping Cart">
+    <Tooltip title="Show cart items">
       <IconButton
         component={Link}
         to="/cart"
