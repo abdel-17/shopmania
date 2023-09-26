@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import { ErrorBoundary as ReactErrorBoundary } from "react-error-boundary";
 
-import errorIcon from "../assets/error.svg";
+import ErrorIcon from "../assets/error.svg?react";
 
 export function ErrorBoundary({ children }: { children: React.ReactNode }) {
   return (
@@ -19,7 +19,7 @@ export function ErrorBoundary({ children }: { children: React.ReactNode }) {
               minHeight="100vh"
               padding={4}
             >
-              <img src={errorIcon} alt="error" style={{ maxWidth: 400 }} />
+              <ErrorIcon style={{ maxWidth: 400 }} />
 
               <Typography
                 component="h1"

@@ -1,6 +1,6 @@
 import { Box, Stack, Typography } from "@mui/material";
 
-import team from "../assets/team.svg";
+import TeamIcon from "../assets/team.svg?react";
 
 export function About() {
   return (
@@ -18,9 +18,7 @@ export function About() {
         margin={4}
         spacing={4}
       >
-        <img
-          src={team}
-          alt="The creators of Shopmania"
+        <TeamIcon
           style={{
             maxWidth: 400,
             alignSelf: "center",

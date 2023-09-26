@@ -12,7 +12,7 @@ import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 
-import cart from "../assets/cart.svg";
+import ShoppingIcon from "../assets/shopping.svg?react";
 import { Stepper } from "../components";
 import { useCartItems, useSession, type CartItem } from "../hooks";
 import { supabase } from "../supabase";
@@ -82,7 +82,7 @@ function CartListItem(props: { item: CartItem | null }) {
       console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
       cartItems.refetch();
       setOptimisticQuantity(newQuantity); // Update quantity before the refetch finishes.
-    },
+    }
   );
 
   const onQuantityChange = (newQuantity: number) => {
@@ -176,9 +176,7 @@ function EmptyCartPlaceholder() {
       justifyContent="center"
     >
       <Box display="flex" flexDirection="column" padding={4}>
-        <img
-          src={cart}
-          alt="Customer browsing Shopmania"
+        <ShoppingIcon
           style={{
             maxWidth: 400,
             alignSelf: "center",
