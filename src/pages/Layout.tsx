@@ -21,12 +21,13 @@ import {
   ListItemText,
   Menu,
   MenuItem,
+  Stack,
   Toolbar,
   Tooltip,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { Logo } from "../components";
@@ -78,14 +79,14 @@ export function Layout() {
               translate: "-50%",
             }}
           >
-            <Logo width={150} />
+            <Logo scale={0.5} />
           </Link>
 
           {session && (
-            <Fragment>
+            <Stack direction="row" spacing={0.5}>
               <LogoutButton />
               <CartButton />
-            </Fragment>
+            </Stack>
           )}
           {session === null && <LoginButton />}
         </Toolbar>
@@ -183,7 +184,7 @@ function CartButton() {
   // Add up the quantities of all items in the cart.
   const totalQuantity = cartItems.data?.reduce(
     (sum, item) => sum + item.quantity,
-    0,
+    0
   );
 
   return (
