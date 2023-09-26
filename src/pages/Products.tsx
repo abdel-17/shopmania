@@ -1,12 +1,14 @@
 import { Sort as SortIcon, Tune as TuneIcon } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Chip,
   Container,
   Grid,
   IconButton,
   Menu,
   MenuItem,
+  Paper,
   Skeleton,
   Stack,
   Tooltip,
@@ -14,8 +16,9 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
+import { Link } from "../components";
+import { useAddToCart } from "../hooks";
 import { supabase } from "../supabase";
 
 const categories = [
@@ -104,7 +107,7 @@ export function Products() {
         Browse our diverse product catalog
       </Typography>
 
-      <Container maxWidth="lg" sx={{ marginTop: 3 }}>
+      <Container maxWidth="lg" disableGutters sx={{ marginTop: 3 }}>
         {/* On mobile, we show a menu for filtering/sorting products. */}
         <Stack
           direction="row"
@@ -161,14 +164,8 @@ export function Products() {
 
         <Grid container spacing={2}>
           {products.map((product, i) => (
-            <Grid key={product?.id ?? i} item xs={12} sm={6} md={4}>
-              {product ? (
-                <Link to={`${product.id}`} style={{ textDecoration: "none" }}>
-                  <ProductCard product={product} />
-                </Link>
-              ) : (
-                <ProductCard />
-              )}
+            <Grid key={product?.id ?? i} item xs={12} sm={6} lg={4}>
+              <ProductCard product={product} />
             </Grid>
           ))}
         </Grid>
@@ -184,21 +181,12 @@ interface Product {
   price: number;
 }
 
-function ProductCard(props: { product?: Product }) {
+function ProductCard(props: { product: Product | null }) {
   const { product } = props;
+  const addToCart = useAddToCart();
   return (
-    <Box
-      padding={2}
-      borderRadius={2}
-      bgcolor="white"
-      sx={{
-        transition: "300ms scale",
-        ":hover": {
-          scale: "1.05",
-        },
-      }}
-    >
-      <Box display="flex" justifyContent="center">
+    <Paper sx={{ padding: 2, borderRadius: 2 }}>
+      <Box display="flex" justifyContent="center" marginBottom={2}>
         {product ? (
           <img
             src={product.image}
@@ -206,39 +194,74 @@ function ProductCard(props: { product?: Product }) {
             loading="lazy"
             width={200}
             height={200}
-            style={{ objectFit: "contain" }}
+            style={{
+              objectFit: "contain",
+              backgroundColor: "white",
+              padding: "8px",
+              borderRadius: "4px",
+            }}
           />
         ) : (
           <Skeleton
             variant="rectangular"
             width={200}
             height={200}
-            sx={{ borderRadius: "8px" }}
+            sx={{ borderRadius: "4px" }}
           />
         )}
       </Box>
 
-      <Typography
-        fontSize={18}
-        fontWeight={500}
-        color="black"
-        noWrap
-        textAlign="center"
+      {product ? (
+        <Link
+          to={`${product.id}`}
+          display="block"
+          fontSize={18}
+          fontWeight={600}
+          color="inherit"
+          underline="hover"
+          noWrap
+          textAlign="center"
+        >
+          {product ? product.title : <Skeleton />}
+        </Link>
+      ) : (
+        <Skeleton sx={{ fontSize: 18 }} />
+      )}
+
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="center"
+        spacing={2}
         marginTop={2}
       >
-        {product?.title ?? <Skeleton />}
-      </Typography>
+        {product && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              addToCart.mutate({ productId: product.id, quantity: 1 });
+            }}
+          >
+            Add to Cart
+          </Button>
+        )}
 
-      <Typography
-        fontSize={18}
-        fontWeight={500}
-        color="primary.dark"
-        textAlign="center"
-        marginTop={0.5}
-      >
-        {product ? `${product.price} $` : <Skeleton />}
-      </Typography>
-    </Box>
+        <Typography
+          fontSize={18}
+          fontWeight={500}
+          color="primary"
+          textAlign="center"
+          flexShrink={0}
+          flexGrow={
+            // Make the skeleton take up all available space.
+            product ? undefined : 1
+          }
+        >
+          {product ? `${product.price} $` : <Skeleton />}
+        </Typography>
+      </Stack>
+    </Paper>
   );
 }
 

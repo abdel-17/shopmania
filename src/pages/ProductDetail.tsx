@@ -1,11 +1,10 @@
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { enqueueSnackbar } from "notistack";
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 import { Stepper } from "../components";
-import { useCartItems, useSession } from "../hooks";
+import { useAddToCart, useSession } from "../hooks";
 import { supabase } from "../supabase";
 
 export function ProductDetail() {
@@ -17,7 +16,6 @@ export function ProductDetail() {
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
   const session = useSession();
-  const cartItems = useCartItems();
 
   const { data: product } = useQuery({
     queryKey: ["products", id],
@@ -31,31 +29,7 @@ export function ProductDetail() {
     },
   });
 
-  const addToCart = useMutation(async (quantity: number) => {
-    if (!product) {
-      console.error("Product is added to the cart before the page loads.");
-      return;
-    }
-
-    const { error } = await supabase.rpc("add_to_cart", {
-      product: product.id,
-      amount: quantity,
-    });
-
-    if (error) {
-      console.error(error);
-      enqueueSnackbar("Failed to add items to cart.", { variant: "error" });
-      return;
-    }
-
-    enqueueSnackbar(
-      `Added ${quantity} ${quantity === 1 ? "item" : `items`} to cart`,
-      {
-        variant: "success",
-      },
-    );
-    cartItems.refetch();
-  });
+  const addToCart = useAddToCart();
 
   const onAddToCart = () => {
     if (!product) {
@@ -66,17 +40,24 @@ export function ProductDetail() {
       navigate("/login");
       return;
     }
-    addToCart.mutate(quantity);
+    addToCart.mutate({ productId: product.id, quantity });
   };
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="center" padding={4}>
+    <Box
+      className="fullscreen"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      padding={3}
+    >
       <Stack
         direction={{
           xs: "column",
           md: "row",
         }}
         spacing={4}
+        alignItems="center"
       >
         {product ? (
           <img
@@ -85,11 +66,10 @@ export function ProductDetail() {
             width={300}
             height={300}
             style={{
-              objectFit: "contain",
-              alignSelf: "center",
-              background: "white",
               padding: "16px",
               borderRadius: "8px",
+              objectFit: "contain",
+              backgroundColor: "white",
             }}
           />
         ) : (
@@ -101,12 +81,7 @@ export function ProductDetail() {
           />
         )}
 
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="center"
-          maxWidth={500}
-        >
+        <Box maxWidth={480}>
           <Typography component="h1" variant="h5" fontWeight={500}>
             {product?.title ?? <Skeleton width={300} />}
           </Typography>
