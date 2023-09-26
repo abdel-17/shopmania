@@ -11,28 +11,43 @@ import {
   Box,
   Container,
   Paper,
+  Stack,
   Typography,
 } from "@mui/material";
 import { blue, green, red } from "@mui/material/colors";
 
 export function Contact() {
   return (
-    <Container maxWidth="md" sx={{ padding: 2 }}>
+    <Container maxWidth="md" sx={{ padding: 3 }}>
       <Typography
         component="h1"
         variant="h4"
         fontWeight="bold"
         textAlign="center"
-        marginTop={2}
       >
         Contact Us
       </Typography>
 
-      <Typography component="h2" variant="h5" textAlign="center" marginTop={3}>
+      <Typography
+        component="h2"
+        variant="h6"
+        fontWeight={400}
+        textAlign="center"
+        marginTop={1}
+      >
         The best customer support at your service
       </Typography>
 
-      <Box display="flex" justifyContent="center" flexWrap="wrap" marginTop={2}>
+      <Stack
+        direction={{
+          xs: "column",
+          sm: "row",
+        }}
+        alignItems="center"
+        justifyContent="center"
+        spacing={2}
+        marginTop={3}
+      >
         <ContactCard
           icon={<PlaceIcon fontSize="large" htmlColor={green[400]} />}
           title="Address"
@@ -48,14 +63,14 @@ export function Contact() {
           title="Email"
           description="lorem@ipsum.com"
         />
-      </Box>
+      </Stack>
 
       <Typography
         component="h1"
         variant="h4"
         fontWeight="bold"
         textAlign="center"
-        marginTop={8}
+        marginTop={6}
       >
         Frequently Asked Questions
       </Typography>
@@ -94,8 +109,7 @@ function ContactCard(props: {
   return (
     <Paper
       sx={{
-        padding: 3,
-        margin: 1,
+        padding: 2,
         width: {
           xs: "80%",
           sm: 200,
@@ -125,9 +139,7 @@ function FAQAccordion(props: { title: string; description: string }) {
       </AccordionSummary>
 
       <AccordionDetails>
-        <Typography variant="body1" color="text.secondary">
-          {props.description}
-        </Typography>
+        <Typography color="text.secondary">{props.description}</Typography>
       </AccordionDetails>
     </Accordion>
   );
