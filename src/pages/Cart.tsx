@@ -82,7 +82,7 @@ function CartListItem(props: { item: CartItem | null }) {
       console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
       cartItems.refetch();
       setOptimisticQuantity(newQuantity); // Update quantity before the refetch finishes.
-    }
+    },
   );
 
   const onQuantityChange = (newQuantity: number) => {

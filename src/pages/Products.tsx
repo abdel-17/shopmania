@@ -7,7 +7,6 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Paper,
   Skeleton,
   Stack,
   Tooltip,
@@ -188,11 +187,12 @@ interface Product {
 function ProductCard(props: { product?: Product }) {
   const { product } = props;
   return (
-    <Paper
+    <Box
+      padding={2}
+      borderRadius={2}
+      bgcolor="white"
       sx={{
-        padding: 2,
-        background: "#222",
-        transition: "0.5s",
+        transition: "300ms scale",
         ":hover": {
           scale: "1.05",
         },
@@ -203,14 +203,10 @@ function ProductCard(props: { product?: Product }) {
           <img
             src={product.image}
             alt={product.title}
+            loading="lazy"
             width={200}
             height={200}
-            style={{
-              objectFit: "contain",
-              background: "white",
-              padding: "12px",
-              borderRadius: "8px",
-            }}
+            style={{ objectFit: "contain" }}
           />
         ) : (
           <Skeleton
@@ -222,19 +218,27 @@ function ProductCard(props: { product?: Product }) {
         )}
       </Box>
 
-      <Typography textAlign="center" noWrap marginTop={2}>
+      <Typography
+        fontSize={18}
+        fontWeight={500}
+        color="black"
+        noWrap
+        textAlign="center"
+        marginTop={2}
+      >
         {product?.title ?? <Skeleton />}
       </Typography>
 
       <Typography
-        color="primary.light"
-        textAlign="center"
         fontSize={18}
         fontWeight={500}
+        color="primary.dark"
+        textAlign="center"
+        marginTop={0.5}
       >
         {product ? `${product.price} $` : <Skeleton />}
       </Typography>
-    </Paper>
+    </Box>
   );
 }
 

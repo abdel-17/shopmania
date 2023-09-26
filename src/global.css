@@ -13,3 +13,7 @@
   min-height: 100vh;
   min-height: 100dvh;
 }
+
+img {
+  max-width: 100%;
+}
