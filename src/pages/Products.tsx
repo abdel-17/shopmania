@@ -19,18 +19,18 @@ import { Link } from "react-router-dom";
 
 import { supabase } from "../supabase";
 
-interface SortMethod {
-  label: string;
-  property: "title" | "price";
-  ascending: boolean;
-}
-
 const categories = [
   "Electronics",
   "Jewelery",
   "Men's Clothing",
   "Women's Clothing",
 ];
+
+interface SortMethod {
+  label: string;
+  property: "title" | "price";
+  ascending: boolean;
+}
 const sortMethods: SortMethod[] = [
   {
     label: "A-Z",
@@ -82,7 +82,7 @@ export function Products() {
   const renderSortMethod = (sortMethod: SortMethod) => sortMethod.label;
 
   return (
-    <Box padding={4}>
+    <Box padding={3}>
       <Typography
         component="h1"
         variant="h4"
@@ -97,15 +97,16 @@ export function Products() {
 
       <Typography
         component="h2"
-        variant="h5"
+        variant="h6"
+        fontWeight={400}
         textAlign="center"
-        marginTop={2}
-        marginBottom={3}
+        marginTop={1}
       >
         Browse our diverse product catalog
       </Typography>
 
-      <Container maxWidth="lg">
+      <Container maxWidth="lg" sx={{ marginTop: 3 }}>
+        {/* On mobile, we show a menu for filtering/sorting products. */}
         <Stack
           direction="row"
           display={{
@@ -116,26 +117,26 @@ export function Products() {
           spacing={1}
           marginBottom={1}
         >
-          {/* We show a menu for filtering/sorting products on mobile. */}
           <SelectMenu
-            selection={sortMethod}
-            setSelection={setSortMethod}
             items={sortMethods}
-            tooltip="Sort"
-            ButtonIcon={<SortIcon />}
+            selected={sortMethod}
+            onSelectedChange={setSortMethod}
+            tooltipText="Sort"
+            TriggerIcon={<SortIcon />}
             renderItem={renderSortMethod}
           />
 
           <SelectMenu
-            selection={category}
-            setSelection={setCategory}
             items={categories}
-            tooltip="Filter"
-            ButtonIcon={<TuneIcon />}
+            selected={category}
+            onSelectedChange={setCategory}
+            tooltipText="Filter"
+            TriggerIcon={<TuneIcon />}
             renderItem={renderCategory}
           />
         </Stack>
 
+        {/* On tablets and desktops, we show two rows of chips instead of menus.*/}
         <Stack
           display={{
             xs: "none",
@@ -144,18 +145,17 @@ export function Products() {
           spacing={1}
           marginBottom={3}
         >
-          {/* On tablets and desktops, we show two rows of chips instead of menus.*/}
           <SelectChips
-            selection={category}
-            setSelection={setCategory}
             items={categories}
+            selected={category}
+            onSelectedChange={setCategory}
             renderLabel={renderCategory}
           />
 
           <SelectChips
-            selection={sortMethod}
-            setSelection={setSortMethod}
             items={sortMethods}
+            selected={sortMethod}
+            onSelectedChange={setSortMethod}
             renderLabel={renderSortMethod}
           />
         </Stack>
@@ -239,26 +239,26 @@ function ProductCard(props: { product?: Product }) {
 }
 
 function SelectChips<T>(props: {
-  selection: T | null;
-  setSelection: React.Dispatch<React.SetStateAction<T | null>>;
   items: T[];
+  selected: T | null;
+  onSelectedChange: (value: T | null) => void;
   renderLabel: (item: T) => React.ReactNode;
 }) {
-  const { selection, setSelection, items, renderLabel: renderItem } = props;
+  const { items, selected, onSelectedChange, renderLabel } = props;
   return (
     <Stack direction="row" justifyContent="center" spacing={1}>
       {items.map((item, i) => {
-        const isSelected = item === selection;
+        const isSelected = item === selected;
         return (
           <Chip
             key={i}
             variant="filled"
-            label={renderItem(item)}
+            label={renderLabel(item)}
             color={isSelected ? "secondary" : "default"}
-            onClick={() => setSelection(item)}
+            onClick={() => onSelectedChange(item)}
             onDelete={
-              // Chips can only be deleted (deselected) if they are selected.
-              isSelected ? () => setSelection(null) : undefined
+              // Chips can only be deleted (deselected) if they are already selected.
+              isSelected ? () => onSelectedChange(null) : undefined
             }
           />
         );
@@ -268,25 +268,28 @@ function SelectChips<T>(props: {
 }
 
 function SelectMenu<T>(props: {
-  selection: T | null;
-  setSelection: React.Dispatch<React.SetStateAction<T | null>>;
   items: T[];
-  tooltip: string;
-  ButtonIcon: React.ReactNode;
+  selected: T | null;
+  onSelectedChange: (value: T | null) => void;
+  tooltipText: string;
+  TriggerIcon: React.ReactNode;
   renderItem: (item: T) => React.ReactNode;
 }) {
-  const { selection, setSelection, items, tooltip, ButtonIcon, renderItem } =
-    props;
+  const {
+    items,
+    selected,
+    onSelectedChange,
+    tooltipText,
+    TriggerIcon,
+    renderItem,
+  } = props;
   const [anchor, setAnchor] = useState<HTMLElement | null>(null);
-
-  const onOpen = (event: React.MouseEvent<HTMLElement>) =>
-    setAnchor(event.currentTarget);
-  const onClose = () => setAnchor(null);
-
   return (
     <>
-      <Tooltip title={tooltip}>
-        <IconButton onClick={onOpen}>{ButtonIcon}</IconButton>
+      <Tooltip title={tooltipText}>
+        <IconButton onClick={(event) => setAnchor(event.currentTarget)}>
+          {TriggerIcon}
+        </IconButton>
       </Tooltip>
 
       <Menu
@@ -300,22 +303,23 @@ function SelectMenu<T>(props: {
           vertical: "bottom",
           horizontal: "right",
         }}
-        onClose={onClose}
+        onClose={() => setAnchor(null)}
       >
-        {items.map((item, i) => (
-          <MenuItem
-            key={i}
-            selected={item === selection}
-            onClick={() => {
-              // If the option is currently selected, deselect it.
-              // Otherwise, select it.
-              setSelection((selection) => (item === selection ? null : item));
-              onClose();
-            }}
-          >
-            {renderItem(item)}
-          </MenuItem>
-        ))}
+        {items.map((item, i) => {
+          const isSelected = item === selected;
+          return (
+            <MenuItem
+              key={i}
+              selected={isSelected}
+              onClick={() => {
+                onSelectedChange(isSelected ? null : item);
+                setAnchor(null);
+              }}
+            >
+              {renderItem(item)}
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );
