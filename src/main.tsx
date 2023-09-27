@@ -5,6 +5,11 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { App } from "./App";
+import {
+  ErrorBoundary,
+  SessionProvider,
+  SnackbarCloseButton,
+} from "./components";
 import "./global.css";
 import theme from "./theme";
 
@@ -21,10 +26,16 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <SnackbarProvider
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        action={(key) => <SnackbarCloseButton snackbarKey={key} />}
       >
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App />
+
+          <ErrorBoundary>
+            <SessionProvider>
+              <App />
+            </SessionProvider>
+          </ErrorBoundary>
         </ThemeProvider>
       </SnackbarProvider>
     </QueryClientProvider>

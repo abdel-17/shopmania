@@ -5,4 +5,6 @@ export { Link } from "./Link";
 export { Logo } from "./Logo";
 export { PasswordTextField } from "./PasswordTextField";
 export { SessionProvider } from "./SessionProvider";
+export { SnackbarCloseButton } from "./SnackbarCloseButton";
 export { Stepper } from "./Stepper";
+
