@@ -32,7 +32,7 @@ export function useCartItems() {
               category,
               image,
               price
-            )`
+            )`,
         )
         .order("quantity", { ascending: false });
 
@@ -70,9 +70,9 @@ export function useAddToCart() {
 
       enqueueSnackbar(
         `Added ${quantity} ${quantity === 1 ? "item" : `items`} to cart`,
-        { variant: "success" }
+        { variant: "success" },
       );
       cartItems.refetch();
-    }
+    },
   );
 }

@@ -184,7 +184,7 @@ function CartButton() {
   // Add up the quantities of all items in the cart.
   const totalQuantity = cartItems.data?.reduce(
     (sum, item) => sum + item.quantity,
-    0
+    0,
   );
 
   return (

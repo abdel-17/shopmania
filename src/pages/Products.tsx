@@ -196,9 +196,9 @@ function ProductCard(props: { product: Product | null }) {
             height={200}
             style={{
               objectFit: "contain",
-              backgroundColor: "white",
               padding: "8px",
               borderRadius: "4px",
+              backgroundColor: "white",
             }}
           />
         ) : (
@@ -217,7 +217,7 @@ function ProductCard(props: { product: Product | null }) {
           display="block"
           fontSize={18}
           fontWeight={600}
-          color="inherit"
+          color="white"
           underline="hover"
           noWrap
           textAlign="center"

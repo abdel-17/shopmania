@@ -2,18 +2,16 @@ import {
   Box,
   Container,
   Divider,
-  Link as MuiLink,
   Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import { enqueueSnackbar } from "notistack";
-import { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 import ShoppingIcon from "../assets/shopping.svg?react";
-import { Stepper } from "../components";
+import { Link, Stepper } from "../components";
 import { useCartItems, useSession, type CartItem } from "../hooks";
 import { supabase } from "../supabase";
 
@@ -33,19 +31,17 @@ export function Cart() {
   }
 
   return (
-    <Container maxWidth="md" disableGutters sx={{ paddingY: 2 }}>
+    <Container maxWidth="sm" sx={{ padding: 3 }}>
       <Typography
         component="h1"
         variant="h4"
         fontWeight="bold"
         textAlign="center"
-        marginLeft={3}
-        marginY={2}
       >
         Shopping Cart
       </Typography>
 
-      <Stack divider={<Divider />}>
+      <Stack divider={<Divider />} spacing={2} marginTop={4}>
         {items.map((item, i) => (
           <CartListItem key={item?.product?.id ?? i} item={item} />
         ))}
@@ -56,32 +52,45 @@ export function Cart() {
 
 function CartListItem(props: { item: CartItem | null }) {
   const { item } = props;
-  const [optimisticQuantity, setOptimisticQuantity] = useState(item?.quantity);
   const cartItems = useCartItems();
 
-  useEffect(() => {
-    if (item?.quantity !== undefined) {
-      // Keep the optimistic quantity in sync with the actual quantity.
-      setOptimisticQuantity(item.quantity);
-    }
-  }, [item?.quantity]);
-
   const updateQuantity = useMutation(
-    async ({ item, newQuantity }: { item: CartItem; newQuantity: number }) => {
-      const { error } = await supabase.rpc("update_cart_quantity", {
-        product: item.product.id,
-        new_quantity: newQuantity,
-      });
+    async ({
+      productId,
+      newQuantity,
+    }: {
+      productId: number;
+      newQuantity: number;
+    }) => {
+      if (newQuantity === 0) {
+        const { error } = await supabase
+          .from("cart_items")
+          .delete()
+          .eq("product_id", productId);
 
-      if (error) {
-        console.error(error);
-        enqueueSnackbar("Failed to update quantity", { variant: "error" });
-        return;
+        if (error) {
+          console.error(error);
+          enqueueSnackbar("Failed to remove item from cart", {
+            variant: "error",
+          });
+          return;
+        }
+      } else {
+        const { error } = await supabase
+          .from("cart_items")
+          .update({ quantity: newQuantity })
+          .eq("product_id", productId);
+
+        if (error) {
+          console.error(error);
+          enqueueSnackbar("Failed to update item quantity", {
+            variant: "error",
+          });
+          return;
+        }
       }
 
-      console.log(`Updated quantity of ${item.product.id} to ${newQuantity}.`);
-      cartItems.refetch();
-      setOptimisticQuantity(newQuantity); // Update quantity before the refetch finishes.
+      await cartItems.refetch();
     },
   );
 
@@ -90,14 +99,17 @@ function CartListItem(props: { item: CartItem | null }) {
       return;
     }
     if (newQuantity === item.quantity) {
-      // No need for a server request if the quantity is the same.
+      // No need for a database request.
       return;
     }
-    updateQuantity.mutate({ item, newQuantity });
+    updateQuantity.mutate({
+      productId: item.product.id,
+      newQuantity,
+    });
   };
 
   return (
-    <Box display="flex" marginX={3} marginY={2}>
+    <Box display="flex">
       {item ? (
         <img
           src={item.product.image}
@@ -106,10 +118,11 @@ function CartListItem(props: { item: CartItem | null }) {
           height={120}
           style={{
             objectFit: "contain",
+            alignSelf: "center",
             flexShrink: 0,
-            padding: 8,
-            borderRadius: 8,
-            background: "white",
+            padding: "8px",
+            borderRadius: "4px",
+            backgroundColor: "white",
           }}
         />
       ) : (
@@ -117,24 +130,23 @@ function CartListItem(props: { item: CartItem | null }) {
           variant="rectangular"
           width={120}
           height={120}
-          sx={{ borderRadius: "8px" }}
+          sx={{ borderRadius: "4px" }}
         />
       )}
 
-      <Stack marginLeft={2} flexGrow={1}>
+      <Box display="flex" flexDirection="column" marginLeft={2} flexGrow={1}>
         {item ? (
-          <MuiLink
-            component={Link}
+          <Link
             to={`/products/${item.product.id.toString()}`}
             color="white"
             underline="hover"
           >
-            <Typography fontWeight={500} fontSize={17}>
+            <Typography fontWeight={500} fontSize={18}>
               {item.product.title}
             </Typography>
-          </MuiLink>
+          </Link>
         ) : (
-          <Typography fontSize={17}>
+          <Typography fontSize={18}>
             <Skeleton />
           </Typography>
         )}
@@ -143,26 +155,33 @@ function CartListItem(props: { item: CartItem | null }) {
           {item ? item.product.category : <Skeleton />}
         </Typography>
 
-        <Box display="flex" alignItems="end" flexGrow={1}>
-          <Box display="flex" alignItems="center" flexGrow={1}>
-            {optimisticQuantity !== undefined ? (
+        <Box display="flex" alignItems="end" flexGrow={1} marginTop={1}>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+            flexGrow={1}
+          >
+            {item?.quantity !== undefined ? (
               <Stepper
-                value={optimisticQuantity}
+                value={item?.quantity}
                 onChange={onQuantityChange}
                 disabled={updateQuantity.isLoading}
               />
             ) : (
-              <Skeleton variant="rectangular" width={100} />
+              <Skeleton width={100} />
             )}
 
-            <Typography fontSize={20} textAlign="end" flexGrow={1}>
-              {item &&
-                // Show only two decimal places
-                `${(item.product.price * item.quantity).toFixed(2)} $`}
-            </Typography>
+            {item ? (
+              <Typography fontSize={18}>
+                {(item.product.price * item.quantity).toFixed(2)} $
+              </Typography>
+            ) : (
+              <Skeleton width={75} />
+            )}
           </Box>
         </Box>
-      </Stack>
+      </Box>
     </Box>
   );
 }
@@ -175,25 +194,25 @@ function EmptyCartPlaceholder() {
       alignItems="center"
       justifyContent="center"
     >
-      <Box display="flex" flexDirection="column" padding={4}>
-        <ShoppingIcon
-          style={{
-            maxWidth: 400,
-            alignSelf: "center",
-          }}
-        />
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        padding={3}
+      >
+        <ShoppingIcon style={{ maxWidth: 300 }} />
 
         <Typography
           component="h1"
           variant="h5"
           textAlign="center"
+          fontWeight={500}
           marginTop={4}
         >
           You have no items in your cart
         </Typography>
 
-        <MuiLink
-          component={Link}
+        <Link
           to="/products"
           textAlign="center"
           color="primary.light"
@@ -201,7 +220,7 @@ function EmptyCartPlaceholder() {
           marginTop={1}
         >
           Browse our products
-        </MuiLink>
+        </Link>
       </Box>
     </Box>
   );
