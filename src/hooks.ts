@@ -34,7 +34,7 @@ export function useCartItems() {
               price
             )`,
         )
-        .order("quantity", { ascending: false });
+        .order("created_at", { ascending: false });
 
       if (signal) {
         query = query.abortSignal(signal);

@@ -11,16 +11,19 @@ export interface Database {
     Tables: {
       cart_items: {
         Row: {
+          created_at: string;
           product_id: number;
           quantity: number;
           user_id: string;
         };
         Insert: {
+          created_at?: string;
           product_id: number;
           quantity: number;
           user_id: string;
         };
         Update: {
+          created_at?: string;
           product_id?: number;
           quantity?: number;
           user_id?: string;
