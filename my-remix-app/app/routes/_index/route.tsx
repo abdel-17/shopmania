@@ -127,6 +127,7 @@ function ProductCard({ product }: { product: Product }) {
 	return (
 		<div className="w-[350px] max-w-full rounded-md bg-neutral-800 p-4">
 			<img
+				loading="lazy"
 				src={product.image}
 				alt={product.title}
 				className="mx-auto block h-[200px] w-[200px] rounded bg-white object-contain p-2"
