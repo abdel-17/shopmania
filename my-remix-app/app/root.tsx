@@ -47,7 +47,7 @@ export function HydrateFallback() {
 			</head>
 			<body>
 				<div className="flex h-full items-center justify-center">
-					<Spinner />
+					<Spinner aria-label="Loading" />
 				</div>
 				<Scripts />
 			</body>

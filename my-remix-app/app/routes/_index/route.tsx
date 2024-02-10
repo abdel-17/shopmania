@@ -97,27 +97,53 @@ function Products({ products }: { products: Product[] }) {
 		for (let i = 0; i < items.length; ++i) {
 			items[i] = <ProductSkeleton key={i} />;
 		}
-		return <ResponsiveGrid>{items}</ResponsiveGrid>;
+		return <ProductsGrid loading>{items}</ProductsGrid>;
 	}
 
 	return (
-		<ResponsiveGrid>
+		<ProductsGrid>
 			{products.map((product) => (
 				<ProductCard key={product.id} product={product} />
 			))}
-		</ResponsiveGrid>
+		</ProductsGrid>
 	);
 }
 
 function ProductSkeleton() {
 	return (
-		<div className="h-[325px] w-[350px] max-w-full animate-pulse rounded-md bg-neutral-700" />
+		<div
+			aria-hidden="true"
+			className="w-[350px] max-w-full rounded-md bg-neutral-800 p-4"
+		>
+			<div className="mx-auto block h-[200px] w-[200px] animate-pulse rounded bg-neutral-700" />
+
+			<div className="mt-2 py-[0.3125rem]">
+				<div className="h-[1.125rem] animate-pulse rounded bg-neutral-700" />
+			</div>
+
+			<div className="mt-4 flex items-center justify-center gap-4">
+				<div className="h-10 w-32 animate-pulse rounded-full bg-neutral-700" />
+				<div className="py-[0.3125rem]">
+					<div className="h-[1.125rem] w-16 animate-pulse rounded bg-neutral-700" />
+				</div>
+			</div>
+		</div>
 	);
 }
 
-function ResponsiveGrid({ children }: { children?: React.ReactNode }) {
+function ProductsGrid({
+	loading,
+	children,
+}: {
+	loading?: boolean;
+	children?: React.ReactNode;
+}) {
 	return (
-		<div className="mx-auto grid w-fit grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		<div
+			aria-live="polite"
+			aria-busy={loading}
+			className="mx-auto grid w-fit grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
+		>
 			{children}
 		</div>
 	);
