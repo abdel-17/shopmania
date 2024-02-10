@@ -1,4 +1,4 @@
-import { Cache } from "~/helpers/cache";
+import { KeyedCache } from "~/helpers/cache";
 import { supabase, type Tables } from "~/supabase";
 
 export const categories = [
@@ -13,14 +13,15 @@ export type ProductCategory = (typeof categories)[number];
 export type Product = Tables<"products">;
 
 export async function getProducts(category: string | null): Promise<Product[]> {
-	const cache = new Cache<Product[]>(`products-${category ?? "all"}`);
-	const cached = await cache.get();
-	if (cached !== null) {
-		return cached;
+	const cache = new KeyedCache<Product[]>(`products-${category ?? "all"}`);
+	const cachedProducts = await cache.get();
+	if (cachedProducts !== undefined) {
+		return cachedProducts;
 	}
 
 	const products = await fetchProducts(category);
-	return await cache.set(products);
+	await cache.set(products);
+	return products;
 }
 
 async function fetchProducts(category: string | null): Promise<Product[]> {
