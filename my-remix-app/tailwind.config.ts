@@ -36,11 +36,23 @@ export default {
 			colors: {
 				primary: {
 					DEFAULT: primary[400],
+					container: primary[700],
 					...primary,
 				},
 				secondary: {
 					DEFAULT: secondary[400],
+					container: secondary[700],
 					...secondary,
+				},
+				on: {
+					primary: {
+						DEFAULT: primary[50],
+						container: primary[100],
+					},
+					secondary: {
+						DEFAULT: secondary[50],
+						container: secondary[100],
+					},
 				},
 			},
 		},
@@ -49,7 +61,7 @@ export default {
 		plugin(({ addComponents }) => {
 			addComponents({
 				".btn": tw(
-					"inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary-700 px-6 text-sm font-medium text-primary-50",
+					"inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary-container px-6 text-sm font-medium text-on-primary-container",
 				),
 			});
 		}),

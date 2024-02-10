@@ -80,7 +80,7 @@ function CategoryChip({ category }: { category: ProductCategory }) {
 			prefetch="intent"
 			role="checkbox"
 			aria-checked={selected}
-			className="relative inline-flex h-8 items-center justify-center gap-2 rounded-md bg-secondary-700 px-3 text-sm font-medium text-secondary-50"
+			className="relative inline-flex h-8 items-center justify-center gap-2 rounded-md bg-secondary-container px-3 text-sm font-medium text-on-secondary-container"
 		>
 			<Ripple />
 			<span>{category}</span>
