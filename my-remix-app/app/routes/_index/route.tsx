@@ -9,16 +9,20 @@ import { CheckIcon } from "lucide-react";
 import React from "react";
 import { Ripple } from "~/components/Ripple";
 import {
-	PARAMS,
 	categories,
 	getProducts,
 	type Product,
 	type ProductCategory,
 } from "./data";
 
+const PARAMS = {
+	category: "category",
+} as const;
+
 export async function clientLoader({ request }: ClientLoaderFunctionArgs) {
 	const url = new URL(request.url);
-	const products = await getProducts(url.searchParams);
+	const category = url.searchParams.get(PARAMS.category);
+	const products = await getProducts(category);
 	return { products };
 }
 
@@ -91,8 +95,24 @@ function CategoryChip({ category }: { category: ProductCategory }) {
 
 function Products({ products }: { products: Product[] }) {
 	const navigation = useNavigation();
+	const [loading, setLoading] = React.useState(false);
 
-	if (navigation.state === "loading" && navigation.location.pathname === "/") {
+	React.useEffect(() => {
+		if (
+			navigation.state !== "loading" ||
+			navigation.location.pathname !== "/"
+		) {
+			setLoading(false);
+			return;
+		}
+
+		// Don't show loading UI immediately to avoid flickering
+		// when loading from the cache.
+		const timeoutId = setTimeout(() => setLoading(true), 50);
+		return () => clearTimeout(timeoutId);
+	}, [navigation]);
+
+	if (loading) {
 		const items = Array(9);
 		for (let i = 0; i < items.length; ++i) {
 			items[i] = <ProductSkeleton key={i} />;

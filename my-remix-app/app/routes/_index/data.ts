@@ -1,8 +1,5 @@
+import { Cache } from "~/helpers/cache";
 import { supabase, type Tables } from "~/supabase";
-
-export const PARAMS = {
-	category: "category",
-} as const;
 
 export const categories = [
 	"Men's Clothing",
@@ -15,21 +12,18 @@ export type ProductCategory = (typeof categories)[number];
 
 export type Product = Tables<"products">;
 
-const productsCache = new Map<string, Product[]>();
-
-export function getProducts(searchParams: URLSearchParams) {
-	const category = searchParams.get(PARAMS.category);
-
-	const cacheKey = category ?? "all";
-	const cached = productsCache.get(cacheKey);
-	if (cached !== undefined) {
+export async function getProducts(category: string | null): Promise<Product[]> {
+	const cache = new Cache<Product[]>(`products-${category ?? "all"}`);
+	const cached = await cache.get();
+	if (cached !== null) {
 		return cached;
 	}
 
-	return fetchProducts(cacheKey, category);
+	const products = await fetchProducts(category);
+	return await cache.set(products);
 }
 
-async function fetchProducts(cacheKey: string, category: string | null) {
+async function fetchProducts(category: string | null): Promise<Product[]> {
 	let query = supabase.from("products").select("*");
 
 	if (category !== null && categories.includes(category as ProductCategory)) {
@@ -40,7 +34,5 @@ async function fetchProducts(cacheKey: string, category: string | null) {
 	if (error !== null) {
 		throw error;
 	}
-
-	productsCache.set(cacheKey, data);
 	return data;
 }
