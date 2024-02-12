@@ -36,9 +36,6 @@ export function Stepper({
 		});
 	}
 
-	const equalsMin = value === min;
-	const equalsMax = value === max;
-
 	return (
 		<div className={`flex items-center gap-4 ${className}`} {...props}>
 			<input
@@ -51,21 +48,21 @@ export function Stepper({
 			/>
 			<button
 				aria-label="Increment"
-				disabled={equalsMax}
+				disabled={value === max}
 				className="icon-btn relative"
 				onClick={increment}
 			>
-				<Ripple disabled={equalsMax} />
+				<Ripple disabled={value === max} />
 				<PlusIcon />
 			</button>
 			<p className="text-lg font-medium tabular-nums">{value}</p>
 			<button
 				aria-label="Decrement"
-				disabled={equalsMin}
+				disabled={value === min}
 				className="icon-btn relative"
 				onClick={decrement}
 			>
-				<Ripple disabled={equalsMin} />
+				<Ripple disabled={value === min} />
 				<MinusIcon />
 			</button>
 		</div>

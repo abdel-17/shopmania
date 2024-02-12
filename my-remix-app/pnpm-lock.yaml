@@ -24,8 +24,8 @@ dependencies:
     specifier: ^0.323.0
     version: 0.323.0(react@18.2.0)
   material-ripple-web:
-    specifier: ^0.0.1
-    version: 0.0.1
+    specifier: ^0.0.5
+    version: 0.0.5(react-dom@18.2.0)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -4126,8 +4126,22 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /material-ripple-web@0.0.1:
-    resolution: {integrity: sha512-HwB3piT4cQE/hKZtx1lTloQhJTptqW2YrkUSgumQLwnMU6AqRwG0kaDZL7XE7XKMyh2tFI1wIYpry2MRcrzwvw==}
+  /material-ripple-web@0.0.5(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-b1b88piZXePbCNv3Jinp0t1u/lsKhbyyYtdUnnBXraA+usBvIE6RW1mVMitpVyoeM6IHPZFvEruktY7VPYFE9g==}
+    peerDependencies:
+      react: ^18.0.0
+      react-dom: ^18.0.0
+      svelte: ^3.0.0 | ^4.0.0
+    peerDependenciesMeta:
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      svelte:
+        optional: true
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /mdast-util-definitions@5.1.2:
