@@ -46,11 +46,9 @@ export default {
 				},
 				on: {
 					primary: {
-						DEFAULT: primary[50],
 						container: primary[100],
 					},
 					secondary: {
-						DEFAULT: secondary[50],
 						container: secondary[100],
 					},
 				},
@@ -62,6 +60,12 @@ export default {
 			addComponents({
 				".btn": tw(
 					"inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary-container px-6 text-sm font-medium text-on-primary-container",
+				),
+				".icon-btn": tw(
+					"inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-300 disabled:text-opacity-[0.38]",
+				),
+				".chip": tw(
+					"inline-flex h-8 items-center justify-center gap-2 rounded-md bg-secondary-container px-3 text-sm font-medium text-on-secondary-container",
 				),
 			});
 		}),

@@ -1,19 +1,17 @@
 import {
+	Await,
 	Link,
+	defer,
 	useLoaderData,
 	useLocation,
 	useNavigation,
 	type ClientLoaderFunctionArgs,
 } from "@remix-run/react";
 import { CheckIcon } from "lucide-react";
-import React from "react";
+import { Suspense, type ReactNode } from "react";
 import { Ripple } from "~/components/Ripple";
-import {
-	categories,
-	getProducts,
-	type Product,
-	type ProductCategory,
-} from "./data";
+import type { Product } from "~/types";
+import { categories, getProducts, type Category } from "./data";
 
 const PARAMS = {
 	category: "category",
@@ -22,8 +20,8 @@ const PARAMS = {
 export async function clientLoader({ request }: ClientLoaderFunctionArgs) {
 	const url = new URL(request.url);
 	const category = url.searchParams.get(PARAMS.category);
-	const products = await getProducts(category);
-	return { products };
+	const products = getProducts(category);
+	return defer({ products });
 }
 
 export default function Page() {
@@ -39,7 +37,11 @@ export default function Page() {
 			</h2>
 
 			<FilterNav className="mb-6 mt-8" />
-			<Products products={products} />
+			<Suspense fallback={<Loading />}>
+				<Await resolve={products}>
+					{(products) => <Products products={products} />}
+				</Await>
+			</Suspense>
 		</div>
 	);
 }
@@ -59,7 +61,7 @@ function FilterNav({ className }: { className?: string }) {
 	);
 }
 
-function CategoryChip({ category }: { category: ProductCategory }) {
+function CategoryChip({ category }: { category: Category }) {
 	const navigation = useNavigation();
 	const location = useLocation();
 
@@ -84,7 +86,7 @@ function CategoryChip({ category }: { category: ProductCategory }) {
 			prefetch="intent"
 			role="checkbox"
 			aria-checked={selected}
-			className="relative inline-flex h-8 items-center justify-center gap-2 rounded-md bg-secondary-container px-3 text-sm font-medium text-on-secondary-container"
+			className="chip relative"
 		>
 			<Ripple />
 			<span>{category}</span>
@@ -93,40 +95,12 @@ function CategoryChip({ category }: { category: ProductCategory }) {
 	);
 }
 
-function Products({ products }: { products: Product[] }) {
-	const navigation = useNavigation();
-	const [loading, setLoading] = React.useState(false);
-
-	React.useEffect(() => {
-		if (
-			navigation.state !== "loading" ||
-			navigation.location.pathname !== "/"
-		) {
-			setLoading(false);
-			return;
-		}
-
-		// Don't show loading UI immediately to avoid flickering
-		// when loading from the cache.
-		const timeoutId = setTimeout(() => setLoading(true), 50);
-		return () => clearTimeout(timeoutId);
-	}, [navigation]);
-
-	if (loading) {
-		const items = Array(9);
-		for (let i = 0; i < items.length; ++i) {
-			items[i] = <ProductSkeleton key={i} />;
-		}
-		return <ProductsGrid loading>{items}</ProductsGrid>;
+function Loading() {
+	const items = Array(9);
+	for (let i = 0; i < items.length; ++i) {
+		items[i] = <ProductSkeleton key={i} />;
 	}
-
-	return (
-		<ProductsGrid>
-			{products.map((product) => (
-				<ProductCard key={product.id} product={product} />
-			))}
-		</ProductsGrid>
-	);
+	return <ProductsGrid loading>{items}</ProductsGrid>;
 }
 
 function ProductSkeleton() {
@@ -151,12 +125,22 @@ function ProductSkeleton() {
 	);
 }
 
+function Products({ products }: { products: Product[] }) {
+	return (
+		<ProductsGrid>
+			{products.map((product) => (
+				<ProductCard key={product.id} product={product} />
+			))}
+		</ProductsGrid>
+	);
+}
+
 function ProductsGrid({
 	loading,
 	children,
 }: {
 	loading?: boolean;
-	children?: React.ReactNode;
+	children?: ReactNode;
 }) {
 	return (
 		<div
@@ -179,9 +163,8 @@ function ProductCard({ product }: { product: Product }) {
 				className="mx-auto block h-[200px] w-[200px] rounded bg-white object-contain p-2"
 			/>
 
-			{/* TODO: change the link's href */}
 			<Link
-				to={`#`}
+				to={`/products/${product.id}`}
 				className="mt-2 line-clamp-1 text-center text-lg font-medium text-white hover:underline"
 			>
 				{product.title}
