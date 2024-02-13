@@ -1,7 +1,7 @@
 import { useLoaderData, type ClientLoaderFunctionArgs } from "@remix-run/react";
 import { getProduct } from "./data";
 import { Ripple } from "~/components/Ripple";
-import { Stepper } from "~/components/Stepper";
+import { StepperInput } from "~/components/StepperInput";
 
 export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
 	const id = Number(params.id);
@@ -35,7 +35,7 @@ export default function Page() {
 							<Ripple />
 							<span>Add to Cart</span>
 						</button>
-						<Stepper defaultValue={1} min={1} />
+						<StepperInput min={1} hiddenInputName="quantity" />
 					</div>
 				</div>
 			</div>

@@ -62,7 +62,7 @@ export default {
 					"inline-flex h-10 items-center justify-center gap-2 rounded-full bg-primary-container px-6 text-sm font-medium text-on-primary-container",
 				),
 				".icon-btn": tw(
-					"inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-300 disabled:text-opacity-[0.38]",
+					"inline-flex h-10 w-10 items-center justify-center rounded-full text-gray-300 disabled:text-opacity-35",
 				),
 				".chip": tw(
 					"inline-flex h-8 items-center justify-center gap-2 rounded-md bg-secondary-container px-3 text-sm font-medium text-on-secondary-container",
@@ -72,8 +72,7 @@ export default {
 	],
 };
 
-function tw(...classes: string[]) {
-	const className = classes.join(" ");
+function tw(className: string) {
 	return {
 		[`@apply ${className}`]: "",
 	};
