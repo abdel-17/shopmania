@@ -35,7 +35,7 @@ export default function Page() {
 							<Ripple />
 							<span>Add to Cart</span>
 						</button>
-						<StepperInput min={1} hiddenInputName="quantity" />
+						<StepperInput min={1} name="quantity" />
 					</div>
 				</div>
 			</div>

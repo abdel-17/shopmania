@@ -4,7 +4,7 @@ import { Ripple } from "./Ripple";
 
 export interface StepperInputProps
 	extends React.ComponentPropsWithoutRef<"div"> {
-	hiddenInputName: string;
+	name: string;
 	defaultValue?: number;
 	min?: number;
 	max?: number;
@@ -12,7 +12,7 @@ export interface StepperInputProps
 }
 
 export function StepperInput({
-	hiddenInputName,
+	name,
 	defaultValue = 1,
 	min,
 	max,
@@ -66,10 +66,17 @@ export function StepperInput({
 
 	return (
 		<div
-			className={`relative flex items-center gap-4 focus-within:outline ${className}`}
 			{...props}
+			role="spinbutton"
+			tabIndex={0}
+			aria-valuenow={value}
+			aria-valuemin={min}
+			aria-valuemax={max}
+			aria-label="Quantity"
+			className={`relative flex items-center gap-4 focus:outline focus:outline-2 focus:outline-current ${className}`}
+			onKeyDown={handleKeyDown}
 		>
-			<input type="hidden" value={value} name={hiddenInputName} />
+			<input type="hidden" value={value} name={name} />
 			<button
 				type="button"
 				tabIndex={-1}
@@ -81,18 +88,7 @@ export function StepperInput({
 				<Ripple disabled={value === min} />
 				<MinusIcon />
 			</button>
-			<div
-				role="spinbutton"
-				tabIndex={0}
-				aria-label="Quantity"
-				aria-valuenow={value}
-				aria-valuemin={min}
-				aria-valuemax={max}
-				className="text-lg font-medium tabular-nums focus:outline-none"
-				onKeyDown={handleKeyDown}
-			>
-				{value}
-			</div>
+			<p className="text-lg font-medium tabular-nums">{value}</p>
 			<button
 				type="button"
 				tabIndex={-1}
