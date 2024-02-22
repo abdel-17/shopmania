@@ -17,9 +17,9 @@ dependencies:
   http-server:
     specifier: ^14.1.1
     version: 14.1.1
-  idb-keyval:
-    specifier: ^6.2.1
-    version: 6.2.1
+  idb:
+    specifier: ^8.0.0
+    version: 8.0.0
   lucide-react:
     specifier: ^0.323.0
     version: 0.323.0(react@18.2.0)
@@ -3586,8 +3586,8 @@ packages:
       postcss: 8.4.34
     dev: true
 
-  /idb-keyval@6.2.1:
-    resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
+  /idb@8.0.0:
+    resolution: {integrity: sha512-l//qvlAKGmQO31Qn7xdzagVPPaHTxXx199MhrAFuVBTPqydcPYBWjkrbv4Y0ktB+GmWOiwHl237UUOrLmQxLvw==}
     dev: false
 
   /ieee754@1.2.1:

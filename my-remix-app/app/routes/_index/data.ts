@@ -1,4 +1,4 @@
-import { getCachedProducts, setCachedProducts } from "~/helpers/cache/products";
+import { productsCache } from "~/helpers/cache/products";
 import { supabase } from "~/supabase";
 import type { Product } from "~/types";
 
@@ -20,16 +20,16 @@ export async function getProducts(category: string | null): Promise<Product[]> {
 }
 
 async function getAllProducts(): Promise<Product[]> {
-	const cachedProducts = await getCachedProducts();
-	if (cachedProducts !== undefined) {
-		return cachedProducts;
+	const cached = await productsCache.getAll();
+	if (cached.length > 0) {
+		return cached;
 	}
 
-	const { data, error } = await supabase.from("products").select("*");
+	const { data: products, error } = await supabase.from("products").select("*");
 	if (error !== null) {
 		throw error;
 	}
 
-	await setCachedProducts(data);
-	return data;
+	await productsCache.addAll(products);
+	return products;
 }
