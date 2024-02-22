@@ -1,7 +1,7 @@
 import { useLoaderData, type ClientLoaderFunctionArgs } from "@remix-run/react";
-import { getProduct } from "./data";
 import { Ripple } from "~/components/Ripple";
 import { StepperInput } from "~/components/StepperInput";
+import { getProduct } from "./data";
 
 export async function clientLoader({ params }: ClientLoaderFunctionArgs) {
 	const id = Number(params.id);
