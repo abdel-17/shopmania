@@ -1,8 +1,7 @@
 import { productsCache } from "~/helpers/cache/products";
 import { supabase } from "~/supabase";
-import type { Product } from "~/types";
 
-export async function getProduct(id: number): Promise<Product | null> {
+export async function getProduct(id: number) {
 	if (Number.isNaN(id)) {
 		return null;
 	}

@@ -1,6 +1,5 @@
 import { productsCache } from "~/helpers/cache/products";
 import { supabase } from "~/supabase";
-import type { Product } from "~/types";
 
 export const categories = [
 	"Men's Clothing",
@@ -11,15 +10,15 @@ export const categories = [
 
 export type Category = (typeof categories)[number];
 
-export async function getProducts(category: string | null): Promise<Product[]> {
+export async function getProducts(category: string | null) {
 	const products = await getAllProducts();
-	if (category === null || !categories.includes(category as never)) {
+	if (category === null) {
 		return products;
 	}
 	return products.filter((product) => product.category === category);
 }
 
-async function getAllProducts(): Promise<Product[]> {
+async function getAllProducts() {
 	const cached = await productsCache.getAll();
 	if (cached.length > 0) {
 		return cached;

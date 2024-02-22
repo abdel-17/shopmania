@@ -2,6 +2,7 @@ import {
 	Await,
 	defer,
 	Link,
+	redirect,
 	useLoaderData,
 	useLocation,
 	useNavigation,
@@ -20,6 +21,12 @@ const PARAMS = {
 export async function clientLoader({ request }: ClientLoaderFunctionArgs) {
 	const url = new URL(request.url);
 	const category = url.searchParams.get(PARAMS.category);
+
+	if (category !== null && !categories.includes(category as never)) {
+		url.searchParams.delete(PARAMS.category);
+		return redirect(url.toString(), { status: 302 });
+	}
+
 	const products = getProducts(category);
 	return defer({ products });
 }
