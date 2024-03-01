@@ -19,7 +19,7 @@
 		"http-server": "^14.1.1",
 		"idb": "^8.0.0",
 		"lucide-react": "^0.323.0",
-		"material-ripple-web": "^0.0.5",
+		"material-ripple-web": "^0.1.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0"
 	},

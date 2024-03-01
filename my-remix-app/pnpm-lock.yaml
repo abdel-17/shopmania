@@ -24,8 +24,8 @@ dependencies:
     specifier: ^0.323.0
     version: 0.323.0(react@18.2.0)
   material-ripple-web:
-    specifier: ^0.0.5
-    version: 0.0.5(react-dom@18.2.0)(react@18.2.0)
+    specifier: ^0.1.0
+    version: 0.1.0(react-dom@18.2.0)(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -4149,8 +4149,8 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /material-ripple-web@0.0.5(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-b1b88piZXePbCNv3Jinp0t1u/lsKhbyyYtdUnnBXraA+usBvIE6RW1mVMitpVyoeM6IHPZFvEruktY7VPYFE9g==}
+  /material-ripple-web@0.1.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-MRlVNVM5i2rvZ9xSh1xGxfVEVYEcaRJQWLvZQZrcmmaW+jV4y14lHFDSronE9/soWK9rTe//RLUwypSZiP8ENg==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
